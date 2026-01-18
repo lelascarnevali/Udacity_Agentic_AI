@@ -1,0 +1,89 @@
+# Udacity Agentic AI Nanodegree
+
+This repository contains the projects and exercises developed as part of the **Agentic AI Nanodegree program** by Udacity. Throughout this program, we go beyond single chatbots to engineer sophisticated, coordinated teams of AI agents.
+
+The curriculum covers advanced prompting techniques, agentic workflows, and the architecture of intelligent systems, enabling the creation of agents that can reason, plan, and use tools to interact with the world.
+
+## Program Overview
+
+The Nanodegree focuses on building agents in Python that can reason, plan, and use tools to interact with databases and external APIs. The program is divided into four main courses:
+
+### 1. Prompting for Effective LLM Reasoning and Planning
+Go beyond basic chatbots and learn to engineer sophisticated AI agents. This course covers:
+*   **Advanced Prompting:** Master Chain-of-Thought, ReAct, and feedback loops.
+*   **Reasoning & Planning:** Build systems that can reason, plan, and solve complex problems.
+*   **Hands-on Project:** Transform generic AI into specialized, reliable tools, culminating in building a multi-agent travel planner from scratch.
+
+### 2. Agentic Workflows
+Move beyond simple automation and learn to architect intelligent systems using Python. Key concepts include:
+*   **Workflow Patterns:** Explore core patterns like Prompt Chaining, Routing, and Parallelization.
+*   **Intelligent Teams:** Create teams of AI agents that can reason, plan, and act to solve complex problems.
+*   **Hands-on Project:** Build a complete, agentic project management system to translate high-level goals into powerful, adaptive AI solutions.
+
+### 3. Building Agents
+Focus on building robust, data-driven AI agents. This course teaches you to:
+*   **Tool Integration:** Integrate tools via function calling and generate structured outputs with Pydantic.
+*   **State & Memory:** Manage agent state and utilize short-term and long-term memory.
+*   **External Interaction:** Create agents that interact with APIs, search the web, query SQL databases, and perform agentic RAG for dynamic retrieval.
+*   **Evaluation:** Learn to evaluate agent performance for reliable, real-world applications.
+
+### 4. Multi-Agent Systems
+Learn to build coordinated teams of AI agents. This course covers the entire process of creating multi-agent systems:
+*   **Architectural Design:** Orchestrate complex workflows from design to implementation in Python.
+*   **Data Flow & State:** Manage data flow and state across multiple agents.
+*   **Advanced Techniques:** Implement advanced techniques like multi-agent RAG.
+*   **Hands-on Project:** Build an automated sales system to solve real-world problems.
+
+---
+
+## Environment Setup
+
+This project uses **[uv](https://github.com/astral-sh/uv)** for fast Python package management.
+
+### Prerequisites
+
+*   **uv installed:** If you don't have it, install it via curl (macOS/Linux) or PowerShell (Windows):
+    ```bash
+    # macOS/Linux
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    ```
+
+### Installation Steps
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/lelascarnevali/Udacity_Agentic_AI.git
+    cd Udacity_Agentic_AI
+    ```
+
+2.  **Create a virtual environment (Python 3.13):**
+    ```bash
+    uv venv --python 3.13.0 .venv
+    ```
+
+3.  **Activate the environment:**
+    *   **macOS/Linux:**
+        ```bash
+        source .venv/bin/activate
+        ```
+    *   **Windows:**
+        ```bash
+        .venv\Scripts\activate
+        ```
+
+4.  **Install dependencies:**
+    ```bash
+    uv pip install -r requirements.txt
+    ```
+
+### Configuration
+
+**API Key Setup:**
+Create a `.env` file in the root directory (based on `.env.example` if available, or just create one) and add your API credentials. This is required for the notebooks to run properly.
+
+```env
+OPENAI_API_KEY=your_key_here
+```
+
+---
+*Each project in this repository represents a hands-on application of the concepts learned, reinforcing job-ready skills in the field of Agentic AI.*
