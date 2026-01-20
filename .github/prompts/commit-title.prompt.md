@@ -1,24 +1,42 @@
 ---
-title: Generate Conventional Commit Title
-description: Generate a single-line Conventional Commit style title for a PR.
-tags: [commit, conventional-commit, commit-message]
-author: repo-automation
+name: Generate Conventional Commit Title
+description: Generate a single-line Conventional Commit style title from staged changes.
 ---
 
-You are GitHub Copilot. Given the pull request title, body, author and list of changed files, generate exactly one commit message in Conventional Commits format.
+You are an expert developer and git specialist. Your goal is to generate a single-line commit message in the **Conventional Commits** format based on the current staged changes in the workspace.
 
-Rules:
-- Choose one type from: feat, fix, docs, chore, refactor, test, perf.
-- Prefer the type based on PR title/body/files (code changes → feat/fix/refactor; docs → docs).
-- If an obvious scope exists (module/file/folder), include it as `type(scope): short-description`.
-- Keep the short description ≤72 characters, imperative and concise.
-- Use present-tense, imperative verbs (e.g., "Add", "Fix", "Update").
-- Output only the single commit message line in English.
+### Instructions:
+1.  **Analyze Changes**: Look at the current staged changes in the git repository. 
+    - If you are able to run terminal commands, run `git diff --staged` to get the precise context.
+    - If you cannot run commands, analyze the code provided in the context or prompt the user to provide the diff.
+2.  **Determine Type**: Choose the most appropriate type from:
+    - `feat`: A new feature
+    - `fix`: A bug fix
+    - `docs`: Documentation only changes
+    - `style`: Changes that do not affect the meaning of the code (white-space, formatting, etc)
+    - `refactor`: A code change that neither fixes a bug nor adds a feature
+    - `perf`: A code change that improves performance
+    - `test`: Adding missing tests or correcting existing tests
+    - `build`: Changes that affect the build system or external dependencies
+    - `ci`: Changes to our CI configuration files and scripts
+    - `chore`: Other changes that don't modify src or test files
+3.  **Determine Scope**: (Optional) specific section of the codebase (e.g., `api`, `auth`, `ui`).
+4.  **Draft Description**: Write a short, imperative description (e.g., "add feature", not "added feature").
+    - Maximum 72 characters.
+    - No period at the end.
+    - Use lowercase (unless proper nouns).
 
-Input placeholders (replace with PR data):
-PR_TITLE: {PR_TITLE}
-PR_BODY: {PR_BODY}
-PR_AUTHOR: {PR_AUTHOR}
-CHANGED_FILES: {CHANGED_FILES}
+### Output Format:
+```
+<type>(<scope>): <description>
+```
 
-Now generate the commit message.
+### Examples:
+- `feat(auth): add google login support`
+- `fix: resolve null pointer exception in user service`
+- `docs: update deployment guidelines`
+
+**Constraints:**
+- Only output the commit message string, nothing else.
+- If multiple files are changed, try to find the common theme for the scope.
+- If the changes are too diverse, create a general message or suggest splitting commits (but prefer generating one valid message for the current set).
