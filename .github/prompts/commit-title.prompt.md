@@ -1,5 +1,5 @@
 ---
-name: Generate Conventional Commit Title
+name: Commit Title
 description: Generate a single-line Conventional Commit style title from staged changes.
 ---
 
