@@ -120,6 +120,8 @@ OPENAI_API_KEY=your_key_here
 ```
 .
 ├── .github/                                   # Copilot configuration and support assets
+│   ├── agents/                                # Agent-related configurations and data
+│   │   └── memory/                            # Agent memory store (persisted learnings)
 │   └── skills/                                # Copilot "skills" docs and helper scripts
 ├── 1_Prompting_for_Effective_LLM_Reasoning_and_Planning/ # Module 1: Prompting foundations
 │   ├── docs/                                  # Module notes, references, and reading materials
@@ -136,6 +138,10 @@ OPENAI_API_KEY=your_key_here
 ├── scripts/                                   # Reusable Python utilities for notebooks
 └── .venv/                                     # Local Python virtual environment (optional)
 ```
+
+### Agent Memory
+
+This repository designates `.github/agents/memory` as the persistent memory location for agent learnings. Use this folder to store summaries, decisions, and context that should be consulted by agents across sessions. 
 
 ## Usage
 
