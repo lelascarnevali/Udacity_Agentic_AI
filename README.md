@@ -151,13 +151,5 @@ jupyter notebook
 - Ensure your `.env` contains required keys before running cells that call external APIs.
 - Tip: You can also use VS Code to open `.ipynb` files directly for a richer editor experience.
 
-## Development Standards
-
-- Python: follow PEP 8; prefer type hints and concise docstrings; use `black`/`ruff` when applicable.
-- Notebooks: write formulas in LaTeX within markdown cells.
-    - Inline: `$E=mc^2$`
-    - Block: `$$\int_a^b f(x)\,dx$$`
-- Commits: use Conventional Commits for clarity (e.g., `feat:`, `chore:`, `docs:`).
-
 ---
 *Each project in this repository represents a hands-on application of the concepts learned, reinforcing job-ready skills in the field of Agentic AI.*
