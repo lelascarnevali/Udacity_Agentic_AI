@@ -9,19 +9,22 @@ This repository hosts Udacity Agentic AI exercises focused on effective promptin
 ## 2. Repository Structure
 ```
 .
-├── .github/
-│   ├── copilot-instructions.md       # This file
-│   └── skills/                       # Copilot skills    
-├── 1_Prompting_for_Effective_LLM_Reasoning_and_Planning/ # Module 1 of this course
-│   ├── docs/                         # Course content and references
-│   └── exercises/                    # Exercise notebooks
-├── scripts/                          # Reusable Python utilities for notebooks
-├── .github/
-│   ├── copilot-instructions.md       # This file
-├── .venv/                            # Local Python virtual environment (optional)
-├── README.md                         # Project overview and how to run
-├── requirements.txt                  # Project dependencies
-└── .gitignore                        # Git ignore rules
+├── .github/                                   # Copilot configuration and support assets
+│   └── skills/                                # Copilot "skills" docs and helper scripts
+├── 1_Prompting_for_Effective_LLM_Reasoning_and_Planning/ # Module 1: Prompting foundations
+│   ├── docs/                                  # Module notes, references, and reading materials
+│   └── exercises/                             # Jupyter notebooks for hands-on practice
+├── 2_Agentic_Workflows/                       # Module 2: Designing agentic workflows
+│   ├── docs/                                  # Module notes, references, and reading materials
+│   └── exercises/                             # Jupyter notebooks for hands-on practice
+├── 3_Building_Agents/                         # Module 3: Implementing agents
+│   ├── docs/                                  # Module notes, references, and reading materials
+│   └── exercises/                             # Jupyter notebooks for hands-on practice
+├── 4_Multi-Agent_Systems/                     # Module 4: Multi-agent systems
+│   ├── docs/                                  # Module notes, references, and reading materials
+│   └── exercises/                             # Jupyter notebooks for hands-on practice
+├── scripts/                                   # Reusable Python utilities for notebooks
+└── .venv/                                     # Local Python virtual environment (optional)
 ```
 
 ## 3. Skills (skill.sh)
