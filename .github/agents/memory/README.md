@@ -11,6 +11,9 @@ Persistent learnings for agents live here as Markdown files.
 - **Decoupling:** Do not mirror programming standards or Copilot instructions here.
 
 ## Suggested Workflow
-1. Copy the template to a context-based filename.
-2. Fill context, decisions, and next steps.
+1. Generate a new entry via the helper script (recommended):
+	- `python scripts/new_memory_entry.py --context "<context>" --topic "<topic>" --tags tag1 tag2 --source "<source>" --agent github-copilot --yaml`
+	- This creates `<context>-agent-memory.md` using the BMAD template and optional YAML frontmatter.
+2. Alternatively, copy the template to a context-based filename and fill sections manually:
+	- Use `templates/bmad-template.md` and replace placeholders.
 3. Commit with `docs(agents): add memory entry`.
