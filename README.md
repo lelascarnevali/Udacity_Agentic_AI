@@ -139,10 +139,6 @@ OPENAI_API_KEY=your_key_here
 └── .venv/                                     # Local Python virtual environment (optional)
 ```
 
-### Agent Memory
-
-This repository designates `.github/agents/memory` as the persistent memory location for agent learnings. Use this folder to store summaries, decisions, and context that should be consulted by agents across sessions. 
-
 ## Usage
 
 - Activate the environment and launch Jupyter:
