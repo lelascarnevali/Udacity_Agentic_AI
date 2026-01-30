@@ -19,7 +19,7 @@ This skill standardizes how to capture persistent agent learnings using a concis
 
 ## Template
 Start from the memory template:
-- Path: `.github/skills/agent-memory/templates/memory-template.md`
+- Path: `.github/skills/agent-memory/assets/templates/memory-template.md`
 - Copy to `.github/agents/memory/<context>-agent-memory.md`
 
 ## Structure
@@ -35,7 +35,7 @@ Start from the memory template:
 ```bash
 # From repo root
 ctx="role-based-prompting"
-.github/skills/agent-memory/new_memory_entry "${ctx}"
+.github/skills/agent-memory/scripts/new_memory_entry "${ctx}"
 ```
 
 ## Conventions
