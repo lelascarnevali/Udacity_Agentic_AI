@@ -1,12 +1,12 @@
 # Agent Memory Entry
 
 - **Date:** 2026-01-29
-- **Topic:** How to write agent memory entries (BMAD style)
-- **Topics/Tags:** memory, conventions, bmad
+- **Topic:** How to write agent memory entries
+- **Topics/Tags:** memory, conventions
 - **Source:** repository documentation workflow
 
 ## Context
-We need a clear, repeatable method for capturing agent learnings as Markdown entries under `.github/agents/memory`, ensuring consistency and usefulness across sessions and modules. Follow BMAD (Breakthrough Method of Agile AI Driven Development) conventions adapted to this repository.
+We need a clear, repeatable method for capturing agent learnings as Markdown entries under `.github/agents/memory`, ensuring consistency and usefulness across sessions and modules. Follow a concise, consistent memory format adapted to this repository.
 
 ## Decisions / Rules
 - Use a simple, consistent structure with sections: Context, Key Insights, Decisions/Rules, References, Next Actions. Optional: Learned Patterns, Tags.
@@ -15,7 +15,7 @@ We need a clear, repeatable method for capturing agent learnings as Markdown ent
 - Prefer bullet points and headings. Reference exact paths and artifacts.
 
 ## Implementation
-- Start new entries from `templates/learning-template.md`.
+- Start new entries from `.github/skills/agent-memory/templates/memory-template.md`.
 - Include concise metadata at the top (Date, Topic, Topics/Tags, Source).
 - Populate sections with high-signal information:
   - Context: what changed and why it matters.
@@ -32,10 +32,7 @@ We need a clear, repeatable method for capturing agent learnings as Markdown ent
 
 ## References
 - Memory conventions: `.github/agents/memory/README.md`.
-- Template: `.github/agents/memory/templates/learning-template.md`.
-- BMAD Method Home: https://docs.bmad-method.org/
-- BMAD LLM-optimized doc: https://docs.bmad-method.org/llms-full.txt
-- BMAD Agent Memory & Sidecar: https://deepwiki.com/bmad-code-org/BMAD-METHOD/7.4-agent-memory-and-sidecar-system
+- Template: `.github/skills/agent-memory/templates/memory-template.md`.
 
 ## Next Steps
 - Apply this structure to future learnings in modules 2–4.

@@ -1,11 +1,11 @@
 ---
 name: agent-memory
-description: BMAD-style agent memory logging for engineering learnings using Markdown entries.
+description: Agent memory logging for engineering learnings using Markdown entries.
 ---
 
-# Agent Memory (BMAD)
+# Agent Memory
 
-This skill standardizes how to capture persistent agent learnings using the BMAD method.
+This skill standardizes how to capture persistent agent learnings using a concise, consistent memory format.
 
 ## When to Use
 - After completing a task, design decision, or investigation with lessons worth retaining
@@ -18,11 +18,11 @@ This skill standardizes how to capture persistent agent learnings using the BMAD
 - Date: include inside the entry body, not in the filename
 
 ## Template
-Start from the BMAD template:
-- Path: `.github/skills/agent-memory/templates/bmad-template.md`
+Start from the memory template:
+- Path: `.github/skills/agent-memory/templates/memory-template.md`
 - Copy to `.github/agents/memory/<context>-agent-memory.md`
 
-## Structure (BMAD-aligned)
+## Structure
 - Metadata (top): Date, Topic, Topics/Tags, Source
 - Context: what changed and why it matters
 - Key Insights: distilled lessons/findings
@@ -45,6 +45,5 @@ ctx="role-based-prompting"
 - `.github/agents/memory/.gitignore` tracks only `.md` and `.gitkeep`
 
 ## References
-- BMAD Method: https://docs.bmad-method.org/
-- BMAD (LLM-optimized): https://docs.bmad-method.org/llms-full.txt
-- Agent Memory & Sidecar: https://deepwiki.com/bmad-code-org/BMAD-METHOD/7.4-agent-memory-and-sidecar-system
+- Memory conventions: `.github/agents/memory/README.md`
+- Template: `.github/skills/agent-memory/templates/memory-template.md`

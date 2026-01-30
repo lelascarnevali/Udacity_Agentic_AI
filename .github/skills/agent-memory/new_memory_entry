@@ -8,7 +8,7 @@ fi
 
 CTX="$1"
 ROOT_DIR="$(cd "$(dirname "$0")"/../../.. && pwd)"
-TEMPLATE_PATH="$ROOT_DIR/.github/skills/agent-memory/templates/bmad-template.md"
+TEMPLATE_PATH="$ROOT_DIR/.github/skills/agent-memory/templates/memory-template.md"
 DEST_DIR="$ROOT_DIR/.github/agents/memory"
 DEST_PATH="$DEST_DIR/${CTX}-agent-memory.md"
 

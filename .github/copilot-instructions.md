@@ -31,6 +31,18 @@ This repository hosts Udacity Agentic AI exercises focused on effective promptin
 - integrate Copilot "skills" via a shell script.
 - Skills location: `.github/skills/`.
 
+## 3.1 Operating Workflow
+- Always check for available skills relevant to the task in `.github/skills/` (and use discovery when needed).
+- Always check agent memory notes in `.github/agents/memory/` for prior learnings that can inform the task.
+- Analyze the request and outline a brief plan using the TODO tool before executing.
+- Use concise tool preambles and group related actions; avoid unnecessary context loading.
+- Execute changes minimally; bundle commits logically and only commit when asked or after confirming.
+
+## 3.2 Language Policy
+- Documentation, code comments, and prompt design: write in English.
+- Chat responses to the user: reply in Portuguese (pt-BR).
+- Keep examples consistent: internal artifacts in English; communication in Portuguese.
+
 
 ## 4. Virtual Environment
 - Preferred: local virtualenv at `.venv/`.
