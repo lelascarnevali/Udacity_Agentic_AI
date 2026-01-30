@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ $# -lt 1 ]; then
+  echo "Usage: $0 <context-kebab-case>" >&2
+  exit 1
+fi
+
+CTX="$1"
+ROOT_DIR="$(cd "$(dirname "$0")"/../../.. && pwd)"
+TEMPLATE_PATH="$ROOT_DIR/.github/skills/agent-memory/templates/bmad-template.md"
+DEST_DIR="$ROOT_DIR/.github/agents/memory"
+DEST_PATH="$DEST_DIR/${CTX}-agent-memory.md"
+
+if [ ! -f "$TEMPLATE_PATH" ]; then
+  echo "Template not found: $TEMPLATE_PATH" >&2
+  exit 1
+fi
+
+mkdir -p "$DEST_DIR"
+cp "$TEMPLATE_PATH" "$DEST_PATH"
+
+# Inject current date into the placeholder
+DATE_STR="$(date +%Y-%m-%d)"
+sed -i.bak "s/^\- \*\*Date:\*\* yyyy-mm-dd/- **Date:** ${DATE_STR}/" "$DEST_PATH" && rm -f "$DEST_PATH.bak"
+
+echo "Created: $DEST_PATH"
+echo "Next: Edit metadata (Topic/Tags/Source) and commit."

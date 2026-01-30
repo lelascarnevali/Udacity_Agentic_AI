@@ -1,5 +1,5 @@
 ---
-name: agent-memory-bmad
+name: agent-memory
 description: BMAD-style agent memory logging for engineering learnings using Markdown entries.
 ---
 
@@ -19,7 +19,7 @@ This skill standardizes how to capture persistent agent learnings using the BMAD
 
 ## Template
 Start from the BMAD template:
-- Path: `.github/skills/agent-memory-bmad/templates/bmad-template.md`
+- Path: `.github/skills/agent-memory/templates/bmad-template.md`
 - Copy to `.github/agents/memory/<context>-agent-memory.md`
 
 ## Structure (BMAD-aligned)
@@ -35,10 +35,7 @@ Start from the BMAD template:
 ```bash
 # From repo root
 ctx="role-based-prompting"
-cp .github/skills/agent-memory-bmad/templates/bmad-template.md \
-   .github/agents/memory/${ctx}-agent-memory.md
-# Edit the new file and commit
-code .github/agents/memory/${ctx}-agent-memory.md
+.github/skills/agent-memory/new_memory_entry "${ctx}"
 ```
 
 ## Conventions
