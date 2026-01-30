@@ -85,5 +85,48 @@ Create a `.env` file in the root directory (based on `.env.example` if available
 OPENAI_API_KEY=your_key_here
 ```
 
+## Repository Structure
+
+```
+.
+├── .github/                                   # Copilot configuration and support assets
+│   └── skills/                                # Copilot "skills" docs and helper scripts
+├── 1_Prompting_for_Effective_LLM_Reasoning_and_Planning/ # Module 1: Prompting foundations
+│   ├── docs/                                  # Module notes, references, and reading materials
+│   └── exercises/                             # Jupyter notebooks for hands-on practice
+├── 2_Agentic_Workflows/                       # Module 2: Designing agentic workflows
+│   ├── docs/                                  # Module notes, references, and reading materials
+│   └── exercises/                             # Jupyter notebooks for hands-on practice
+├── 3_Building_Agents/                         # Module 3: Implementing agents
+│   ├── docs/                                  # Module notes, references, and reading materials
+│   └── exercises/                             # Jupyter notebooks for hands-on practice
+├── 4_Multi-Agent_Systems/                     # Module 4: Multi-agent systems
+│   ├── docs/                                  # Module notes, references, and reading materials
+│   └── exercises/                             # Jupyter notebooks for hands-on practice
+├── scripts/                                   # Reusable Python utilities for notebooks
+└── .venv/                                     # Local Python virtual environment (optional)
+```
+
+## Usage
+
+- Activate the environment and launch Jupyter:
+
+```bash
+source .venv/bin/activate
+python -m pip install jupyter
+jupyter notebook
+```
+
+- Open notebooks under the module `exercises/` folders and run cells.
+- Ensure your `.env` contains required keys before running cells that call external APIs.
+
+## Development Standards
+
+- Python: follow PEP 8; prefer type hints and concise docstrings; use `black`/`ruff` when applicable.
+- Notebooks: write formulas in LaTeX within markdown cells.
+    - Inline: `$E=mc^2$`
+    - Block: `$$\int_a^b f(x)\,dx$$`
+- Commits: use Conventional Commits for clarity (e.g., `feat:`, `chore:`, `docs:`).
+
 ---
 *Each project in this repository represents a hands-on application of the concepts learned, reinforcing job-ready skills in the field of Agentic AI.*
