@@ -1,35 +1,41 @@
 # Agent Memory Entry
 
 - **Date:** 2026-01-29
-- **Topic:** How to write agent memory entries
+- **Topic:** How to write agent memory entries (BMAD style)
+- **Topics/Tags:** memory, conventions, bmad
+- **Source:** repository documentation workflow
 
 ## Context
-We need a clear, repeatable method for capturing agent learnings as Markdown entries under `.github/agents/memory`, ensuring consistency and usefulness across sessions and modules.
+We need a clear, repeatable method for capturing agent learnings as Markdown entries under `.github/agents/memory`, ensuring consistency and usefulness across sessions and modules. Follow BMAD (Breakthrough Method of Agile AI Driven Development) conventions adapted to this repository.
 
-## Decisions
-- Use a simple, consistent structure with sections: Context, Decisions, Implementation, Techniques, References, Next Steps.
-- Name files with `YYYY-MM-DD-<topic>.md` to keep chronological order and searchability.
-- Avoid code dumps; focus on engineering insights, rationale, and actionable next steps.
+## Decisions / Rules
+- Use a simple, consistent structure with sections: Context, Key Insights, Decisions/Rules, References, Next Actions. Optional: Learned Patterns, Tags.
+- Name files with `<context>-agent-memory.md` (kebab-case, no spaces). Include the date inside the entry, not in the filename.
+- Keep entries concise, factual, and operational. Write for selective loading; avoid fluff.
+- Prefer bullet points and headings. Reference exact paths and artifacts.
 
 ## Implementation
 - Start new entries from `templates/learning-template.md`.
-- Include a concise title and date at the top.
-- Populate each section with high-signal information:
+- Include concise metadata at the top (Date, Topic, Topics/Tags, Source).
+- Populate sections with high-signal information:
   - Context: what changed and why it matters.
-  - Decisions: choices made and trade-offs.
-  - Implementation: artifacts created/updated and locations.
-  - Techniques: prompting/workflow patterns and reasoning strategies.
-  - References: links to docs or specs.
-  - Next Steps: follow-ups to validate or extend.
+  - Key Insights: distilled lessons or findings.
+  - Decisions/Rules: standards to apply and trade-offs considered.
+  - References: internal paths and external links.
+  - Next Actions: follow-ups to validate or extend.
 
 ## Techniques
 - Write for engineers: be precise, minimal, and outcome-driven.
 - Prefer bullet points; keep paragraphs short.
-- Capture prompts and outcomes only if they illustrate a reusable pattern.
+- Capture prompts/outcomes only if they illustrate a reusable pattern.
+- Use tags to aid indexing and retrieval.
 
 ## References
 - Memory conventions: `.github/agents/memory/README.md`.
 - Template: `.github/agents/memory/templates/learning-template.md`.
+- BMAD Method Home: https://docs.bmad-method.org/
+- BMAD LLM-optimized doc: https://docs.bmad-method.org/llms-full.txt
+- BMAD Agent Memory & Sidecar: https://deepwiki.com/bmad-code-org/BMAD-METHOD/7.4-agent-memory-and-sidecar-system
 
 ## Next Steps
 - Apply this structure to future learnings in modules 2–4.
