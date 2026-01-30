@@ -36,6 +36,35 @@ Learn to build coordinated teams of AI agents. This course covers the entire pro
 
 ---
 
+## Quickstart
+
+Get up and running fast on macOS with `uv` and Jupyter:
+
+```bash
+# Clone and enter repository
+git clone https://github.com/lelascarnevali/Udacity_Agentic_AI.git
+cd Udacity_Agentic_AI
+
+# Create and activate Python 3.13 virtual env
+uv venv --python 3.13.0 .venv
+source .venv/bin/activate
+
+# Install dependencies and Jupyter
+uv pip install -r requirements.txt
+uv pip install jupyter
+
+# Launch notebooks
+jupyter notebook
+# or
+jupyter lab
+```
+
+Add your API key in a `.env` at the repo root before running notebooks:
+
+```env
+OPENAI_API_KEY=your_key_here
+```
+
 ## Environment Setup
 
 This project uses **[uv](https://github.com/astral-sh/uv)** for fast Python package management.
@@ -74,6 +103,7 @@ This project uses **[uv](https://github.com/astral-sh/uv)** for fast Python pack
 4.  **Install dependencies:**
     ```bash
     uv pip install -r requirements.txt
+    uv pip install jupyter
     ```
 
 ### Configuration
@@ -113,12 +143,13 @@ OPENAI_API_KEY=your_key_here
 
 ```bash
 source .venv/bin/activate
-python -m pip install jupyter
+uv pip install jupyter
 jupyter notebook
 ```
 
 - Open notebooks under the module `exercises/` folders and run cells.
 - Ensure your `.env` contains required keys before running cells that call external APIs.
+- Tip: You can also use VS Code to open `.ipynb` files directly for a richer editor experience.
 
 ## Development Standards
 
