@@ -32,11 +32,35 @@ This repository hosts Udacity Agentic AI exercises focused on effective promptin
 - Skills location: `.github/skills/`.
 
 ## 3.1 Operating Workflow
-- Always check for available skills relevant to the task in `.github/skills/` (and use discovery when needed).
-- Always check agent memory notes in `.github/agents/memory/` for prior learnings that can inform the task.
-- Analyze the request and outline a brief plan using the TODO tool before executing.
-- Use concise tool preambles and group related actions; avoid unnecessary context loading.
-- Execute changes minimally; bundle commits logically and only commit when asked or after confirming.
+
+### Skill-First Approach
+**MANDATORY**: Before executing ANY task, check for relevant skills:
+1. **Always read `.github/skills/README.md` first** - comprehensive catalog of all available skills
+2. Search for relevant skill using catalog categories or semantic search
+3. When a skill exists, **follow its documented workflow** - do NOT use direct terminal commands
+4. Skills are authoritative - they contain validated, tested procedures
+
+**Key Skills:**
+- `git-commit`: Git operations with conventional commits
+- `skill-creator`: Create new skills
+- `skill-catalog-updater`: Auto-update skills catalog
+- `crafting-effective-readmes`: README generation
+- `find-skills`: Discover external skills
+- `agent-memory`: Document learnings
+
+### Context Gathering
+- Check agent memory in `.github/agents/memory/` for prior learnings
+- Use semantic search for concept-based queries
+- Use grep/file search for specific strings or patterns
+- Keep files open in editor to provide implicit context
+
+### Execution Best Practices
+- Analyze request → check skills → plan with TODO tool → execute
+- Be specific with meaningful names (functions, variables, commit messages)
+- Provide top-level context comments for complex implementations
+- Use precise, domain-specific terms likely to appear in the codebase
+- Execute changes minimally; bundle commits logically
+- Only commit when explicitly asked or after confirmation
 
 ## 3.2 Language Policy
 - Documentation, code comments, and prompt design: write in English.
