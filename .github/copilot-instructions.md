@@ -90,7 +90,7 @@ At the end of each response, always include a section showing which resources we
 ```markdown
 ---
 **Contexto utilizado:**
-- **Skills:** [list of skills from .github/skills/ that were referenced]
+- **Skills:** [list of skills from .github/skills/ that were referenced.]
 - **Arquivos:** [list of files that were read or modified]
 - **Memória:** [agent memory files from .github/agents/memory/ if consulted]
 ```
