@@ -68,4 +68,22 @@ deactivate
   - Inline: `$E=mc^2$`
   - Block: `$$\int_a^b f(x)\,dx$$`
 
+## 6. Context Transparency
+At the end of each response, always include a section showing which resources were used:
+
+```markdown
+---
+**Contexto utilizado:**
+- **Skills:** [list of skills from .github/skills/ that were referenced]
+- **Arquivos:** [list of files that were read or modified]
+- **Memória:** [agent memory files from .github/agents/memory/ if consulted]
+```
+
+Guidelines:
+- Only list skills if explicitly consulted from `.github/skills/`
+- List all files read with `read_file` or modified with editing tools
+- Include memory files only if actually accessed
+- Omit the section entirely for simple conversational responses that don't use external resources
+- Keep the format concise and scannable
+
 — End of instructions —
