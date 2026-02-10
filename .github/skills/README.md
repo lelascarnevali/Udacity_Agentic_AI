@@ -37,13 +37,6 @@ This directory contains specialized skills that extend Copilot's capabilities wi
 **Location:** [.github/skills/git-commit/](.github/skills/git-commit/)
 
 
-### `skill-catalog-updater`
-
-**Description:** Automatically updates the skills catalog (README.md) when skills are created or deleted. Scans .github/skills/ directory, extracts metadata from SKILL.md files, and regenerates the catalog with consistent formatting.
-
-**Location:** [.github/skills/skill-catalog-updater/](.github/skills/skill-catalog-updater/)
-
-
 ### `skill-creator`
 
 **Description:** Guide for creating effective skills. This skill should be used when users want to create a new skill (or update an existing skill) that extends Claude's capabilities with specialized knowledge, workflows, or tool integrations.
@@ -63,10 +56,12 @@ This directory contains specialized skills that extend Copilot's capabilities wi
 
 ## 🔄 Keeping This Catalog Updated
 
-This catalog is **automatically maintained** by the `skill-catalog-updater` skill.
+This catalog is **automatically maintained** by the catalog updater utility (not a skill).
 
 **To update:** Run `.github/skills/skill-catalog-updater/update-catalog.sh`
 
+This is integrated into the `skill-creator` workflow - see that skill for details.
+
 ---
 
-*Last updated: 2026-02-09 23:03:58*
+*Last updated: 2026-02-09 23:08:01*

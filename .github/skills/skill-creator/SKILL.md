@@ -99,6 +99,27 @@ Files not intended to be loaded into context, but rather used within the output 
 - **Use cases**: Templates, images, icons, boilerplate code, fonts, sample documents that get copied or modified
 - **Benefits**: Separates output resources from documentation, enables Claude to use files without loading them into context
 
+### Maintaining the Skills Catalog
+
+**IMPORTANT**: After creating, modifying, or deleting a skill, you MUST update the skills catalog:
+
+```bash
+# Update the catalog after any skill changes
+.github/skills/skill-catalog-updater/update-catalog.sh
+```
+
+This ensures `.github/skills/README.md` stays in sync with available skills. The updater:
+- Scans all SKILL.md files in `.github/skills/`
+- Extracts name and description from frontmatter
+- Regenerates README.md with current skills
+- Adds timestamp
+
+**Workflow:**
+1. Create/modify/delete skill
+2. Run updater script
+3. Review generated README.md
+4. Commit skill changes + updated catalog together
+
 #### What to Not Include in a Skill
 
 A skill should only contain essential files that directly support its functionality. Do NOT create extraneous documentation or auxiliary files, including:

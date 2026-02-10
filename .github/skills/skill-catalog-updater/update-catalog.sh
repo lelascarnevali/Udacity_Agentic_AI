@@ -80,9 +80,11 @@ cat >> "$CATALOG_FILE" << EOF
 
 ## 🔄 Keeping This Catalog Updated
 
-This catalog is **automatically maintained** by the \`skill-catalog-updater\` skill.
+This catalog is **automatically maintained** by the catalog updater utility (not a skill).
 
 **To update:** Run \`.github/skills/skill-catalog-updater/update-catalog.sh\`
+
+This is integrated into the \`skill-creator\` workflow - see that skill for details.
 
 ---
 

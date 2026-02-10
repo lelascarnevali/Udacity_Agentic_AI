@@ -40,14 +40,6 @@ This repository hosts Udacity Agentic AI exercises focused on effective promptin
 3. When a skill exists, **follow its documented workflow** - do NOT use direct terminal commands
 4. Skills are authoritative - they contain validated, tested procedures
 
-**Key Skills:**
-- `git-commit`: Git operations with conventional commits
-- `skill-creator`: Create new skills
-- `skill-catalog-updater`: Auto-update skills catalog
-- `crafting-effective-readmes`: README generation
-- `find-skills`: Discover external skills
-- `agent-memory`: Document learnings
-
 ### Context Gathering
 - Check agent memory in `.github/agents/memory/` for prior learnings
 - Use semantic search for concept-based queries
