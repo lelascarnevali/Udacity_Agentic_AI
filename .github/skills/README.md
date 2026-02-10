@@ -56,12 +56,12 @@ This directory contains specialized skills that extend Copilot's capabilities wi
 
 ## 🔄 Keeping This Catalog Updated
 
-This catalog is **automatically maintained** by the catalog updater utility (not a skill).
+This catalog is **automatically maintained** by the catalog updater utility.
 
-**To update:** Run `.github/skills/skill-catalog-updater/update-catalog.sh`
+**To update:** Run `.github/skills/skill-creator/catalog-updater/update-catalog.sh`
 
 This is integrated into the `skill-creator` workflow - see that skill for details.
 
 ---
 
-*Last updated: 2026-02-09 23:08:01*
+*Last updated: 2026-02-09 23:11:32*

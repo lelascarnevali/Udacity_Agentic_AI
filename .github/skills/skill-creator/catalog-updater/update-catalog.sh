@@ -5,7 +5,7 @@
 
 set -e
 
-REPO_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
+REPO_ROOT="$(cd "$(dirname "$0")/../../../.." && pwd)"
 SKILLS_DIR="${REPO_ROOT}/.github/skills"
 CATALOG_FILE="${SKILLS_DIR}/README.md"
 
@@ -80,9 +80,9 @@ cat >> "$CATALOG_FILE" << EOF
 
 ## 🔄 Keeping This Catalog Updated
 
-This catalog is **automatically maintained** by the catalog updater utility (not a skill).
+This catalog is **automatically maintained** by the catalog updater utility.
 
-**To update:** Run \`.github/skills/skill-catalog-updater/update-catalog.sh\`
+**To update:** Run \`.github/skills/skill-creator/catalog-updater/update-catalog.sh\`
 
 This is integrated into the \`skill-creator\` workflow - see that skill for details.
 

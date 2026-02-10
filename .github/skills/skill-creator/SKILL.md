@@ -105,7 +105,7 @@ Files not intended to be loaded into context, but rather used within the output 
 
 ```bash
 # Update the catalog after any skill changes
-.github/skills/skill-catalog-updater/update-catalog.sh
+.github/skills/skill-creator/catalog-updater/update-catalog.sh
 ```
 
 This ensures `.github/skills/README.md` stays in sync with available skills. The updater:
@@ -116,7 +116,7 @@ This ensures `.github/skills/README.md` stays in sync with available skills. The
 
 **Workflow:**
 1. Create/modify/delete skill
-2. Run updater script
+2. Run updater script (located in skill-creator/catalog-updater/)
 3. Review generated README.md
 4. Commit skill changes + updated catalog together
 
