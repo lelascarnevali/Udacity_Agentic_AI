@@ -23,6 +23,13 @@ This directory contains specialized skills that extend Copilot's capabilities wi
 **Location:** [.github/skills/crafting-effective-readmes/](.github/skills/crafting-effective-readmes/)
 
 
+### `create-study-guide`
+
+**Description:** Create high-quality technical reference guides and cheat sheets from raw content. Focuses on engineering best practices, visual retention (tables, emojis, formulas), and concise summaries rather than verbatim transcription.
+
+**Location:** [.github/skills/create-study-guide/](.github/skills/create-study-guide/)
+
+
 ### `find-skills`
 
 **Description:** Helps users discover and install agent skills when they ask questions like "how do I do X", "find a skill for X", "is there a skill that can...", or express interest in extending capabilities. This skill should be used when the user is looking for functionality that might exist as an installable skill.
@@ -64,4 +71,4 @@ This is integrated into the `skill-creator` workflow - see that skill for detail
 
 ---
 
-*Last updated: 2026-02-09 23:11:32*
+*Last updated: 2026-02-16 21:03:20*
