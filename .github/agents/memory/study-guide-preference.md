@@ -4,14 +4,21 @@
 
 **Padrão de Execução (Skill `create-study-guide`):**
 1.  **Engenharia > Prosa:** Priorizar fórmulas, tabelas comparativas e blocos de código em vez de parágrafos longos.
-2.  **Retenção Visual:** Usar emojis moderados, LaTeX ($$) para conceitos abstratos (ex: `Personas Equation`) e tabelas Markdown.
-3.  **Fonte da Verdade:** SEMPRE ler as transcrições (`.srt` ou texto) antes de gerar o conteúdo final para garantir que os exemplos (ex: "Organizador de Escritório") sejam específicos do curso, não genéricos.
-4.  **Estrutura:**
+2.  **Retenção Visual:** 
+    *   Usar emojis moderados e LaTeX ($$) para fórmulas.
+    *   **ASCII Art/Mermaid:** Para fluxos de arquitetura (ex: Loop ReAct).
+    *   **Tabelas de Comparação:** Para contrastar métodos (ex: Draft vs Final, CoT vs ReAct).
+3.  **Code-First & Implementation:**
+    *   Incluir padrões de código reais (Python/Regex) e não apenas pseudo-código.
+    *   Exemplos de "Poor vs Optimized" (ex: Tool Descriptions).
+    *   Dicas de Debugging (ex: Feedback Loops de erro).
+4.  **Fonte da Verdade:** SEMPRE ler as transcrições (`.srt` ou texto) antes de gerar o conteúdo final.
+5.  **Estrutura:**
     *   Conceito Fundamental (Fórmula/Definição Técnica)
-    *   Componentes/Arquitetura
-    *   Estudos de Caso (Comparação Antes/Depois)
-    *   Code Patterns (Implementação)
-    *   Glossário Técnico
+    *   Componentes/Arquitetura (Diagramas)
+    *   Estudos de Caso (Comparação Antes/Depois em Tabela)
+    *   Code Patterns (Implementação Robusta)
+    *   Armadilhas Comuns & Debugging
 
 **Exemplo de Sucesso:**
-Ver arquivos: `1-the-role-of-prompting-in-agentic-ai.md` e `2-role-based-prompting.md`.
+Ver arquivos: `5-applying-cot-and-react-with-python.md` e `6-prompt-instruction-refinement.md`.
