@@ -1,4 +1,4 @@
-# Applying CoT & ReAct Prompting with Python
+# Aplicando Prompting CoT e ReAct com Python
 
 > **Nota Técnica**: Este guia foca na **implementação de código** (Code-First) dos conceitos de Chain-of-Thought e ReAct. Baseado no exercício prático de diagnóstico de supply chain/retail da aula.
 

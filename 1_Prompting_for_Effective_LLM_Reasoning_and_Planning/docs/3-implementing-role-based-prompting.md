@@ -1,4 +1,4 @@
-# Implementing Role-Based Prompting: From Actor to Expert
+# Implementando Role-Based Prompting: De Ator a Especialista
 
 > **Nota Técnica**: Este guia explora a implementação prática de personas em Python, diferenciando entre "Personas Criativas" (Atores) e "Personas Profissionais" (Especialistas). Baseado nos exercícios de simulação histórica (Einstein) e análise de segurança (Phishing).
 

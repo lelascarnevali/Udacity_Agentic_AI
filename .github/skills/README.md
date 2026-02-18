@@ -23,20 +23,6 @@ This directory contains specialized skills that extend Copilot's capabilities wi
 **Location:** [.github/skills/crafting-effective-readmes/](.github/skills/crafting-effective-readmes/)
 
 
-### `create-study-guide`
-
-**Description:** Create high-quality technical reference guides and cheat sheets from raw content. Focuses on engineering best practices, visual retention (tables, emojis, formulas), and concise summaries rather than verbatim transcription.
-
-**Location:** [.github/skills/create-study-guide/](.github/skills/create-study-guide/)
-
-
-### `find-skills`
-
-**Description:** Helps users discover and install agent skills when they ask questions like "how do I do X", "find a skill for X", "is there a skill that can...", or express interest in extending capabilities. This skill should be used when the user is looking for functionality that might exist as an installable skill.
-
-**Location:** [.github/skills/find-skills/](.github/skills/find-skills/)
-
-
 ### `git-commit`
 
 **Description:** Execute git commit with conventional commit message analysis, intelligent staging, and message generation. Use when user asks to commit changes, create a git commit, or mentions "/commit". Supports: (1) Auto-detecting type and scope from changes, (2) Generating conventional commit messages from diff, (3) Interactive commit with optional type/scope/description overrides, (4) Intelligent file staging for logical grouping
@@ -44,11 +30,25 @@ This directory contains specialized skills that extend Copilot's capabilities wi
 **Location:** [.github/skills/git-commit/](.github/skills/git-commit/)
 
 
+### `prompt-engineering`
+
+**Description:** Use this skill when you writing commands, hooks, skills for Agent, or prompts for sub agents or any other LLM interaction, including optimizing prompts, improving LLM outputs, or designing production prompt templates.
+
+**Location:** [.github/skills/prompt-engineering/](.github/skills/prompt-engineering/)
+
+
 ### `skill-creator`
 
 **Description:** Guide for creating effective skills. This skill should be used when users want to create a new skill (or update an existing skill) that extends Claude's capabilities with specialized knowledge, workflows, or tool integrations.
 
 **Location:** [.github/skills/skill-creator/](.github/skills/skill-creator/)
+
+
+### `tech-writer`
+
+**Description:** Apply rigorous technical writing standards (Strunk & White) to create or update documentation. Use for creating study guides, cheat sheets, or updating project docs based on local code changes.
+
+**Location:** [.github/skills/tech-writer/](.github/skills/tech-writer/)
 
 
 ---
@@ -71,4 +71,4 @@ This is integrated into the `skill-creator` workflow - see that skill for detail
 
 ---
 
-*Last updated: 2026-02-16 21:03:20*
+*Last updated: 2026-02-17 21:32:40*

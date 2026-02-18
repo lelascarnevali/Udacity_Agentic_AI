@@ -1,4 +1,4 @@
-# Applying Prompt Instruction Refinement with Python
+# Aplicando Refinamento de Instruções de Prompt com Python
 
 Este guia explora como transformar *prompts vagos* em *instruções precisas e programáveis*, utilizando Python para estruturar a interação com o LLM. A técnica é demonstrada através de dois cenários: um de **classificação de receitas** (baseado na aula) e um de **automação de suporte ao cliente** (aplicação prática).
 

@@ -36,7 +36,7 @@ Um agente moderno é composto por 5 pilares essenciais:
 
 ## 3. O Poder do Prompting: "Programando" o Modelo
 
-**Prompting** não é apenas fazer perguntas estúpidas; é o método de **programação** do comportamento do agente. Transforma poder de computação bruto em utilidade específica.
+**Prompting** é o método de **programação** do comportamento do agente. Transforma poder de computação bruto em utilidade específica.
 
 ### Decomposição de Tarefas (Planning)
 Agentes usam prompting para quebrar problemas complexos (ex: "Quero um reembolso") em passos lógicos:
