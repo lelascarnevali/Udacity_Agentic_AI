@@ -1,6 +1,6 @@
 ---
 name: tech-writer
-description: Apply rigorous technical writing standards (Strunk & White) to create or update documentation. Use for creating study guides, cheat sheets, or updating project docs based on local code changes.
+description: MANDATORY for creating or updating ANY documentation in /docs/ folders (study guides, cheat sheets, reference guides). Apply rigorous technical writing standards (Strunk & White). Use when user asks to create documentation, study guides, summaries, or reference materials from transcripts, videos, or code changes.
 license: MIT
 allowed-tools: [read_file, create_file, create_directory, run_in_terminal, file_search, grep_search]
 ---
@@ -13,6 +13,21 @@ This skill embodies a specialist Technical Writer agent. It operates in two prim
 2.  **Update**: syncing documentation with code changes (Maintenance).
 
 All output is governed by "The Elements of Style" (Strunk & White) for clarity and conciseness, and by "Docs-as-Code" best practices for maintainability.
+
+## When to Use This Skill
+
+**MANDATORY** when:
+- User requests to create documentation, study guide, cheat sheet, or reference guide
+- Creating or updating files in any `/docs/` folder
+- Converting transcripts or raw content into structured documentation
+- Updating documentation based on code changes
+
+**Trigger phrases:**
+- "faça um item X em docs..."
+- "crie um guia de estudo..."
+- "documente..."
+- "faça uma documentação sobre..."
+- "crie um resumo..."
 
 ## Mode Selection
 
@@ -45,6 +60,33 @@ Identify core concepts. Ask: "How would I explain this to another engineer in 30
 - **Tables**: Mandatory for any comparison.
 - **Callouts**: Use blockquotes (`>`) for critical rules or "Scenario" examples.
 - **Language**: Default to **Portuguese (pt-BR)** unless requested otherwise.
+
+### 4. Copyright & Code Examples
+**CRITICAL**: When including code examples in documentation:
+
+- ✅ **DO**: Create original, educational, generic implementations
+- ✅ **DO**: Write reusable patterns and abstractions
+- ✅ **DO**: Focus on demonstrating concepts, not production code
+- ✅ **DO**: Use simple, clear variable/function names
+- ❌ **DON'T**: Copy specific implementations from libraries or tutorials
+- ❌ **DON'T**: Include business-specific or proprietary logic
+- ❌ **DON'T**: Reproduce copyrighted code patterns verbatim
+
+**Example Approach:**
+```python
+# ❌ BAD: Specific implementation tied to one use case
+def generate_data_analysis_script():
+    # ...very specific prompts and logic...
+
+# ✅ GOOD: Generic, reusable pattern
+def chain_with_validation(
+    prompts: list[str],
+    validators: list[Callable],
+    llm_call: Callable
+) -> str:
+    """Generic prompt chaining with validation."""
+    # ...abstract pattern...
+```
 
 ---
 

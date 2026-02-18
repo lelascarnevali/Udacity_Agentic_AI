@@ -19,6 +19,9 @@ Reference guides dealing with the theoretical aspects of prompt engineering.
 - **[6. Prompt Instruction Refinement](./6-prompt-instruction-refinement.md)**  
   *Methodology for iteratively debugging and optimizing prompts using the Refinement Cycle.*
 
+- **[8. Chaining Prompts for Agentic Reasoning](./8-chaining-prompts-for-agentic-reasoning.md)**  
+  *Breaking complex tasks into sequential steps with validation gates for reliable multi-stage LLM workflows.*
+
 ---
 
 ### 🐍 Practical Implementation (Python)

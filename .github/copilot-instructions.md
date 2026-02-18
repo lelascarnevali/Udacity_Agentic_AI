@@ -33,18 +33,34 @@ This repository hosts Udacity Agentic AI exercises focused on effective promptin
 
 ## 3.1 Operating Workflow
 
-### Skill-First Approach
-**MANDATORY**: Before executing ANY task, check for relevant skills:
-1. **Always read `.github/skills/README.md` first** - comprehensive catalog of all available skills
-2. Search for relevant skill using catalog categories or semantic search
-3. When a skill exists, **follow its documented workflow** - do NOT use direct terminal commands
-4. Skills are authoritative - they contain validated, tested procedures
+### Skill-First with Memory Context (MANDATORY)
+**BEFORE executing ANY non-trivial task:**
 
-### Context Gathering
-- Check agent memory in `.github/agents/memory/` for prior learnings
-- Use semantic search for concept-based queries
-- Use grep/file search for specific strings or patterns
-- Keep files open in editor to provide implicit context
+1. **Check Relevant Skills** (`.github/skills/`):
+   - Read `.github/skills/README.md` for catalog
+   - Search for relevant skill using categories or semantic search
+   - When skill exists, read the skill document
+   - Skills are authoritative - contain validated procedures
+
+2. **Check Memory Associated with Skills** (`.github/agents/memory/`):
+   - After identifying skill(s), check for related memory entries:
+     - `tech-writer` skill → `study-guide-preference.md`
+     - Python operations → `virtual-environment-agent-memory.md`
+     - Terminal/git operations → `terminal-troubleshooting.md`
+     - `agent-memory` skill → `agent-memory-skill-usage-agent-memory.md`
+     - README work → `readme-agent-memory.md`
+     - Workflow patterns → `workflow-memory-check-agent-memory.md`
+   - Apply learnings, preferences, and established rules from memory
+
+3. **Gather Additional Context**:
+   - Use semantic search for concept-based queries
+   - Use grep/file search for specific strings or patterns
+   - Keep files open in editor to provide implicit context
+
+**Skip skill/memory check ONLY for:**
+- Simple conversational responses
+- Trivial single-line answers
+- Tasks not involving file operations or workflows
 
 ### Execution Best Practices
 - Analyze request → check skills → plan with TODO tool → execute
