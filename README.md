@@ -36,6 +36,28 @@ Learn to build coordinated teams of AI agents. This course covers the entire pro
 
 ---
 
+## 🤖 Agentic Skills
+
+This repository is equipped with a suite of **Agentic Skills** designed to enhance the development workflow. These skills are integrated into GitHub Copilot and provide specialized capabilities for maintaining and expanding the project.
+
+Located in `.github/skills/`, these tools include:
+
+*   **`tech-writer`**:  
+    *   **Creation Mode**: Generates high-quality study guides and cheat sheets from raw content.
+    *   **Maintenance Mode**: Automatically updates documentation to reflect code changes, ensuring docs never drift from implementation.
+    *   *Powered by "The Elements of Style" (Strunk & White) and Docs-as-Code best practices.*
+
+*   **`skill-creator`**:  
+    *   Facilitates the creation of new agentic skills, standardizing the structure and registration process.
+
+*   **`agent-memory`**:  
+    *   Manages long-term memory for the AI, allowing it to recall project-specific context and decisions across sessions.
+
+*   **`planner`** & **`metacognition`**:  
+    *   Advanced reasoning tools to break down complex tasks and reflect on the problem-solving process.
+
+---
+
 ## Quickstart
 
 Get up and running fast on macOS with `uv` and Jupyter:
