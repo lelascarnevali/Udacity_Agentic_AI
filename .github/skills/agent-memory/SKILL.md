@@ -44,6 +44,13 @@ ctx="role-based-prompting"
 - Do not duplicate programming standards or Copilot instructions here
 - `.github/agents/memory/.gitignore` tracks only `.md` and `.gitkeep`
 
+## Maintenance (MANDATORY)
+After creating a new memory file, you **MUST** update the index at `.github/agents/memory/README.md`.
+- Add a new row to the table.
+- **Context/Skill**: The skill or context associated with the memory.
+- **Relevant Memory File**: Link to the new file (e.g., `[my-new-memory.md](my-new-memory.md)`).
+- **Description**: A brief summary of what the memory contains.
+
 ## References
 - Memory conventions: `.github/agents/memory/README.md`
 - Template: `.github/skills/agent-memory/templates/memory-template.md`

@@ -34,28 +34,19 @@ This repository hosts Udacity Agentic AI exercises focused on effective promptin
 ## 3.1 Operating Workflow
 
 ### Skill-First with Memory Context (MANDATORY)
-**BEFORE executing ANY non-trivial task:**
+**BEFORE creating a plan or executing ANY non-trivial task:**
 
-1. **Check Relevant Skills** (`.github/skills/`):
-   - Read `.github/skills/README.md` for catalog
-   - Search for relevant skill using categories or semantic search
-   - When skill exists, read the skill document
-   - Skills are authoritative - contain validated procedures
+1. **Consult Knowledge Indices**:
+   - **Skills Catalog**: Read `.github/skills/README.md` to identify what capabilities are available.
+   - **Memory Index**: Read `.github/agents/memory/README.md` to identify what past learnings/preferences apply.
 
-2. **Check Memory Associated with Skills** (`.github/agents/memory/`):
-   - After identifying skill(s), check for related memory entries:
-     - `tech-writer` skill → `study-guide-preference.md`
-     - Python operations → `virtual-environment-agent-memory.md`
-     - Terminal/git operations → `terminal-troubleshooting.md`
-     - `agent-memory` skill → `agent-memory-skill-usage-agent-memory.md`
-     - README work → `readme-agent-memory.md`
-     - Workflow patterns → `workflow-memory-check-agent-memory.md`
-   - Apply learnings, preferences, and established rules from memory
+2. **Activate Specific Knowledge**:
+   - Read the *specific* skill file found in the catalog (e.g., `SKILL.md`).
+   - Read the *specific* memory file found in the index (e.g., `*-memory.md`).
 
-3. **Gather Additional Context**:
-   - Use semantic search for concept-based queries
-   - Use grep/file search for specific strings or patterns
-   - Keep files open in editor to provide implicit context
+3. **Plan & Execute**:
+   - Create a plan (using `manage_todo_list`) that explicitly incorporates the steps/rules from the loaded skills and memory.
+   - Execute the plan, adhering strictly to the loaded guidelines.
 
 **Skip skill/memory check ONLY for:**
 - Simple conversational responses
@@ -63,7 +54,8 @@ This repository hosts Udacity Agentic AI exercises focused on effective promptin
 - Tasks not involving file operations or workflows
 
 ### Execution Best Practices
-- Analyze request → check skills → plan with TODO tool → execute
+- **Workflow:** Read Indices (`README.md`s) → Read Specific Files → Plan (`manage_todo_list`) → Execute.
+- **File Editing Rule (MANDATORY):** NEVER use terminal commands (like `cat`, `echo`, `sed`) to create or edit files. ALWAYS use VS Code tools (`create_file`, `replace_string_in_file`, `edit_notebook_file`).
 - Be specific with meaningful names (functions, variables, commit messages)
 - Provide top-level context comments for complex implementations
 - Use precise, domain-specific terms likely to appear in the codebase
