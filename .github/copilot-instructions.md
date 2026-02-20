@@ -68,6 +68,40 @@ This repository hosts Udacity Agentic AI exercises focused on effective promptin
 - Keep examples consistent: internal artifacts in English; communication in Portuguese.
 
 
+## 3.3 Garantindo a Consulta de Skills e Memórias (Aprimorado)
+
+Para evitar inconsistências e garantir que as skills e memórias sejam consultadas corretamente, siga estas etapas adicionais:
+
+1. **Validação Automática**:
+   - Antes de executar qualquer tarefa, registre quais skills e memórias foram consultadas.
+   - Inclua logs no formato:
+     ```
+     [Timestamp] Skill consultada: [NOME_DA_SKILL] | Memória consultada: [NOME_DA_MEMÓRIA]
+     ```
+
+2. **Exemplos Práticos**:
+   - **Exemplo 1**: Consultar uma skill específica:
+     ```
+     Leia o arquivo `.github/skills/prompt-engineering/SKILL.md` para entender como otimizar prompts.
+     ```
+   - **Exemplo 2**: Consultar memórias relevantes:
+     ```
+     Leia o arquivo `.github/agents/memory/README.md` para identificar aprendizados prévios aplicáveis.
+     ```
+
+3. **Ações Corretivas**:
+   - Caso uma skill ou memória não seja consultada, interrompa a execução e retorne ao fluxo correto.
+   - Informe ao usuário que a consulta foi corrigida. Exemplo de mensagem:
+     ```
+     A consulta da skill/memória foi corrigida. Certifique-se de seguir o fluxo correto para evitar inconsistências futuras.
+     ```
+
+4. **Auditoria**:
+   - Mantenha um registro das skills e memórias consultadas para referência futura.
+   - Integre a validação com ferramentas de CI/CD para garantir conformidade automática.
+
+Essas etapas garantem que o fluxo seja seguido rigorosamente e que todas as tarefas sejam executadas com base nas informações corretas.
+
 ## 4. Virtual Environment
 - Preferred: local virtualenv at `.venv/`.
 - Setup on macOS:
