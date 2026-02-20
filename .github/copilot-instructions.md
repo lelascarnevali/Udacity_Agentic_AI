@@ -34,24 +34,29 @@ This repository hosts Udacity Agentic AI exercises focused on effective promptin
 ## 3.1 Operating Workflow
 
 ### Skill-First with Memory Context (MANDATORY)
-**BEFORE creating a plan or executing ANY non-trivial task:**
+**BEFORE creating a plan or executing ANY task (including tasks that appear trivial):**
 
-1. **Consult Knowledge Indices**:
-   - **Skills Catalog**: Read `.github/skills/README.md` to identify what capabilities are available.
-   - **Memory Index**: Read `.github/agents/memory/README.md` to identify what past learnings/preferences apply.
+1. **Consult Knowledge Indices (always)**:
+   - **Skills Catalog**: Read `.github/skills/README.md` to identify available capabilities.
+   - **Memory Index**: Read `.github/agents/memory/README.md` to identify relevant past learnings or preferences.
 
-2. **Activate Specific Knowledge**:
-   - Read the *specific* skill file found in the catalog (e.g., `SKILL.md`).
-   - Read the *specific* memory file found in the index (e.g., `*-memory.md`).
+2. **Activate Specific Knowledge (when present)**:
+   - Read the specific skill files that look relevant (e.g., `.github/skills/*/SKILL.md`).
+   - Read the specific memory files that look relevant (e.g., `.github/agents/memory/*-memory.md`).
 
-3. **Plan & Execute**:
-   - Create a plan (using `manage_todo_list`) that explicitly incorporates the steps/rules from the loaded skills and memory.
-   - Execute the plan, adhering strictly to the loaded guidelines.
+3. **ReAct-style Plan & Execute Loop**:
+   - Build a plan using `manage_todo_list` that explicitly references rules or steps from any loaded skills and memory.
+   - Use a ReAct loop for execution: **Analyze** the task and repo state → **Decide** which skill/memory (if any) to apply and which micro-action to take → **Act** (use tools) → **Observe** results → **Reflect** and update plan.
+   - Before each action, re-evaluate whether an applicable skill or memory should be used.
 
-**Skip skill/memory check ONLY for:**
-- Simple conversational responses
-- Trivial single-line answers
-- Tasks not involving file operations or workflows
+4. **Micro-Activities (MANDATORY)**:
+   - Break work into small, self-contained micro-activities to avoid exceeding the LLM context window. Each micro-activity should be a single focused action (e.g., "read file X", "generate diff summary", "stage files A,B", "apply patch to file Y").
+   - After completing each micro-activity, record progress in `manage_todo_list` and re-check skills/memories for newly relevant guidance.
+
+5. **Exceptions**:
+   - Only skip the above checks for pure conversational replies that do not involve repository or workflow actions and when explicitly requested by the user.
+
+This policy enforces always checking skills and memory, applying ReAct reasoning, and using micro-activities so automated agents behave consistently and safely.
 
 ### Execution Best Practices
 - **Workflow:** Read Indices (`README.md`s) → Read Specific Files → Plan (`manage_todo_list`) → Execute.
