@@ -33,19 +33,22 @@ This repository hosts Udacity Agentic AI exercises focused on effective promptin
 
 ## 3.1 Operating Workflow
 
-### Skill-First with Memory Context (MANDATORY)
-**BEFORE creating a plan or executing ANY task (including tasks that appear trivial):**
+### Core Workflow (MANDATORY)
 
-1. **Consult Knowledge Indices (always)**:
-   - **Skills Catalog**: Read `.github/skills/README.md` to identify available capabilities.
-   - **Memory Index**: Read `.github/agents/memory/README.md` to identify relevant past learnings or preferences.
+**YOU MUST follow these steps in order for EVERY task. No exceptions.**
 
-2. **Activate Specific Knowledge (when present)**:
-   - Read the specific skill files that look relevant (e.g., `.github/skills/*/SKILL.md`).
-   - Read the specific memory files that look relevant (e.g., `.github/agents/memory/*-memory.md`).
+**STEP 0: CONTEXT AND SKILL ANALYSIS (NON-NEGOTIABLE)**
+This is the absolute first step. Do not plan or execute any other action until this is complete.
+1.  **Consult Catalogs**: Read `.github/skills/README.md` and `.github/agents/memory/README.md`.
+2.  **Identify Relevant Knowledge**: Based on the user's request, identify any potentially relevant skills or memories. If any are relevant, you MUST read their `SKILL.md` or memory files.
+3.  **State Findings in Your Plan**: Your execution plan **MUST** begin with a "Context Analysis" section that lists:
+    *   The skills you identified as relevant (e.g., `git-commit`, `tech-writer`).
+    *   The memories you identified as relevant.
+    *   If no specific skills/memories seem relevant, you must state: "No specific skills or memories were identified as relevant."
+    *   *Failure to include this section in your plan is a critical error.*
 
-3. **ReAct-style Plan & Execute Loop**:
-   - Build a plan using `manage_todo_list` that explicitly references rules or steps from any loaded skills and memory.
+**STEP 1: ReAct-style Plan & Execute Loop**:
+   - After completing Step 0, build a plan using `manage_todo_list` that explicitly references rules or steps from any loaded skills and memory.
    - Use a ReAct loop for execution: **Analyze** the task and repo state → **Decide** which skill/memory (if any) to apply and which micro-action to take → **Act** (use tools) → **Observe** results → **Reflect** and update plan.
    - Before each action, re-evaluate whether an applicable skill or memory should be used.
 
