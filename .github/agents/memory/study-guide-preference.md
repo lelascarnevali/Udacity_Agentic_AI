@@ -32,3 +32,10 @@ Ver arquivos: `5-applying-cot-and-react-with-python.md` e `6-prompt-instruction-
 - [ ] Código é original e educacional (não específico/copiado)?
 - [ ] Usa emojis, tabelas e LaTeX adequadamente?
 - [ ] Seguiu "The Elements of Style" (voz ativa, forma positiva)?
+
+**Padronização de Estrutura (lições do item 9):**
+- Nunca usar bloco de "nota técnica" ou comentários antes do título.
+- Não deixar linhas vazias antes do título.
+- O título deve ser a primeira linha do arquivo, em markdown, sem numeração, símbolos ou prefixos.
+- Seguir a taxonomia e semântica dos outros docs para títulos e sumário (ex: sem "·", sem "9 -", sem ponto, sem caixa diferente).
+- Sumário visual e seções devem seguir o fluxo dos exemplos de sucesso.
