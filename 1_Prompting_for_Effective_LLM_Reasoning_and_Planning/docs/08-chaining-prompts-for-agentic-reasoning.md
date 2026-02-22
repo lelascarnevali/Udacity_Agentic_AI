@@ -25,6 +25,15 @@ $$
 
 To achieve complex goals, agents decompose tasks into smaller steps and evaluate progress at each step.
 
+```mermaid
+flowchart TD
+	LLM["LLM\n(reason)"] --> ORC["Orchestrator\n(control)"]
+	ORC --> TOOLS["Tools\n(act)"]
+	TOOLS --> ORC
+	ORC --> MEMORY["Memory\n(context)"]
+	MEMORY --> LLM
+```
+
 ---
 
 ## 2) Prompt Chaining: Core Idea
@@ -42,6 +51,12 @@ $$
 3. **Draft post** using `RESPONSE_2` → `FINAL_RESPONSE`
 
 This pipeline is more controllable and maintainable than one giant prompt.
+
+| Pattern | When to use | Trade-offs |
+|---|---:|---|
+| Chain (ReAct) | Multi-step tasks requiring tools | Deterministic control, more engineering
+| Chain (CoT) | Complex reasoning inside single call | Simpler but riskier for tool usage
+
 
 ---
 
@@ -85,6 +100,38 @@ if validate_output(output):
 else:
 	handle_error(output)
 ```
+
+	### Poor vs Optimized (code-first)
+
+	Poor (no validation):
+
+	```python
+	def run_simple_chain(prompts, llm):
+		responses = []
+		for p in prompts:
+			responses.append(llm(p))
+		return responses[-1]
+	```
+
+	Optimized (validation + retries):
+
+	```python
+	from typing import Callable
+	def chain_with_validation(prompts: list[str], llm: Callable[[str], str],
+							  validator: Callable[[str], bool], retries: int = 2):
+		last = None
+		for p in prompts:
+			attempt = 0
+			while attempt <= retries:
+				out = llm(p if last is None else f"{p}\n\nPrevious:\n{last}")
+				if validator(out):
+					last = out
+					break
+				attempt += 1
+			else:
+				raise RuntimeError("Validation failed after retries")
+		return last
+	```
 
 ### Typical failure strategies
 
