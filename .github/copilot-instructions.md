@@ -52,6 +52,11 @@ This is the absolute first step. Do not plan or execute any other action until t
    - Use a ReAct loop for execution: **Analyze** the task and repo state → **Decide** which skill/memory (if any) to apply and which micro-action to take → **Act** (use tools) → **Observe** results → **Reflect** and update plan.
    - Before each action, re-evaluate whether an applicable skill or memory should be used.
 
+**COMMIT POLICY (REPOSITORY):**
+1. For every git commit made by this agent (even for small or single-file changes), the agent MUST use the `git-commit` skill from `.github/skills/git-commit/SKILL.md` to generate the commit message and follow its staging recommendations.
+2. When automating commits, prefer using the repository helper script `scripts/commit_with_skill.py` which implements the `git-commit` heuristics. If the script is not available, the agent must still consult the `git-commit` skill and follow its workflow manually.
+3. Do NOT run destructive git operations (force push, hard reset) without explicit user approval.
+
 4. **Micro-Activities (MANDATORY)**:
    - Break work into small, self-contained micro-activities to avoid exceeding the LLM context window. Each micro-activity should be a single focused action (e.g., "read file X", "generate diff summary", "stage files A,B", "apply patch to file Y").
    - After completing each micro-activity, record progress in `manage_todo_list` and re-check skills/memories for newly relevant guidance.
