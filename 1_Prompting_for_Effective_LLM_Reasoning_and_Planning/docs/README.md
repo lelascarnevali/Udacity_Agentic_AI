@@ -1,43 +1,45 @@
-# Module 1: Prompting for Effective LLM Reasoning and Planning
+# Módulo 1: Prompting para Raciocínio e Planejamento Eficaz com LLMs
 
-## Documentation Index
+## Índice de Documentação
 
-This module covers foundational techniques for prompting Large Language Models (LLMs) to reason and plan effectively within agentic workflows. Filenames are zero-padded to ensure correct ordering on GitHub.
+Este módulo aborda técnicas fundamentais para projetar prompts que permitam aos Large Language Models (LLMs) raciocinar e planejar em fluxos de trabalho agentivos. Os nomes de ficheiros usam zero-padding quando aplicável para garantir a ordenação correta no GitHub.
 
-### 🧠 Conceptual Foundations
-Reference guides dealing with the theoretical aspects of prompt engineering.
+### 🧠 Fundamentos Conceituais
+Guias de referência que tratam dos aspetos teóricos do design de prompts.
 
-- **[01. The Role of Prompting in Agentic AI](./01-the-role-of-prompting-in-agentic-ai.md)**
-  *Understanding the "Agente = Perceber + Decidir + Agir" equation and the role of LLMs as the cognitive engine.*
+- **[01. O Papel do Prompting em Agentic AI](./01-the-role-of-prompting-in-agentic-ai.md)**
+  *Entende a equação "Agente = Perceber + Decidir + Agir" e o papel dos LLMs como motor cognitivo.*
 
-- **[02. Role-Based Prompting: Engineering Guide](./02-role-based-prompting.md)**
-  *Deep dive into the Persona Equation ($P(\\text{Response} | \\\\text{Context}, \\\\text{Role}, \\\\text{Constraints})$) and how identity shapes model output.*
+- **[02. Role-Based Prompting: Guia de Engenharia](./02-role-based-prompting.md)**
+  *Explora como a persona (Role) influencia a saída do modelo e padrões para controlar tom e comportamento.*
 
-- **[03. Implementing Role-Based Prompting](./03-implementing-role-based-prompting.md)**
-  *From "Creative Actors" to "Professional Experts" — implementation patterns and examples in Python.*
+- **[03. Implementando Role-Based Prompting](./03-implementing-role-based-prompting.md)**
+  *Padrões de implementação e exemplos em Python para traduzir personas em instruções efetivas.*
 
-- **[04. Chain-of-Thought & ReAct Frameworks](./04-chain-of-thought-and-react-prompting.md)**
-  *Comparison of reasoning methods: CoT (internal chain-of-thought) vs ReAct (reasoning + acting with tools).*
+- **[04. Chain-of-Thought & ReAct](./04-chain-of-thought-and-react-prompting.md)**
+  *Comparação entre métodos de raciocínio: CoT (interno) vs ReAct (raciocínio + ações/ferramentas).*
 
-- **[05. Applying CoT & ReAct with Python](./05-applying-cot-and-react-with-python.md)**
-  *Code-first patterns for building Think/Act/Observe loops and safely parsing LLM actions.*
- 
- - **[06. Prompt Instruction Refinement & Application](./06-prompt-instruction-refinement-and-application.md)**
-   *Methodology and practical Python examples for debugging and optimizing prompts.*
-
- - **[07. Chaining Prompts for Agentic Reasoning](./07-chaining-prompts-for-agentic-reasoning.md)**
-   *Integrated guide covering chaining architecture, gate checks, Python implementation, and Pydantic-based structured validation.*
-
- - **[08. LLM Feedback Loops](./08-llm-feedback-loops.md)**
-   *Designing iterative feedback and evaluation loops for model improvement.*
-
+- **[05. Aplicando CoT & ReAct com Python](./05-applying-cot-and-react-with-python.md)**
+  *Padrões "code-first" para construir loops Think/Act/Observe e parse seguro de ações geradas pelo LLM.*
 ---
 
-### 🐍 Practical Tools & Examples
-Supplemental code, snippets and best-practice patterns used across exercises.
+- **[06. Refinamento de Instruções de Prompt e Aplicação](./06-prompt-instruction-refinement-and-application.md)**
+  *Metodologia e exemplos práticos em Python para iterar e depurar instruções.*
 
-- **Code examples:** see the individual guides above (03, 05, 07, 08, 09) for runnable snippets.
-- **Validation patterns:** `ast` checks for syntax, `pydantic` for structured output validation, and regex-based parsers for ACT/OBS patterns.
+- **[07. Encadeamento de Prompts para Raciocínio Agêntico](./07-chaining-prompts-for-agentic-reasoning.md)**
+  *Guia integrado sobre arquitetura de cadeias, gate checks, implementação em Python e validação com Pydantic.*
+
+- **[08. Loops de Feedback para LLMs](./08-llm-feedback-loops.md)**
+  *Desenho de ciclos iterativos de feedback e avaliação para melhorar as saídas do modelo.*
+
+---
+---
+
+### 🐍 Ferramentas Práticas e Exemplos
+Recursos complementares, snippets e padrões de boas práticas usados nos exercícios.
+
+- **Exemplos de código:** consulte os guias acima (03, 05, 06, 07, 08) para trechos executáveis.
+- **Padrões de validação:** checagens com `ast` para sintaxe, `pydantic` para saídas estruturadas e parsers por regex para padrões ACT/OBS.
 
 ---
 
