@@ -21,18 +21,15 @@ Reference guides dealing with the theoretical aspects of prompt engineering.
 
 - **[05. Applying CoT & ReAct with Python](./05-applying-cot-and-react-with-python.md)**
   *Code-first patterns for building Think/Act/Observe loops and safely parsing LLM actions.*
+ 
+ - **[06. Prompt Instruction Refinement & Application](./06-prompt-instruction-refinement-and-application.md)**
+   *Methodology and practical Python examples for debugging and optimizing prompts.*
 
-- **[06. Prompt Instruction Refinement](./06-prompt-instruction-refinement.md)**
-  *Methodology for iteratively debugging and optimizing prompts using the Refinement Cycle.*
+ - **[07. Chaining Prompts for Agentic Reasoning](./07-chaining-prompts-for-agentic-reasoning.md)**
+   *Integrated guide covering chaining architecture, gate checks, Python implementation, and Pydantic-based structured validation.*
 
-- **[07. Applying Prompt Refinement with Python](./07-applying-prompt-instruction-refinement-with-python.md)**
-  *Practical examples of turning vague user input into structured, machine-readable outputs.*
-
-- **[08. Chaining Prompts for Agentic Reasoning](./08-chaining-prompts-for-agentic-reasoning.md)**
-  *Integrated guide covering chaining architecture, gate checks, Python implementation, and Pydantic-based structured validation.*
-
-- **[09. LLM Feedback Loops](./09-llm-feedback-loops.md)**
-  *Designing iterative feedback and evaluation loops for model improvement.*
+ - **[08. LLM Feedback Loops](./08-llm-feedback-loops.md)**
+   *Designing iterative feedback and evaluation loops for model improvement.*
 
 ---
 
