@@ -40,7 +40,3 @@ Recursos complementares, snippets e padrões de boas práticas usados nos exerc�
 
 - **Exemplos de código:** consulte os guias acima (03, 05, 06, 07, 08) para trechos executáveis.
 - **Padrões de validação:** checagens com `ast` para sintaxe, `pydantic` para saídas estruturadas e parsers por regex para padrões ACT/OBS.
-
----
-
-If you find a broken link after the recent renames, please open an issue or submit a PR updating references elsewhere in the repository.
