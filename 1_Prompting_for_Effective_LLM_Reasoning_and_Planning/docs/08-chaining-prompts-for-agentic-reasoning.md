@@ -1,52 +1,42 @@
 # Chaining Prompts for Agentic Reasoning
 
 ## Resumo
-- **O que:** Padrões para encadear prompts em workflows agentivos.
-- **Por que:** Evita halluci­nações e permite validações entre etapas (gate checks).
-- **Como:** Decomponha tarefas, defina critérios de sucesso e use validações estruturadas (ex.: Pydantic, ast).
+ - **O que:** Padrões para encadear prompts em fluxos de trabalho agentivos.
+ - **Por que:** Reduz halluci­nações e permite validações entre etapas (gate checks).
+ - **Como:** Decomponha tarefas, defina critérios de sucesso por etapa e use validações estruturadas (ex.: Pydantic, ast).
 
-## 1) Why Prompt Chaining Matters
+## 1) Por que o encadeamento de prompts importa
 
-Large Language Models (LLMs) are strong at single-turn generation, but they struggle in multi-stage workflows, especially when tasks require external data (for example: weather, calendar, inventory, policy APIs).
+Modelos de Linguagem (LLMs) são fortes em geração de uma única interação, mas têm dificuldades em workflows de múltiplas etapas, especialmente quando a tarefa exige dados externos (por exemplo: tempo, calendário, inventário, APIs de política).
 
-AI agents solve this by combining reasoning with execution:
+Agentes de IA resolvem isso combinando raciocínio com execução:
 
 $$
 	ext{Agent} = \text{LLM (reason)} + \text{Tools (act)} + \text{Orchestration (control)}
 $$
 
-### Common components of an AI Agent
-
-# Encadeamento de Prompts para Raciocínio Agentivo
-
-## Resumo
-- **O que:** Padrões para encadear prompts em fluxos de trabalho agentivos.
-- **Por que:** Reduz halluci­nações e permite validações entre etapas (gate checks).
-- **Como:** Decomponha tarefas, defina critérios de sucesso por etapa e use validações estruturadas (ex.: Pydantic, ast).
-
-## Por que o encadeamento de prompts importa
-
-Modelos de Linguagem (LLMs) são fortes em geração single-turn, mas têm dificuldades em workflows em múltiplas etapas, especialmente quando a tarefa exige dados externos (por exemplo: tempo, calendário, inventário, políticas de API).
-
-Agentes AI resolvem isso combinando raciocínio com execução:
-
-$$
-	ext{Agent} = \text{LLM (raciocínio)} + \text{Tools (ação)} + \text{Orchestração (controle)}
-$$
-
 ### Componentes comuns de um agente
 
-- **LLM**: motor de raciocínio.
-- **Tools**: APIs/funções para recuperação e ações.
-- **Instruções**: comportamentos e restrições de sistema.
-- **Memória**: contexto de curto prazo + histórico de longo prazo.
-- **Camada de Runtime/Orquestração**: controla o loop e o uso de ferramentas.
+ - **LLM**: motor de raciocínio.
+ - **Tools**: APIs/funções para recuperação e ações.
+ - **Instructions**: comportamento e restrições de sistema.
+ - **Memory**: contexto de curto prazo + histórico de longo prazo.
+ - **Runtime/Orchestration Layer**: controla o loop e o uso de ferramentas.
 
-Para alcançar metas complexas, agentes decompõem tarefas em etapas menores e avaliam progresso em cada passo.
+Para alcançar metas complexas, agentes decompõem tarefas em etapas menores e avaliam o progresso em cada passo.
+
+```mermaid
+flowchart TD
+	LLM["LLM\n(reason)"] --> ORC["Orchestrator\n(control)"]
+	ORC --> TOOLS["Tools\n(act)"]
+	TOOLS --> ORC
+	ORC --> MEMORY["Memory\n(context)"]
+	MEMORY --> LLM
+```
 
 ---
 
-## Encadeamento de Prompts: ideia central
+## 2) Encadeamento de Prompts: ideia central
 
 O encadeamento conecta programaticamente saídas e entradas entre chamadas:
 
@@ -54,44 +44,49 @@ $$
 	ext{Output}_1 \rightarrow \text{Input}_2,\quad \text{Output}_2 \rightarrow \text{Input}_3
 $$
 
-### Exemplo: fluxo para postar no LinkedIn
+### Exemplo: fluxo para publicar no LinkedIn
 
 1. **Pesquisa** → `RESPONSE_1`
-2. **Resumo** usando `RESPONSE_1` → `RESPONSE_2`
+2. **Resumir** usando `RESPONSE_1` → `RESPONSE_2`
 3. **Rascunho** usando `RESPONSE_2` → `FINAL_RESPONSE`
 
-Esse pipeline é mais controlável e manutenível do que um único prompt gigantesco.
+Esse pipeline é mais controlável e manutenível do que um único prompt muito grande.
+
+| Padrão | Quando usar | Compromissos |
+|---|---:|---|
+| Chain (ReAct) | Tarefas multi-etapa que requerem ferramentas | Controle determinístico, precisa de mais engenharia |
+| Chain (CoT) | Raciocínios complexos em uma única chamada | Simples, mas arriscado para uso de ferramentas |
 
 ---
 
-## Por que encadear é essencial para agentes
+## 3) Por que o encadeamento é essencial para agentes
 
 Pergunta: **"Que horas é minha consulta odontológica amanhã?"**
 
 ### Workflow rígido (hard-coded)
-1. Perguntar ao modelo se dados do calendário são necessários.
+1. Perguntar ao modelo se os dados do calendário são necessários.
 2. Se sim, chamar `get_calendar()`.
 3. Pedir ao modelo para responder a partir da saída da ferramenta.
 
 ### Workflow agentivo (estilo ReAct)
 1. `THOUGHT`: Preciso dos dados do calendário.
 2. `ACTION`: `get_calendar("amanha")`
-3. Orquestrador retorna observação (`"09:00"`).
+3. Orquestrador retorna observação (`"9am"`).
 4. `THOUGHT`: Agora tenho a resposta.
-5. `ACTION`: `final_answer("09:00")`
+5. `ACTION`: `final_answer("9am")`
 
 O encadeamento liga essas ações, mas o encadeamento **sozinho** não é suficiente.
 
 ---
 
-## Validação de saída: Gate Checks
+## 4) Validação de saída: Gate Checks
 
 LLMs podem alucinar, falhar no formato ou ignorar instruções. Erros em etapas iniciais podem se propagar.
 
-Gate checks acrescentam controle de qualidade entre etapas:
+Gate checks adicionam controle de qualidade entre etapas:
 
-- **Passou**: prosseguir.
-- **Falhou**: interromper, tentar novamente ou tentar com feedback de falha.
+ - **Passou**: prosseguir.
+ - **Falhou**: interromper, tentar novamente ou tentar com feedback de falha.
 
 ### Pseudocódigo genérico
 
@@ -105,15 +100,47 @@ else:
 	handle_error(output)
 ```
 
-### Estratégias comuns de falha
+### Poor vs Optimized (code-first)
+
+Poor (sem validação):
+
+```python
+def run_simple_chain(prompts, llm):
+	responses = []
+	for p in prompts:
+		responses.append(llm(p))
+	return responses[-1]
+```
+
+Otimizado (validação + retries):
+
+```python
+from typing import Callable
+def chain_with_validation(prompts: list[str], llm: Callable[[str], str],
+						  validator: Callable[[str], bool], retries: int = 2):
+	last = None
+	for p in prompts:
+		attempt = 0
+		while attempt <= retries:
+			out = llm(p if last is None else f"{p}\n\nPrevious:\n{last}")
+			if validator(out):
+				last = out
+				break
+			attempt += 1
+		else:
+			raise RuntimeError("Validation failed after retries")
+	return last
+```
+
+### Estratégias típicas de falha
 
 1. **Parar** imediatamente (fluxos de alto risco).
 2. **Repetir** com o mesmo prompt.
-3. **Repetir com feedback** (incluir razão da falha explicitamente).
+3. **Repetir com feedback** (incluir a razão da falha explicitamente).
 
 ---
 
-## Tipos de Gate Checks
+## 5) Tipos de Gate Checks
 
 | Tipo | O que valida | Implementação comum |
 |---|---|---|
@@ -123,30 +150,30 @@ else:
 
 ---
 
-## Caso de uso: gerar script de análise de dados
+## 6) Caso de uso: geração de script para análise de dados
 
 Objetivo: gerar código Python que leia um CSV, calcule a média de uma coluna e grave o resultado.
 
 ### Etapa 1 — Gerar esboço
 
-O prompt pede um plano curto e numerado.
+O prompt solicita um plano curto e numerado.
 
 Gate 1 (opcional):
-- formato em lista presente,
-- verbos chaves presentes (`ler`, `processar`, `gravar`).
+ - formato em lista presente,
+ - verbos-chave presentes (`read`, `process`, `write`).
 
 ### Etapa 2 — Gerar código a partir do esboço
 
-Prompt injeta `outline_response` da Etapa 1.
+O prompt injeta `outline_response` da Etapa 1.
 
-Gate 2:
-- validar sintaxe via `ast.parse()` (ou linter).
+**Gate 2**:
+ - validar sintaxe via `ast.parse()` (ou linter).
 
 ### Etapa 3 — Refinar se a sintaxe falhar
 
 Enviar o código gerado e os detalhes do erro de sintaxe como feedback.
 
-Re-executar Gate 2 com contador máximo de tentativas.
+Reexecutar o Gate 2 com contador máximo de tentativas.
 
 ### Fluxo fim-a-fim
 
@@ -156,7 +183,7 @@ Re-executar Gate 2 com contador máximo de tentativas.
 
 ---
 
-## Implementando encadeamentos em Python
+## 7) Implementando encadeamentos em Python
 
 Em tempo de execução, encadear prompts é gerenciar strings e chamadas sequenciais à API.
 
@@ -198,16 +225,16 @@ def check_python_syntax(code: str) -> tuple[bool, str]:
 
 ---
 
-## Pydantic para saídas estruturadas confiáveis
+## 8) Pydantic para saídas estruturadas confiáveis
 
 Saídas em linguagem natural variam em estrutura e são difíceis de automatizar com segurança.
 
 Pydantic resolve isso com schemas explícitos:
 
-- **Validação**: rejeita dados malformados ou incompletos.
-- **Parsing**: converte JSON em objetos tipados Python.
+ - **Validação**: rejeita dados malformados ou incompletos.
+ - **Parsing**: converte JSON em objetos tipados Python.
 
-### Por que isso importa em cadeias
+### Por que isso importa nas cadeias
 
 Pydantic funciona como um gate check entre etapas:
 
@@ -250,7 +277,7 @@ def validate_order_payload(payload: dict) -> tuple[bool, str]:
 
 ---
 
-## Regras práticas de projeto
+## 9) Regras práticas de projeto
 
 1. Divida tarefas grandes em prompts específicos por etapa.
 2. Defina critérios explícitos de sucesso para cada etapa.
@@ -261,39 +288,11 @@ def validate_order_payload(payload: dict) -> tuple[bool, str]:
 
 ---
 
-## Recapitulação
+## 10) Recapitulação
 
-- A decomposição de tarefas melhora a qualidade do raciocínio.
-- O encadeamento de prompts cria um pipeline programável.
-- Gate checks evitam propagação de erros.
-- Pydantic torna as saídas de agente mais robustas e interoperáveis.
+ - A decomposição de tarefas melhora a qualidade do raciocínio.
+ - O encadeamento de prompts cria um pipeline programável.
+ - Gate checks evitam propagação de erros.
+ - Pydantic torna as saídas de agentes mais robustas e interoperáveis.
 
 Esses padrões formam a base de workflows agentivos confiáveis em produção.
-	try:
-		Order.model_validate(payload)
-		return True, "Valid payload"
-	except ValidationError as e:
-		return False, e.json()
-```
-
----
-
-## 9) Practical Design Rules
-
-1. Break large tasks into stage-specific prompts.
-2. Define explicit success criteria per stage.
-3. Add deterministic gate checks where possible.
-4. Limit retries to avoid infinite loops.
-5. Log prompt/output/validation per iteration.
-6. Use structured outputs + Pydantic for machine-to-machine reliability.
-
----
-
-## 10) Recap
-
-- Task decomposition improves reasoning quality.
-- Prompt chaining creates a programmable pipeline.
-- Gate checks prevent error propagation.
-- Pydantic makes agent outputs robust and interoperable.
-
-These patterns form the backbone of reliable agentic workflows in production.
