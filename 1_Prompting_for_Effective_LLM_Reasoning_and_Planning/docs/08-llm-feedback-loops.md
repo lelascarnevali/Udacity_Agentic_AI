@@ -143,3 +143,86 @@ def refine_code_with_feedback(
 - A qualidade do sistema depende da qualidade do mecanismo de feedback.
 - Monitorar o ciclo é obrigatório para avaliar progresso e corrigir falhas de projeto.
 - Iteração bem projetada aproxima agentes de comportamento realmente agêntico.
+ - Iteração bem projetada aproxima agentes de comportamento realmente agêntico.
+ 
+---
+
+## Implementing an AI That Learns From Its Mistakes
+
+You've learned that we can guide an AI through complex, multi-step tasks. But what happens when the AI makes a mistake along the way?
+
+Here's a common experience when using AI for code generation: you ask it to create a code snippet, and it returns something that is almost perfect. It has a small bug, a syntax error, or it doesn't quite meet all the requirements. Your instinct is to manually fix the code yourself.
+
+But what if we could teach the AI to fix its own mistakes? This is the core idea behind implementing an LLM Feedback Loop.
+
+Let's see how this works in practice.
+
+### Scenario: Profile Card (HTML/CSS)
+
+We need an AI to generate the HTML and CSS for a simple, styled user profile card.
+
+#### Attempt 1: The Initial (Flawed) Generation
+
+First, we'll give the AI a prompt with our initial request.
+
+```python
+# The initial prompt for the profile card
+prompt_initial = """
+You are a web developer. Generate the HTML and CSS for a user profile card.
+It should have:
+- A container with a light grey background and a subtle shadow.
+- An avatar image placeholder.
+- The user's name and title below the avatar.
+"""
+
+# Let's assume we call the LLM and get a response
+# initial_code = get_completion(prompt_initial)
+# print(initial_code)
+```
+
+Likely (Flawed) Output: Let's imagine the AI returns code that is functional but has a design flaw. For example, maybe it forgets to center the text, making the card look unprofessional.
+
+#### Step 2: The Feedback Mechanism
+
+Instead of fixing the CSS ourselves, we will act as a code reviewer and provide feedback. In a real application, this feedback could come from an automated linter, a visual regression test, or, as we'll see in the exercise, a suite of unit tests.
+
+For this demonstration, our feedback will be a simple, natural language description of the problem:
+
+```python
+# The feedback describes the problem with the initial code
+feedback = "The generated code is a good start, but it has a design flaw: The user's name and title text are not centered within the card. Please fix the CSS to center-align the text."
+```
+
+#### Step 3: The Feedback Loop (The Corrective Prompt)
+
+Now for the most important part. We will create a new prompt that includes both the AI's original, flawed code and our specific feedback.
+
+```python
+# A new prompt that asks the AI to revise its own work
+prompt_corrective = f"""
+You are a web developer. You previously generated some code that had an error.
+Please revise the code to fix the issue described in the feedback.
+
+Your previous code:
+---
+<HTML_AND_CSS_FROM_INITIAL_CODE>
+---
+
+Feedback on your code:
+---
+{feedback}
+---
+
+Please provide the complete, corrected HTML and CSS.
+"""
+
+# The AI now receives its own work plus our correction
+# corrected_code = get_completion(prompt_corrective)
+# print(corrected_code)
+```
+
+Likely Output: The AI now returns a corrected version of the code where the CSS `text-align: center;` property has been correctly applied.
+
+This simple loop—Generate → Evaluate → Feedback → Revise—is the foundation of creating self-improving AI systems.
+
+Next step: automate the feedback by using Python unit tests as the evaluator and build a loop where tests produce structured feedback consumed by the corrective prompt. Implement the loop in a notebook or script that runs the LLM in a sandbox, executes tests, and reprompts until all tests pass or a maximum iteration count is reached.
