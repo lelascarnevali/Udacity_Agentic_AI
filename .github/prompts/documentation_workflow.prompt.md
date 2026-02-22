@@ -21,7 +21,16 @@ Você **DEVE** seguir este processo em ordem, sem pular etapas.
 2.  **Identificar o Módulo**: Determine o módulo correto para a documentação (ex: `1_Prompting...`, `2_Agentic_Workflows`, etc.) e sua subpasta `docs/`.
 3.  **Verificar Arquivo Existente**: Procure por um arquivo `.md` correspondente ao título no diretório.
 4.  **Plano de Ação**: Informe ao usuário o plano: "O tópico pertence ao `Módulo X`. Um arquivo será **CRIADO** em `.../docs/novo-arquivo.md`." ou "Um arquivo existente será **ATUALIZADO** em `.../docs/arquivo-existente.md`.".
-5.  **Princípio da Incerteza**: Se você não tiver 100% de certeza sobre o módulo ou a ação, **PARE** e pergunte ao usuário antes de prosseguir.
+
+5.  **Verificação de Organização do `docs/` (MANDATÓRIO)**: Antes de criar ou atualizar qualquer arquivo, verifique a organização do diretório `docs/` do módulo alvo. Execute as seguintes checagens automáticas e manuais:
+
+    - **Padronização de nomes**: confirme que os arquivos seguem a convenção do repositório (ex.: zero-padded quando aplicável, nomes descritivos).
+    - **Remoção de temporários/duplicados**: identifique arquivos temporários, backups ou rascunhos (`*-backup.md`, `*~`, `06-07-*.md`) que possam gerar duplicidade e proponha sua remoção ou consolidação.
+    - **Consistência de numeração e ordem**: verifique se a numeração dos arquivos (quando usada) reflete a sequência didática correta; se necessário, proponha renomeações seguras.
+    - **Atualização do TOC**: garanta que `docs/README.md` ou índice equivalente seja atualizado para refletir criações, remoções ou renomeações.
+    - **Pausa para consentimento**: se a organização exigir mudanças que possam afetar links/permalinks (renomeações em massa, remoção de arquivos), PARE e apresente uma proposta de correção ao usuário para aprovação.
+
+6.  **Princípio da Incerteza**: Se você não tiver 100% de certeza sobre o módulo ou a ação, **PARE** e pergunte ao usuário antes de prosseguir.
 
 **Etapa 2: Ciclo Iterativo de Produção (Time de Subagentes)**
 Este ciclo se repete até que o Validador aprove o conteúdo.
