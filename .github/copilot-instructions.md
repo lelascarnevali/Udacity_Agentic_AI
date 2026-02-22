@@ -35,10 +35,10 @@ This repository hosts Udacity Agentic AI exercises focused on effective promptin
 
 ### Core Workflow (MANDATORY)
 
-**YOU MUST follow these steps in order for EVERY task. No exceptions.**
-**YOU MUST execute STEP 0 for EVERY PROMPT, even if the user doesn't explicitly ask for it.**
-**STEP 0: CONTEXT AND SKILL ANALYSIS (NON-NEGOTIABLE)**
-This is the absolute first step. Do not plan or execute any other action until this is complete.
+> Todas as regras abaixo são obrigatórias em toda tarefa. Step 0 executa em todo prompt, sem exceção.
+
+**STEP 0: CONTEXT AND SKILL ANALYSIS**
+Primeiro passo absoluto. Não planeje nem execute nenhuma ação antes de concluí-lo.
 1.  **ALWAYS Consult Catalogs**: Read `.github/skills/README.md` and `.github/agents/memory/README.md`.
 2.  **Identify Relevant Knowledge**: Based on the user's request, identify any potentially relevant skills or memories. If any are relevant, you MUST read their `SKILL.md` or memory files.
 3.  **State Findings in Your Plan**: Your execution plan **MUST** begin with a "Context Analysis" section that lists:
@@ -52,7 +52,6 @@ This is the absolute first step. Do not plan or execute any other action until t
    - Use a ReAct loop for execution: **Analyze** the task and repo state → **Decide** which skill/memory (if any) to apply and which micro-action to take → **Act** (use tools) → **Observe** results → **Reflect** and update plan.
    - Before each action, re-evaluate whether an applicable skill or memory should be used.
 
-**YOU MUST follow these steps. No exceptions.**
 **COMMIT POLICY (REPOSITORY):**
 1. For every git commit made by this agent (even for small or single-file changes), the agent MUST use the `git-commit` skill from `.github/skills/git-commit/SKILL.md` to generate the commit message and follow its staging recommendations.
 2. When automating commits, prefer using the repository helper script `scripts/commit_with_skill.py` which implements the `git-commit` heuristics. If the script is not available, the agent must still consult the `git-commit` skill and follow its workflow manually.
@@ -65,9 +64,6 @@ This is the absolute first step. Do not plan or execute any other action until t
 5. **Exceptions**:
    - Only skip the above checks for pure conversational replies that do not involve repository or workflow actions and when explicitly requested by the user.
 
-This policy enforces always checking skills and memory, applying ReAct reasoning, and using micro-activities so automated agents behave consistently and safely.
-
-**YOU MUST follow these steps in order for EVERY task. No exceptions.**
 ### Execution Best Practices
 - **Workflow:** Read Indices (`README.md`s) → Read Specific Files → Plan (`manage_todo_list`) → Execute.
 - **File Editing Rule (MANDATORY):** NEVER use terminal commands (like `cat`, `echo`, `sed`) to create or edit files. ALWAYS use VS Code tools (`create_file`, `replace_string_in_file`, `edit_notebook_file`).
@@ -77,30 +73,16 @@ This policy enforces always checking skills and memory, applying ReAct reasoning
 - Execute changes minimally; bundle commits logically
 - Only commit when explicitly asked or after confirmation
 
-**YOU MUST follow these steps in order. No exceptions.**
 ## 3.2 Language Policy
-- Documentation, code comments, and prompt design: write in English.
+- `docs/` folders: write in Portuguese (pt-BR).
+- Code, variable names, comments: write in English.
 - Chat responses to the user: reply in Portuguese (pt-BR).
-- Keep examples consistent: internal artifacts in English; communication in Portuguese.
 
 
 ## 4. Virtual Environment
-- Preferred: local virtualenv at `.venv/`.
-- Setup on macOS:
-
-```sh
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-python --version
-pip --version
-```
-
-- Deactivate:
-
-```sh
-deactivate
-```
+- Preferred: local virtualenv at `.venv/` — `python3 -m venv .venv && source .venv/bin/activate`.
+- Install deps: `pip install -r requirements.txt`. Deactivate with `deactivate`.
+- Details: see `.github/instructions/python-env.instructions.md`.
 
 ## 5. Standards
 - Python: follow PEP 8; prefer type hints and concise docstrings; use `black`/`ruff` when applicable.
@@ -108,23 +90,11 @@ deactivate
   - Inline: `$E=mc^2$`
   - Block: `$$\int_a^b f(x)\,dx$$`
 
-**YOU ALWAYS MUST execute 6.CONTEXT TRANSPARENCY for EVERY PROMPT, even if the user doesn't explicitly ask for it.**
 ## 6. Context Transparency
-At the end of each response, always include a section showing which resources were used:
+End every non-trivial response with:
 
-```markdown
----
-**Contexto utilizado:**
-- **Skills:** [list of skills from .github/skills/ that were referenced.]
-- **Arquivos:** [list of files that were read or modified]
-- **Memória:** [agent memory files from .github/agents/memory/ if consulted]
-```
+> **Contexto utilizado:** **Skills:** … | **Arquivos:** … | **Memória:** …
 
-Guidelines:
-- Only list skills if explicitly consulted from `.github/skills/`
-- List all files read with `read_file` or modified with editing tools
-- Include memory files only if actually accessed
-- Omit the section entirely for simple conversational responses that don't use external resources
-- Keep the format concise and scannable
+Liste apenas o que foi efetivamente consultado. Omita em respostas puramente conversacionais.
 
 — End of instructions —
