@@ -9,29 +9,13 @@ The curriculum covers advanced prompting techniques, agentic workflows, and the 
 The Nanodegree focuses on building agents in Python that can reason, plan, and use tools to interact with databases and external APIs. The program is divided into four main courses:
 
 ### 1. Prompting for Effective LLM Reasoning and Planning
-Go beyond basic chatbots and learn to engineer reliable, agentic systems that can reason, plan, and act.
-By the end of this module you will have a practical, testable skillset for prompting and building agents:
+Go beyond basic chatbots and learn to engineer practical agentic systems. This module teaches how to craft prompts and workflows that make LLMs reliable partners for reasoning, planning, and action.
 
-Your AI Agent Engineering Skills Scorecard
+*   **Advanced Prompting:** Master techniques such as Chain-of-Thought, ReAct, and feedback loops to elicit step-by-step reasoning and controlled actions from LLMs.
+*   **Reasoning & Planning:** Design prompts and prompt-chained workflows that let models plan multi-step solutions, verify intermediate results, and handle edge cases.
+*   **Hands-on Project:** Apply these techniques to transform a generic LLM into a specialized, testable agent (e.g., a multi-agent travel planner), including evaluation and automated feedback loops.
 
-Congratulations on completing the course! Here are the powerful new skills in your toolkit.
-
-Agent Design & Theory
-- You can explain the architecture of an AI agent, including core components such as the LLM brain, tool interfaces, and memory.
-- You can choose appropriate agent patterns (workflow vs autonomous agent) and design modular agent components.
-
-Core Prompting Techniques
-- Craft Specialized Personas: design role-based prompts to make an LLM adopt tone, expertise, and constraints for a task.
-- Guide Complex Reasoning: compose Chain-of-Thought prompts that break problems into ordered reasoning steps.
-- Refine for Precision: iterate prompts with context, examples, and strict output formats to transform generic responses into reliable, structured outputs.
-
-Advanced Agentic Patterns
-- Enable Action with ReAct: implement ReAct so agents can call tools, query external data, and decide next actions dynamically.
-- Build Robust Workflows with Prompt Chaining: chain multiple LLM calls with programmatic gate checks and validations.
-- Engineer Self-Correcting Systems: implement feedback loops (automated tests, validators, human-in-the-loop) so agents evaluate and improve their own outputs.
-
-You now have the skills to transform large language models into specialized, reliable tools that solve real-world problems.
-Happy building!
+By the end of this module you will be able to design, implement and evaluate agentic prompts and simple agentic workflows in Python.
 
 ### 2. Agentic Workflows
 Move beyond simple automation and learn to architect intelligent systems using Python. Key concepts include:
