@@ -1,3 +1,4 @@
+````markdown
 # Chain-of-Thought & ReAct: Frameworks de Raciocínio
 
 > **Nota Técnica**: Este guia aborda a transição de LLMs passivos (geradores de texto) para sistemas agênticos (resolutores de problemas). Foca em duas arquiteturas cognitivas essenciais: *Chain-of-Thought* (Raciocínio Interno) e *ReAct* (Raciocínio + Ação Externa).
@@ -91,3 +92,5 @@ ACT: get_stock_quote(ticker="$MC")
 - **Skills:** `create-study-guide` (Tabelas, Emojis, Code Blocks).
 - **Source 1:** User Text (Exemplos detalhados de Financial/Life Sciences Agent).
 - **Source 2:** Transcrições (`Chain-of-Thought... Subtitles`) para definições canônicas de Zero-Shot/Few-Shot CoT e Loop ReAct.
+
+````

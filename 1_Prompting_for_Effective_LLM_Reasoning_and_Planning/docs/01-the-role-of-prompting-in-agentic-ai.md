@@ -1,3 +1,4 @@
+```markdown
 # Guia de Referência: O Papel do Prompting na IA Agêntica
 
 ## 1. Conceito Fundamental: O que é um Agente de IA?
@@ -74,3 +75,5 @@ Ao interagir com Agentes, use estas três alavancas para pilotar o comportamento
 2.  **Transparência (Chain-of-Thought):** Peça para o modelo "explicar passo a passo" ou "mostrar o trabalho". Isso melhora a coerência lógica.
 3.  **Refinamento Sistemático:** Comece simples, avalie a saída, adicione restrições, repita.
 
+
+```

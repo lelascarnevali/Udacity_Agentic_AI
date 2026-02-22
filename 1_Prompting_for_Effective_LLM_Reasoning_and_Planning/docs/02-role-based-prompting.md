@@ -1,3 +1,4 @@
+````markdown
 # Role-Based Prompting: Guia de Engenharia
 
 > **Nota Técnica**: Este documento compila estratégias de engenharia de prompt focadas na atribuição de personas para especializar a inferência de LLMs. Baseado na análise de experimentos práticos de *Role-Based Prompting* das aulas.
@@ -90,3 +91,5 @@ Como medir se o Role-Based Prompting está funcionando?
 - **Visual Retention**: Uso de tabelas e blocos de código para fixação.
 - **Source Material**: Transcrições da aula prática (Walkthrough de código e Definição de Agente).
 - **Conceitos**: Diferença entre Role isolado vs Role com Restrições.
+
+````

@@ -1,3 +1,4 @@
+````markdown
 # Aplicando Prompting CoT e ReAct com Python
 
 > **Nota Técnica**: Este guia foca na **implementação de código** (Code-First) dos conceitos de Chain-of-Thought e ReAct. Baseado no exercício prático de diagnóstico de supply chain/retail da aula.
@@ -131,8 +132,11 @@ while True:
 Se o seu agente ficar "preso" alucinando ferramentas inexistentes, adicione um `OBSERVATION: Tool not found` quando o parser falhar. Isso ensina o modelo a tentar de novo.
 
 ---
+
 **Contexto utilizado:**
 - **Skills:** `create-study-guide` (Code-First Approach).
 - **Source 1:** Transcrições (`Applying...Subtitles`) com foco na implementação do Loop ReAct e Parsing.
 - **Source 2:** Exemplos do Usuário (Supply Chain, Patient Diagnosis) para ilustrar a diferença dinâmica CoT vs ReAct.
 - **Conceitos:** Runtime Loop, Tool Definition, Dynamic Information Retrieval.
+
+````
