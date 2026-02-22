@@ -9,10 +9,29 @@ The curriculum covers advanced prompting techniques, agentic workflows, and the 
 The Nanodegree focuses on building agents in Python that can reason, plan, and use tools to interact with databases and external APIs. The program is divided into four main courses:
 
 ### 1. Prompting for Effective LLM Reasoning and Planning
-Go beyond basic chatbots and learn to engineer sophisticated AI agents. This course covers:
-*   **Advanced Prompting:** Master Chain-of-Thought, ReAct, and feedback loops.
-*   **Reasoning & Planning:** Build systems that can reason, plan, and solve complex problems.
-*   **Hands-on Project:** Transform generic AI into specialized, reliable tools, culminating in building a multi-agent travel planner from scratch.
+Go beyond basic chatbots and learn to engineer reliable, agentic systems that can reason, plan, and act.
+By the end of this module you will have a practical, testable skillset for prompting and building agents:
+
+Your AI Agent Engineering Skills Scorecard
+
+Congratulations on completing the course! Here are the powerful new skills in your toolkit.
+
+Agent Design & Theory
+- You can explain the architecture of an AI agent, including core components such as the LLM brain, tool interfaces, and memory.
+- You can choose appropriate agent patterns (workflow vs autonomous agent) and design modular agent components.
+
+Core Prompting Techniques
+- Craft Specialized Personas: design role-based prompts to make an LLM adopt tone, expertise, and constraints for a task.
+- Guide Complex Reasoning: compose Chain-of-Thought prompts that break problems into ordered reasoning steps.
+- Refine for Precision: iterate prompts with context, examples, and strict output formats to transform generic responses into reliable, structured outputs.
+
+Advanced Agentic Patterns
+- Enable Action with ReAct: implement ReAct so agents can call tools, query external data, and decide next actions dynamically.
+- Build Robust Workflows with Prompt Chaining: chain multiple LLM calls with programmatic gate checks and validations.
+- Engineer Self-Correcting Systems: implement feedback loops (automated tests, validators, human-in-the-loop) so agents evaluate and improve their own outputs.
+
+You now have the skills to transform large language models into specialized, reliable tools that solve real-world problems.
+Happy building!
 
 ### 2. Agentic Workflows
 Move beyond simple automation and learn to architect intelligent systems using Python. Key concepts include:
