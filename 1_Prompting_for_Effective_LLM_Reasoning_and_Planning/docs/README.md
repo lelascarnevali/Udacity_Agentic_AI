@@ -32,11 +32,4 @@ Guias de referência que tratam dos aspetos teóricos do design de prompts.
 - **[08. Loops de Feedback para LLMs](./08-llm-feedback-loops.md)**
   *Desenho de ciclos iterativos de feedback e avaliação para melhorar as saídas do modelo.*
 
----
----
 
-### 🐍 Ferramentas Práticas e Exemplos
-Recursos complementares, snippets e padrões de boas práticas usados nos exercícios.
-
-- **Exemplos de código:** consulte os guias acima (03, 05, 06, 07, 08) para trechos executáveis.
-- **Padrões de validação:** checagens com `ast` para sintaxe, `pydantic` para saídas estruturadas e parsers por regex para padrões ACT/OBS.
