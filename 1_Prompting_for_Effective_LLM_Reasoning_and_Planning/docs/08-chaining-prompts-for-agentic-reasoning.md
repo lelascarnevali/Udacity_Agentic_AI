@@ -1,10 +1,5 @@
 # Chaining Prompts for Agentic Reasoning
 
-## Resumo
- - **O que:** Padrões para encadear prompts em fluxos de trabalho agentivos.
- - **Por que:** Reduz halluci­nações e permite validações entre etapas (gate checks).
- - **Como:** Decomponha tarefas, defina critérios de sucesso por etapa e use validações estruturadas (ex.: Pydantic, ast).
-
 ## 1) Por que o encadeamento de prompts importa
 
 Modelos de Linguagem (LLMs) são fortes em geração de uma única interação, mas têm dificuldades em workflows de múltiplas etapas, especialmente quando a tarefa exige dados externos (por exemplo: tempo, calendário, inventário, APIs de política).
