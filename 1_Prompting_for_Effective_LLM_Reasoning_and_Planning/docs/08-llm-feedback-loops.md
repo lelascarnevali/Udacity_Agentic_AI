@@ -143,86 +143,92 @@ def refine_code_with_feedback(
 - A qualidade do sistema depende da qualidade do mecanismo de feedback.
 - Monitorar o ciclo é obrigatório para avaliar progresso e corrigir falhas de projeto.
 - Iteração bem projetada aproxima agentes de comportamento realmente agêntico.
- - Iteração bem projetada aproxima agentes de comportamento realmente agêntico.
  
 ---
 
 ## Implementing an AI That Learns From Its Mistakes
 
-You've learned that we can guide an AI through complex, multi-step tasks. But what happens when the AI makes a mistake along the way?
+Você aprendeu que podemos guiar uma IA através de tarefas complexas em múltiplas etapas. Mas o que acontece quando a IA comete um erro durante o processo?
 
-Here's a common experience when using AI for code generation: you ask it to create a code snippet, and it returns something that is almost perfect. It has a small bug, a syntax error, or it doesn't quite meet all the requirements. Your instinct is to manually fix the code yourself.
+Uma experiência comum ao usar IA para geração de código: pedimos ao modelo um trecho e ele devolve algo quase perfeito — mas com um pequeno bug, erro de sintaxe ou requisito não atendido. O impulso imediato é consertar o código manualmente.
 
-But what if we could teach the AI to fix its own mistakes? This is the core idea behind implementing an LLM Feedback Loop.
+E se pudéssemos ensinar a própria IA a corrigir seus erros? Essa é a ideia central por trás da implementação de um Loop de Feedback com LLMs.
 
-Let's see how this works in practice.
+Vamos ver na prática.
 
-### Scenario: Profile Card (HTML/CSS)
+### Cenário: Cartão de Perfil (HTML/CSS)
 
-We need an AI to generate the HTML and CSS for a simple, styled user profile card.
+Precisamos que a IA gere o HTML e CSS de um cartão de perfil simples e estilizado.
 
-#### Attempt 1: The Initial (Flawed) Generation
+#### Tentativa 1 — Geração Inicial (com falha)
 
-First, we'll give the AI a prompt with our initial request.
+Primeiro, damos ao modelo o prompt inicial:
 
 ```python
-# The initial prompt for the profile card
+# Prompt inicial para o cartão de perfil
 prompt_initial = """
-You are a web developer. Generate the HTML and CSS for a user profile card.
-It should have:
-- A container with a light grey background and a subtle shadow.
-- An avatar image placeholder.
-- The user's name and title below the avatar.
+Você é um desenvolvedor web. Gere o HTML e o CSS para um cartão de perfil de usuário.
+Deve conter:
+- Um container com fundo cinza claro e sombra sutil.
+- Um placeholder para a imagem do avatar.
+- O nome e o cargo do usuário abaixo do avatar.
 """
 
-# Let's assume we call the LLM and get a response
+# Supomos que chamamos o LLM e obtemos `initial_code`
 # initial_code = get_completion(prompt_initial)
 # print(initial_code)
 ```
 
-Likely (Flawed) Output: Let's imagine the AI returns code that is functional but has a design flaw. For example, maybe it forgets to center the text, making the card look unprofessional.
+Saída provável (com falha): o modelo pode gerar código funcional, porém com um defeito de design — por exemplo, esquecer de centralizar o texto do nome e do cargo, deixando o cartão desalinhado.
 
-#### Step 2: The Feedback Mechanism
+#### Etapa 2 — Mecanismo de Feedback
 
-Instead of fixing the CSS ourselves, we will act as a code reviewer and provide feedback. In a real application, this feedback could come from an automated linter, a visual regression test, or, as we'll see in the exercise, a suite of unit tests.
+Em vez de consertar manualmente, atuamos como revisor de código e fornecemos feedback. Em aplicações reais, esse feedback pode vir de um linter, um teste de regressão visual ou, como no exercício, de uma suíte de testes automatizados.
 
-For this demonstration, our feedback will be a simple, natural language description of the problem:
+Para demonstração, o feedback será uma descrição em linguagem natural do problema:
 
 ```python
-# The feedback describes the problem with the initial code
-feedback = "The generated code is a good start, but it has a design flaw: The user's name and title text are not centered within the card. Please fix the CSS to center-align the text."
+# Feedback descrevendo o problema da primeira versão
+feedback = "O código gerado está bom como ponto de partida, mas apresenta um defeito de layout: o nome e o cargo não estão centralizados no cartão. Corrija o CSS para centralizar o texto."
 ```
 
-#### Step 3: The Feedback Loop (The Corrective Prompt)
+#### Etapa 3 — Loop de Feedback (Prompt Corretivo)
 
-Now for the most important part. We will create a new prompt that includes both the AI's original, flawed code and our specific feedback.
+Agora o mais importante: construímos um novo prompt que inclui o código anterior e o feedback específico.
 
 ```python
-# A new prompt that asks the AI to revise its own work
+# Prompt corretivo que pede ao modelo revisar seu próprio código
 prompt_corrective = f"""
-You are a web developer. You previously generated some code that had an error.
-Please revise the code to fix the issue described in the feedback.
+Você é um desenvolvedor web. Você gerou anteriormente um código que contém um erro.
+Por favor, revise o código para corrigir o problema descrito no feedback.
 
-Your previous code:
+Seu código anterior:
 ---
-<HTML_AND_CSS_FROM_INITIAL_CODE>
+<HTML_E_CSS_DA_VERSAO_INICIAL>
 ---
 
-Feedback on your code:
+Feedback sobre seu código:
 ---
 {feedback}
 ---
 
-Please provide the complete, corrected HTML and CSS.
+Por favor, forneça o HTML e o CSS completos e corrigidos.
 """
 
-# The AI now receives its own work plus our correction
 # corrected_code = get_completion(prompt_corrective)
 # print(corrected_code)
 ```
 
-Likely Output: The AI now returns a corrected version of the code where the CSS `text-align: center;` property has been correctly applied.
+Saída provável: o modelo retorna uma versão corrigida onde, por exemplo, `text-align: center;` ou regras equivalentes foram aplicadas corretamente.
 
-This simple loop—Generate → Evaluate → Feedback → Revise—is the foundation of creating self-improving AI systems.
+Este loop simples — Gerar → Avaliar → Feedback → Revisar — é a base para sistemas de IA que se auto-aperfeiçoam.
 
-Next step: automate the feedback by using Python unit tests as the evaluator and build a loop where tests produce structured feedback consumed by the corrective prompt. Implement the loop in a notebook or script that runs the LLM in a sandbox, executes tests, and reprompts until all tests pass or a maximum iteration count is reached.
+Próximo passo: automatizar o feedback substituindo a revisão manual por uma suíte de testes Python que atue como avaliador. Construa um loop que:
+
+- chama o LLM para gerar código;
+- executa testes em sandbox (unit tests, validações de DOM/CSS, linters);
+- gera `feedback` estruturado a partir dos resultados dos testes;
+- reprompts o LLM com o código + feedback;
+- repete até `all_tests_pass` ou `max_iterations`.
+
+Implemente esse loop num notebook ou script do repositório, garantindo execução em ambiente isolado, logging de resultados e limite de iterações.
