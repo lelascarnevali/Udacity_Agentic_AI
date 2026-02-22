@@ -29,12 +29,9 @@ Reference guides dealing with the theoretical aspects of prompt engineering.
   *Practical examples of turning vague user input into structured, machine-readable outputs.*
 
 - **[08. Chaining Prompts for Agentic Reasoning](./08-chaining-prompts-for-agentic-reasoning.md)**
-  *Breaking complex tasks into sequential steps, with gate checks and validation between stages.*
+  *Integrated guide covering chaining architecture, gate checks, Python implementation, and Pydantic-based structured validation.*
 
-- **[09. Chaining Prompts with Python](./09-chaining-prompts-with-python.md)**
-  *Implementing chaining patterns, validators (AST, Pydantic) and retry strategies in Python.*
-
-- **[10. LLM Feedback Loops](./10-llm-feedback-loops.md)**
+- **[09. LLM Feedback Loops](./09-llm-feedback-loops.md)**
   *Designing iterative feedback and evaluation loops for model improvement.*
 
 ---
@@ -42,7 +39,7 @@ Reference guides dealing with the theoretical aspects of prompt engineering.
 ### 🐍 Practical Tools & Examples
 Supplemental code, snippets and best-practice patterns used across exercises.
 
-- **Code examples:** see the individual guides above (03, 05, 07, 09) for runnable snippets.
+- **Code examples:** see the individual guides above (03, 05, 07, 08, 09) for runnable snippets.
 - **Validation patterns:** `ast` checks for syntax, `pydantic` for structured output validation, and regex-based parsers for ACT/OBS patterns.
 
 ---

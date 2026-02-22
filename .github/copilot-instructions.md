@@ -36,10 +36,10 @@ This repository hosts Udacity Agentic AI exercises focused on effective promptin
 ### Core Workflow (MANDATORY)
 
 **YOU MUST follow these steps in order for EVERY task. No exceptions.**
-
+**YOU MUST execute STEP 0 for EVERY PROMPT, even if the user doesn't explicitly ask for it.**
 **STEP 0: CONTEXT AND SKILL ANALYSIS (NON-NEGOTIABLE)**
 This is the absolute first step. Do not plan or execute any other action until this is complete.
-1.  **Consult Catalogs**: Read `.github/skills/README.md` and `.github/agents/memory/README.md`.
+1.  **ALWAYS Consult Catalogs**: Read `.github/skills/README.md` and `.github/agents/memory/README.md`.
 2.  **Identify Relevant Knowledge**: Based on the user's request, identify any potentially relevant skills or memories. If any are relevant, you MUST read their `SKILL.md` or memory files.
 3.  **State Findings in Your Plan**: Your execution plan **MUST** begin with a "Context Analysis" section that lists:
     *   The skills you identified as relevant (e.g., `git-commit`, `tech-writer`).
@@ -52,6 +52,7 @@ This is the absolute first step. Do not plan or execute any other action until t
    - Use a ReAct loop for execution: **Analyze** the task and repo state → **Decide** which skill/memory (if any) to apply and which micro-action to take → **Act** (use tools) → **Observe** results → **Reflect** and update plan.
    - Before each action, re-evaluate whether an applicable skill or memory should be used.
 
+**YOU MUST follow these steps. No exceptions.**
 **COMMIT POLICY (REPOSITORY):**
 1. For every git commit made by this agent (even for small or single-file changes), the agent MUST use the `git-commit` skill from `.github/skills/git-commit/SKILL.md` to generate the commit message and follow its staging recommendations.
 2. When automating commits, prefer using the repository helper script `scripts/commit_with_skill.py` which implements the `git-commit` heuristics. If the script is not available, the agent must still consult the `git-commit` skill and follow its workflow manually.
@@ -66,6 +67,7 @@ This is the absolute first step. Do not plan or execute any other action until t
 
 This policy enforces always checking skills and memory, applying ReAct reasoning, and using micro-activities so automated agents behave consistently and safely.
 
+**YOU MUST follow these steps in order for EVERY task. No exceptions.**
 ### Execution Best Practices
 - **Workflow:** Read Indices (`README.md`s) → Read Specific Files → Plan (`manage_todo_list`) → Execute.
 - **File Editing Rule (MANDATORY):** NEVER use terminal commands (like `cat`, `echo`, `sed`) to create or edit files. ALWAYS use VS Code tools (`create_file`, `replace_string_in_file`, `edit_notebook_file`).
@@ -75,6 +77,7 @@ This policy enforces always checking skills and memory, applying ReAct reasoning
 - Execute changes minimally; bundle commits logically
 - Only commit when explicitly asked or after confirmation
 
+**YOU MUST follow these steps in order. No exceptions.**
 ## 3.2 Language Policy
 - Documentation, code comments, and prompt design: write in English.
 - Chat responses to the user: reply in Portuguese (pt-BR).
@@ -105,6 +108,7 @@ deactivate
   - Inline: `$E=mc^2$`
   - Block: `$$\int_a^b f(x)\,dx$$`
 
+**YOU ALWAYS MUST execute 6.CONTEXT TRANSPARENCY for EVERY PROMPT, even if the user doesn't explicitly ask for it.**
 ## 6. Context Transparency
 At the end of each response, always include a section showing which resources were used:
 
