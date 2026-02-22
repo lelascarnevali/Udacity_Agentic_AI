@@ -17,79 +17,83 @@ $$
 
 ### Common components of an AI Agent
 
-- **LLM**: the reasoning engine.
-- **Tools**: APIs/functions for retrieval and actions.
-- **Instructions**: system-level behavior and constraints.
-- **Memory**: short-term context + long-term history.
-- **Runtime/Orchestration Layer**: controls the loop and tool usage.
+# Encadeamento de Prompts para Raciocínio Agentivo
 
-To achieve complex goals, agents decompose tasks into smaller steps and evaluate progress at each step.
+## Resumo
+- **O que:** Padrões para encadear prompts em fluxos de trabalho agentivos.
+- **Por que:** Reduz halluci­nações e permite validações entre etapas (gate checks).
+- **Como:** Decomponha tarefas, defina critérios de sucesso por etapa e use validações estruturadas (ex.: Pydantic, ast).
 
-```mermaid
-flowchart TD
-	LLM["LLM\n(reason)"] --> ORC["Orchestrator\n(control)"]
-	ORC --> TOOLS["Tools\n(act)"]
-	TOOLS --> ORC
-	ORC --> MEMORY["Memory\n(context)"]
-	MEMORY --> LLM
-```
+## Por que o encadeamento de prompts importa
+
+Modelos de Linguagem (LLMs) são fortes em geração single-turn, mas têm dificuldades em workflows em múltiplas etapas, especialmente quando a tarefa exige dados externos (por exemplo: tempo, calendário, inventário, políticas de API).
+
+Agentes AI resolvem isso combinando raciocínio com execução:
+
+$$
+	ext{Agent} = \text{LLM (raciocínio)} + \text{Tools (ação)} + \text{Orchestração (controle)}
+$$
+
+### Componentes comuns de um agente
+
+- **LLM**: motor de raciocínio.
+- **Tools**: APIs/funções para recuperação e ações.
+- **Instruções**: comportamentos e restrições de sistema.
+- **Memória**: contexto de curto prazo + histórico de longo prazo.
+- **Camada de Runtime/Orquestração**: controla o loop e o uso de ferramentas.
+
+Para alcançar metas complexas, agentes decompõem tarefas em etapas menores e avaliam progresso em cada passo.
 
 ---
 
-## 2) Prompt Chaining: Core Idea
+## Encadeamento de Prompts: ideia central
 
-Prompt chaining programmatically connects outputs and inputs across calls:
+O encadeamento conecta programaticamente saídas e entradas entre chamadas:
 
 $$
 	ext{Output}_1 \rightarrow \text{Input}_2,\quad \text{Output}_2 \rightarrow \text{Input}_3
 $$
 
-### Example: LinkedIn post workflow
+### Exemplo: fluxo para postar no LinkedIn
 
-1. **Research** → `RESPONSE_1`
-2. **Summarize** using `RESPONSE_1` → `RESPONSE_2`
-3. **Draft post** using `RESPONSE_2` → `FINAL_RESPONSE`
+1. **Pesquisa** → `RESPONSE_1`
+2. **Resumo** usando `RESPONSE_1` → `RESPONSE_2`
+3. **Rascunho** usando `RESPONSE_2` → `FINAL_RESPONSE`
 
-This pipeline is more controllable and maintainable than one giant prompt.
-
-| Pattern | When to use | Trade-offs |
-|---|---:|---|
-| Chain (ReAct) | Multi-step tasks requiring tools | Deterministic control, more engineering
-| Chain (CoT) | Complex reasoning inside single call | Simpler but riskier for tool usage
-
+Esse pipeline é mais controlável e manutenível do que um único prompt gigantesco.
 
 ---
 
-## 3) Why Chaining Is Essential for Agents
+## Por que encadear é essencial para agentes
 
-Question: **"What time is my dental appointment tomorrow?"**
+Pergunta: **"Que horas é minha consulta odontológica amanhã?"**
 
-### Hard-coded workflow
-1. Ask model whether calendar data is needed.
-2. If yes, call `get_calendar()`.
-3. Ask model to answer from tool output.
+### Workflow rígido (hard-coded)
+1. Perguntar ao modelo se dados do calendário são necessários.
+2. Se sim, chamar `get_calendar()`.
+3. Pedir ao modelo para responder a partir da saída da ferramenta.
 
-### Agentic (ReAct-style) workflow
-1. `THOUGHT`: I need calendar data.
-2. `ACTION`: `get_calendar("tomorrow")`
-3. Orchestrator returns observation (`"9am"`).
-4. `THOUGHT`: I now have the answer.
-5. `ACTION`: `final_answer("9am")`
+### Workflow agentivo (estilo ReAct)
+1. `THOUGHT`: Preciso dos dados do calendário.
+2. `ACTION`: `get_calendar("amanha")`
+3. Orquestrador retorna observação (`"09:00"`).
+4. `THOUGHT`: Agora tenho a resposta.
+5. `ACTION`: `final_answer("09:00")`
 
-Prompt chaining links these actions, but chaining **alone** is not enough.
+O encadeamento liga essas ações, mas o encadeamento **sozinho** não é suficiente.
 
 ---
 
-## 4) Output Validation: Gate Checks
+## Validação de saída: Gate Checks
 
-LLMs can hallucinate, fail formats, or miss instructions. Early-step errors can cascade.
+LLMs podem alucinar, falhar no formato ou ignorar instruções. Erros em etapas iniciais podem se propagar.
 
-Gate checks add quality control between steps:
+Gate checks acrescentam controle de qualidade entre etapas:
 
-- **Pass**: continue.
-- **Fail**: halt, retry, or retry with failure feedback.
+- **Passou**: prosseguir.
+- **Falhou**: interromper, tentar novamente ou tentar com feedback de falha.
 
-### Generic pseudo-code
+### Pseudocódigo genérico
 
 ```python
 output = call_llm(prompt_step1)
@@ -101,109 +105,76 @@ else:
 	handle_error(output)
 ```
 
-	### Poor vs Optimized (code-first)
+### Estratégias comuns de falha
 
-	Poor (no validation):
-
-	```python
-	def run_simple_chain(prompts, llm):
-		responses = []
-		for p in prompts:
-			responses.append(llm(p))
-		return responses[-1]
-	```
-
-	Optimized (validation + retries):
-
-	```python
-	from typing import Callable
-	def chain_with_validation(prompts: list[str], llm: Callable[[str], str],
-							  validator: Callable[[str], bool], retries: int = 2):
-		last = None
-		for p in prompts:
-			attempt = 0
-			while attempt <= retries:
-				out = llm(p if last is None else f"{p}\n\nPrevious:\n{last}")
-				if validator(out):
-					last = out
-					break
-				attempt += 1
-			else:
-				raise RuntimeError("Validation failed after retries")
-		return last
-	```
-
-### Typical failure strategies
-
-1. **Stop** immediately (high-risk workflows).
-2. **Retry** with same prompt.
-3. **Retry with feedback** (include failure reason explicitly).
+1. **Parar** imediatamente (fluxos de alto risco).
+2. **Repetir** com o mesmo prompt.
+3. **Repetir com feedback** (incluir razão da falha explicitamente).
 
 ---
 
-## 5) Types of Gate Checks
+## Tipos de Gate Checks
 
-| Type | What it validates | Common implementation |
+| Tipo | O que valida | Implementação comum |
 |---|---|---|
-| **Format checks** | JSON/XML shape, required fields, length | Pydantic, schema validation, structured output APIs |
-| **Content checks** | Keywords, citation presence, topical relevance | Regex, embedding similarity, secondary LLM checks |
-| **Logic checks** | Numeric/logical consistency, code quality | `ast`, linters, unit tests, policy constraints |
+| **Verificação de formato** | Forma JSON/XML, campos obrigatórios, tamanho | Pydantic, validação de esquema, APIs de saída estruturada |
+| **Verificação de conteúdo** | Presença de palavras-chave, citações, relevância | Regex, similaridade por embeddings, checagens por segundo LLM |
+| **Verificação lógica** | Consistência numérica/lógica, qualidade de código | `ast`, linters, testes unitários, restrições de política |
 
 ---
 
-## 6) Use Case: Data Analysis Script Generation
+## Caso de uso: gerar script de análise de dados
 
-Goal: generate Python code that reads a CSV, computes average for a column, and writes output.
+Objetivo: gerar código Python que leia um CSV, calcule a média de uma coluna e grave o resultado.
 
-### Step 1 — Generate outline
+### Etapa 1 — Gerar esboço
 
-Prompt asks for a short, numbered plan.
+O prompt pede um plano curto e numerado.
 
-Optional **Gate 1**:
-- list format present,
-- key verbs present (`read`, `process`, `write`).
+Gate 1 (opcional):
+- formato em lista presente,
+- verbos chaves presentes (`ler`, `processar`, `gravar`).
 
-### Step 2 — Generate code from outline
+### Etapa 2 — Gerar código a partir do esboço
 
-Prompt injects `outline_response` from Step 1.
+Prompt injeta `outline_response` da Etapa 1.
 
-**Gate 2**:
-- validate syntax via `ast.parse()` (or linter).
+Gate 2:
+- validar sintaxe via `ast.parse()` (ou linter).
 
-### Step 3 — Refine if syntax failed
+### Etapa 3 — Refinar se a sintaxe falhar
 
-Feed back generated code + syntax error details.
+Enviar o código gerado e os detalhes do erro de sintaxe como feedback.
 
-Re-run Gate 2 with max retry count.
+Re-executar Gate 2 com contador máximo de tentativas.
 
-### End-to-end chain
+### Fluxo fim-a-fim
 
-1. Prompt 1 → Outline → Gate 1
-2. Prompt 2 → Code → Gate 2
-3. If fail: Prompt 3 (fix) → Gate 2 (retry loop)
+1. Prompt 1 → Esboço → Gate 1
+2. Prompt 2 → Código → Gate 2
+3. Se falhar: Prompt 3 (corrigir) → Gate 2 (loop de tentativa)
 
 ---
 
-## 7) Implementing Prompt Chains in Python
+## Implementando encadeamentos em Python
 
-At runtime, prompt chaining is string management + sequential API calls.
+Em tempo de execução, encadear prompts é gerenciar strings e chamadas sequenciais à API.
 
 ```python
 prompt_step1 = """
-You are a helpful programming assistant.
-I need a Python script to read input_data.csv,
-calculate the average of a column named 'value',
-and write the result to output.txt.
-Provide a simple step-by-step outline.
+Você é um assistente de programação prestativo.
+Preciso de um script Python para ler input_data.csv,
+calcular a média da coluna 'value' e gravar o resultado em output.txt.
+Forneça um plano simples passo a passo.
 """
 
 outline_response = get_completion(prompt_step1)
 
 prompt_step2 = f"""
-Based on the outline below, write complete Python code.
-Use standard libraries and include comments.
+Com base no esboço abaixo, escreva código Python completo.
+Use bibliotecas padrão e inclua comentários.
 
-Outline:
+Esboço:
 ---
 {outline_response}
 ---
@@ -212,7 +183,7 @@ Outline:
 code_response = get_completion(prompt_step2)
 ```
 
-Syntax gate check:
+Verificação de sintaxe:
 
 ```python
 import ast
@@ -220,31 +191,31 @@ import ast
 def check_python_syntax(code: str) -> tuple[bool, str]:
 	try:
 		ast.parse(code)
-		return True, "No syntax errors found."
+		return True, "Sem erros de sintaxe."
 	except SyntaxError as e:
-		return False, f"Syntax Error: {e}"
+		return False, f"Erro de sintaxe: {e}"
 ```
 
 ---
 
-## 8) Pydantic for Reliable Structured Outputs
+## Pydantic para saídas estruturadas confiáveis
 
-Natural language outputs vary in structure and are hard to automate safely.
+Saídas em linguagem natural variam em estrutura e são difíceis de automatizar com segurança.
 
-Pydantic solves this with explicit schemas:
+Pydantic resolve isso com schemas explícitos:
 
-- **Validation**: rejects malformed or incomplete data.
-- **Parsing**: converts JSON into typed Python objects.
+- **Validação**: rejeita dados malformados ou incompletos.
+- **Parsing**: converte JSON em objetos tipados Python.
 
-### Why this matters in chains
+### Por que isso importa em cadeias
 
-Pydantic acts as a gate check between steps:
+Pydantic funciona como um gate check entre etapas:
 
 $$
 	ext{LLM JSON} \xrightarrow{\text{Pydantic validate}} \text{Typed Object} \rightarrow \text{Next Step}
 $$
 
-### Example models: `OrderItem` and `Order`
+### Modelos de exemplo: `OrderItem` e `Order`
 
 ```python
 from pydantic import BaseModel, Field
@@ -253,23 +224,51 @@ from typing import List, Optional
 
 class OrderItem(BaseModel):
 	sku: str = Field(..., description="Stock Keeping Unit")
-	quantity: int = Field(..., description="Quantity ordered")
-	item_name: Optional[str] = Field(None, description="Item name if available")
+	quantity: int = Field(..., description="Quantidade pedida")
+	item_name: Optional[str] = Field(None, description="Nome do item, se disponível")
 
 
 class Order(BaseModel):
-	order_id: int = Field(..., description="Unique order identifier")
-	customer_email: Optional[str] = Field(None, description="Customer email")
-	items: List[OrderItem] = Field(..., description="Order items")
-	total_amount: float = Field(..., description="Order total amount")
+	order_id: int = Field(..., description="Identificador único do pedido")
+	customer_email: Optional[str] = Field(None, description="Email do cliente")
+	items: List[OrderItem] = Field(..., description="Itens do pedido")
+	total_amount: float = Field(..., description="Valor total do pedido")
 ```
 
-### Validation gate
+### Gate de validação
 
 ```python
 from pydantic import ValidationError
 
 def validate_order_payload(payload: dict) -> tuple[bool, str]:
+	try:
+		Order.model_validate(payload)
+		return True, "Payload válido"
+	except ValidationError as e:
+		return False, e.json()
+```
+
+---
+
+## Regras práticas de projeto
+
+1. Divida tarefas grandes em prompts específicos por etapa.
+2. Defina critérios explícitos de sucesso para cada etapa.
+3. Adicione gate checks determinísticos quando possível.
+4. Limite tentativas para evitar loops infinitos.
+5. Registre prompt/saída/validação a cada iteração.
+6. Use saídas estruturadas + Pydantic para confiabilidade máquina-a-máquina.
+
+---
+
+## Recapitulação
+
+- A decomposição de tarefas melhora a qualidade do raciocínio.
+- O encadeamento de prompts cria um pipeline programável.
+- Gate checks evitam propagação de erros.
+- Pydantic torna as saídas de agente mais robustas e interoperáveis.
+
+Esses padrões formam a base de workflows agentivos confiáveis em produção.
 	try:
 		Order.model_validate(payload)
 		return True, "Valid payload"
