@@ -122,32 +122,146 @@ The application is structured as a progressive pipeline:
 
 ## Solution
 
-Project — Main notebook: [project_starter.ipynb](1_Prompting_for_Effective_LLM_Reasoning_and_Planning/project_starter.ipynb)
+> **Instructor Note:** This section explains the reference solution for the AgentsVille Trip Planner project.
+> Read it after you have attempted the notebook on your own. Understanding *why* each design decision was made
+> is as important as making the code run.
 
-Solution summary
-- Implements a complete trip-planning pipeline: input validation (`VacationInfo`),
-  simulated ingestion of weather forecasts and activities, generation of a `TravelPlan` via the `ItineraryAgent`,
-  automated evaluation with `eval` functions, and iterative correction using a ReAct agent (`ItineraryRevisionAgent`).
+### Reference Notebook
 
-- Open and run the notebook [project_starter.ipynb](1_Prompting_for_Effective_LLM_Reasoning_and_Planning/project_starter.ipynb) step-by-step.
+Open and run [project_starter.ipynb](project_starter.ipynb) cell by cell.
+Each section maps directly to a rubric criterion described below.
 
-Expected outcomes
-- `VacationInfo` validates successfully (Pydantic) and has the correct format.
-- `ItineraryAgent` produces JSON that validates against the `TravelPlan` schema.
-- Evaluation functions (`eval_*`) detect obvious issues (dates, cost, missing activities, weather incompatibilities).
-- `ItineraryRevisionAgent` executes ReAct cycles, calls tools as specified, and only invokes `final_answer_tool` when `run_evals_tool` returns `success: true`.
+---
 
-Evaluation criteria (short rubric)
-- Type and format validation: final JSON must validate against the `TravelPlan` model.
-- Date consistency: `start_date` / `end_date` must match `VacationInfo`.
-- Cost accuracy: sum of activity prices == `total_cost` and `total_cost ≤ budget`.
-- Weather safety: outdoor activities must not be scheduled on incompatible weather days.
-- Agent functional requirements: at least 2 activities per day after revision and correct tool usage in the specified JSON format.
+### Architecture Overview
 
-Quick debugging tips
-- Run cells sequentially and inspect intermediate outputs (`weather_for_dates_df`, `activities_for_dates_df`).
-- If the agent does not produce valid JSON, examine the printed `ANALYSIS` section and adjust the agent system prompt (e.g., reinforce output format).
-- To debug the ReAct loop, inspect the messages and `OBSERVATION` strings produced by tool calls.
+The solution implements a **two-agent pipeline** connected by a shared evaluation harness:
+
+```
+VacationInfo (Pydantic)
+      │
+      ▼
+ItineraryAgent  ──── Chain-of-Thought prompt ───▶  TravelPlan (draft)
+      │
+      ▼
+Evaluation Harness  ──── eval_* functions ──▶  EvaluationResults
+      │
+      ▼
+ItineraryRevisionAgent  ──── ReAct loop (THOUGHT → ACTION → OBSERVATION) ──▶  TravelPlan (final)
+```
+
+This separation of concerns is intentional: the first agent optimises for *quality of reasoning*
+(single LLM call, rich context), while the second optimises for *reliability of output*
+(iterative tool use, self-evaluation before committing).
+
+---
+
+### Key Design Decisions
+
+#### 1. Chain-of-Thought in `ITINERARY_AGENT_SYSTEM_PROMPT`
+
+The prompt explicitly enumerates five reasoning steps — date alignment, interest matching,
+weather constraints, budget calculation, and activity coverage — before asking for the JSON output.
+This forces the model to *plan before it writes*, which dramatically reduces schema validation failures
+compared to a direct instruction like "produce a travel plan".
+
+**Why it matters for the rubric:** the TravelPlan schema and the ANALYSIS section both appear in
+the prompt, so the model has a contract to satisfy *before* generating the FINAL OUTPUT block.
+
+#### 2. Deterministic Output Format in `ACTIVITY_AND_WEATHER_ARE_COMPATIBLE_SYSTEM_PROMPT`
+
+The prompt instructs the model to emit **exactly one word** on the FINAL ANSWER line —
+either `IS_COMPATIBLE` or `IS_INCOMPATIBLE`, with no other text, punctuation, or explanation.
+This constraint is critical because the downstream Python parser uses substring matching:
+if the model outputs both tokens in the same line (e.g. `IS_COMPATIBLE / IS_INCOMPATIBLE`),
+the check `"IS_COMPATIBLE" in resp` will always evaluate to `True`, silently masking
+incompatible activities.
+
+**Lesson:** when an LLM response drives a conditional branch in production code, the output
+format specification must be *unambiguous and mutually exclusive*.
+
+#### 3. Tool Docstrings as Agent Context
+
+The `ItineraryRevisionAgent` system prompt is generated dynamically via
+`get_tool_descriptions_string(ALL_TOOLS)`, which reads each tool's `__doc__` string at
+instantiation time. This means the docstring is not just for human readers — it is the
+primary specification the LLM uses when deciding *how to call the tool*.
+
+The `get_activities_by_date_tool` docstring therefore must declare:
+- **parameter names and types** (`date: str`, `city: str`)
+- **expected date format** (`YYYY-MM-DD`, e.g. `"2025-06-10"`)
+- **return type and structure** (`List[dict]`, each matching the Activity schema)
+
+Omitting this information causes the agent to guess formats, leading to tool-call errors
+that waste steps in the ReAct loop.
+
+#### 4. ReAct Loop with Mandatory Exit Gate
+
+The `ITINERARY_REVISION_AGENT_SYSTEM_PROMPT` contains an explicit rule:
+> "Call `final_answer_tool` **only** when the most recent `run_evals_tool` call returned
+> `success: true` with an empty `failures` list."
+
+This single constraint converts a free-form generation loop into a *verified* loop:
+the agent cannot self-certify completion — it must receive external confirmation from the
+evaluation harness. This pattern (generate → evaluate → reflect → revise) is the
+foundation of self-correcting agentic systems.
+
+---
+
+### Expected Outcomes After Each Stage
+
+| Stage | Artifact | Acceptance criterion |
+|-------|----------|----------------------|
+| Pydantic validation | `VacationInfo` | All fields present with correct types |
+| ItineraryAgent | `travel_plan_1` | JSON validates against `TravelPlan` schema |
+| eval_* suite | `EvaluationResults` | Failures listed; `success` may be `False` initially |
+| ItineraryRevisionAgent | `travel_plan_2` | `success=True`, `failures=[]` across all 7 evals |
+
+---
+
+### Rubric Alignment
+
+| Rubric criterion | Where implemented |
+|------------------|--------------------|
+| Role and task definition | `ITINERARY_AGENT_SYSTEM_PROMPT` — role block + numbered reasoning steps |
+| Structured output format | Both system prompts specify JSON schema or single-label output |
+| Context injection | Weather and activity DataFrames serialised into the ItineraryAgent prompt |
+| Tool docstring completeness | `get_activities_by_date_tool` — typed parameters, date format, return type |
+| Weather-compatibility evaluation | `ACTIVITY_AND_WEATHER_ARE_COMPATIBLE_SYSTEM_PROMPT` — single-label output rule |
+| ReAct loop correctness | `ITINERARY_REVISION_AGENT_SYSTEM_PROMPT` — phased strategy + exit gate |
+| Traveler feedback incorporation | `eval_traveler_feedback_is_incorporated` added to `ALL_EVAL_FUNCTIONS` |
+
+---
+
+### Common Pitfalls and Debugging Guide
+
+**The agent produces invalid JSON.**
+Check the `ANALYSIS` section in the raw response. If the model reasoned correctly but
+formatted incorrectly, strengthen the output format section of the prompt (add an explicit
+example with the schema filled in). Also verify that the JSON schema of `TravelPlan` is
+included in the prompt context.
+
+**`eval_total_cost_is_accurate` fails.**
+The model miscalculated the sum. This is an arithmetic reliability issue — ensure the
+`calculator_tool` is available and that the revision agent prompt instructs it to use the
+calculator before setting `total_cost`.
+
+**`eval_itinerary_events_match_actual_events` fails with "not matching".**
+The model copied an activity but mutated a field (e.g., changed `price` or `start_time`).
+Reinforce in the prompt: *"Copy every activity field exactly from the dataset; do not
+invent or change any field value."*
+
+**`eval_activities_and_weather_are_compatible` flags a false positive.**
+Check whether the activity description explicitly mentions indoor alternatives. If it does,
+the prompt rule ("treat it as compatible if it mentions indoor alternatives or backup options")
+should handle it. If it still fails, it may be a model hallucination in the evaluator itself —
+inspect the `REASONING` section printed to the notebook output.
+
+**The ReAct loop hits `max_steps` without calling `final_answer_tool`.**
+Read each THOUGHT/ACTION/OBSERVATION trace to find where the loop stalls. Common causes:
+(1) the agent calls `run_evals_tool` with a malformed plan, (2) it ignores an OBSERVATION
+and repeats the same action, or (3) the prompt's exit gate condition is unclear.
+Increase specificity of the phased strategy section in the revision prompt.
 
 
 ### Exercises (Learning Path)
