@@ -8,7 +8,7 @@ The curriculum covers advanced prompting techniques, agentic workflows, and the 
 
 The Nanodegree focuses on building agents in Python that can reason, plan, and use tools to interact with databases and external APIs. The program is divided into four main courses:
 
-### 1. Prompting for Effective LLM Reasoning and Planning
+### 1. PAntes
 Go beyond basic chatbots and learn to engineer practical agentic systems. This module teaches how to craft prompts and workflows that make LLMs reliable partners for reasoning, planning, and action.
 
 *   **Advanced Prompting:** Master techniques such as Chain-of-Thought, ReAct, and feedback loops to elicit step-by-step reasoning and controlled actions from LLMs.

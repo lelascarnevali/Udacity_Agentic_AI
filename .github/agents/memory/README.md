@@ -13,3 +13,4 @@ When performing tasks, the agent **MUST** check this index to identify relevant 
 | **README Work** | [`readme-agent-memory.md`](readme-agent-memory.md) | Guidelines for creating and updating README files. |
 | **Workflow Patterns** | [`workflow-memory-check-agent-memory.md`](workflow-memory-check-agent-memory.md) | Standard workflow patterns and memory check procedures. |
 | **Memory Creation** | [`how-to-write-memory-agent-memory.md`](how-to-write-memory-agent-memory.md) | Guide ensuring memory entries are useful and structured. |
+| **GPT-5 Models** | [`gpt5-model-usage-agent-memory.md`](gpt5-model-usage-agent-memory.md) | Practical notes for using `gpt-5-nano` with Chat Completions and required parameters. |
