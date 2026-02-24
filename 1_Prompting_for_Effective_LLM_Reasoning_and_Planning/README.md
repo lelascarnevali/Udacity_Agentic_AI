@@ -122,7 +122,33 @@ The application is structured as a progressive pipeline:
 
 ## Solution
 
-Project — [Notebook: project_starter.ipynb](./exercises/project_starter.ipynb)
+Project — Main notebook: [project_starter.ipynb](1_Prompting_for_Effective_LLM_Reasoning_and_Planning/project_starter.ipynb)
+
+Solution summary
+- Implements a complete trip-planning pipeline: input validation (`VacationInfo`),
+  simulated ingestion of weather forecasts and activities, generation of a `TravelPlan` via the `ItineraryAgent`,
+  automated evaluation with `eval` functions, and iterative correction using a ReAct agent (`ItineraryRevisionAgent`).
+
+- Open and run the notebook [project_starter.ipynb](1_Prompting_for_Effective_LLM_Reasoning_and_Planning/project_starter.ipynb) step-by-step.
+
+Expected outcomes
+- `VacationInfo` validates successfully (Pydantic) and has the correct format.
+- `ItineraryAgent` produces JSON that validates against the `TravelPlan` schema.
+- Evaluation functions (`eval_*`) detect obvious issues (dates, cost, missing activities, weather incompatibilities).
+- `ItineraryRevisionAgent` executes ReAct cycles, calls tools as specified, and only invokes `final_answer_tool` when `run_evals_tool` returns `success: true`.
+
+Evaluation criteria (short rubric)
+- Type and format validation: final JSON must validate against the `TravelPlan` model.
+- Date consistency: `start_date` / `end_date` must match `VacationInfo`.
+- Cost accuracy: sum of activity prices == `total_cost` and `total_cost ≤ budget`.
+- Weather safety: outdoor activities must not be scheduled on incompatible weather days.
+- Agent functional requirements: at least 2 activities per day after revision and correct tool usage in the specified JSON format.
+
+Quick debugging tips
+- Run cells sequentially and inspect intermediate outputs (`weather_for_dates_df`, `activities_for_dates_df`).
+- If the agent does not produce valid JSON, examine the printed `ANALYSIS` section and adjust the agent system prompt (e.g., reinforce output format).
+- To debug the ReAct loop, inspect the messages and `OBSERVATION` strings produced by tool calls.
+
 
 ### Exercises (Learning Path)
 
