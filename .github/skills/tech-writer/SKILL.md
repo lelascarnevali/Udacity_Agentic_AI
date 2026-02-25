@@ -1,8 +1,7 @@
 ---
 name: tech-writer
 description: MANDATORY for creating or updating ANY documentation in /docs/ folders (study guides, cheat sheets, reference guides). Apply rigorous technical writing standards (Strunk & White). Use when user asks to create documentation, study guides, summaries, or reference materials from transcripts, videos, or code changes.
-license: MIT
-allowed-tools: [read_file, create_file, create_directory, run_in_terminal, file_search, grep_search]
+argument-hint: '[topic or file to document] — e.g. "Chain-of-Thought prompting" or path to transcript'
 ---
 
 # Technical Writer

@@ -15,10 +15,21 @@ This repository hosts Udacity Agentic AI exercises focused on effective promptin
 ```
 .
 ├── .github/                                   # Agent configuration and support assets
-│   ├── agents/memory/                         # Persistent agent memory files
-│   ├── instructions/                          # Contextual instructions (python-env, etc.)
-│   ├── prompts/                               # Workflow prompt templates
-│   └── skills/                               # Skills catalog and SKILL.md files
+│   ├── agents/                                # Custom agents (.agent.md) + memory/
+│   │   ├── plan.agent.md                      # "Plan" read-only planning agent
+│   │   └── memory/                            # Persistent session learnings
+│   ├── instructions/                          # Always-on scoped rules (applyTo glob)
+│   │   ├── python-env.instructions.md         # Python/notebook rules
+│   │   ├── module-structure.instructions.md   # Exercise/module conventions
+│   │   └── workflow-architecture.instructions.md  # Where to put agent workflows
+│   ├── prompts/                               # User-invoked slash commands
+│   │   ├── documentation_workflow.prompt.md   # /documentation_workflow
+│   │   └── commit.prompt.md                   # /commit
+│   └── skills/                               # Auto-loaded reusable procedures
+│       ├── git-commit/  tech-writer/  agent-memory/
+│       ├── prompt-engineering/  skill-creator/  crafting-effective-readmes/
+├── .claude/                                   # Claude Code specific agents
+│   └── agents/plan.md                         # Plan agent (Claude format)
 ├── 1_Prompting_for_Effective_LLM_Reasoning_and_Planning/
 │   ├── docs/
 │   └── exercises/
@@ -84,7 +95,24 @@ Skip the workflow checks only for pure conversational replies that involve no re
 - Code, variable names, comments: write in **English**.
 - Chat responses to the user: reply in **Portuguese (pt-BR)**.
 
-## 6. Skills Catalog
+## 6. Workflow Architecture — Where to Put Things
+
+> Full reference: `.github/instructions/workflow-architecture.instructions.md`
+
+Use this table to decide where new agent knowledge belongs:
+
+| Knowledge type | Location | Triggered by |
+|---|---|---|
+| Always-on project context | `copilot-instructions.md` | Every request |
+| Path-scoped coding rules | `instructions/*.instructions.md` | Matching file |
+| User-invoked workflow (slash command) | `prompts/*.prompt.md` | `/command` in chat |
+| Specialized AI persona | `agents/*.agent.md` | User selects agent |
+| Auto-loaded reusable procedure | `skills/<name>/SKILL.md` | AI detects relevance |
+| Session learnings / preferences | `agents/memory/*.md` | Agent reads on Step 0 |
+
+**Key rule:** Memory files record *what was learned*, not *what to do*. If a memory file contains a primary procedure, promote it to a Skill or Instruction.
+
+## 8. Skills Catalog
 
 Skills are located in `.github/skills/`. Always consult `.github/skills/README.md` first.
 
@@ -97,9 +125,11 @@ Skills are located in `.github/skills/`. Always consult `.github/skills/README.m
 | `skill-creator` | Creating or updating skills in `.github/skills/` |
 | `tech-writer` | Technical writing (study guides, docs) following Strunk & White |
 
-## 7. Agent Memory
+## 9. Agent Memory
 
 Project memory is stored in `.github/agents/memory/`. Always check `.github/agents/memory/README.md` to identify relevant files.
+
+> **Rule:** Memory files record *what was learned*, not *what to do*. Procedures belong in Skills or Instructions.
 
 | Context / Skill | File |
 |---|---|
@@ -107,25 +137,23 @@ Project memory is stored in `.github/agents/memory/`. Always check `.github/agen
 | Python Operations | `virtual-environment-agent-memory.md` |
 | Terminal / Git | `terminal-troubleshooting.md` |
 | `agent-memory` skill | `agent-memory-skill-usage-agent-memory.md` |
-| README Work | `readme-agent-memory.md` |
 | Workflow Patterns | `workflow-memory-check-agent-memory.md` |
-| Memory Creation | `how-to-write-memory-agent-memory.md` |
 | GPT-5 Models | `gpt5-model-usage-agent-memory.md` |
 
-## 8. Virtual Environment
+## 10. Virtual Environment
 
 - Preferred: `.venv/` at workspace root — `python3 -m venv .venv && source .venv/bin/activate`
 - Install deps: `pip install -r requirements.txt`. Deactivate: `deactivate`.
 - Details: `.github/instructions/python-env.instructions.md`.
 
-## 9. Code Standards
+## 11. Code Standards
 
 - **Python**: PEP 8; prefer type hints and concise docstrings; use `black`/`ruff` when applicable.
 - **Notebooks**: write formulas in LaTeX within markdown cells.
   - Inline: `$E=mc^2$`
   - Block: `$$\int_a^b f(x)\,dx$$`
 
-## 10. Context Transparency
+## 12. Context Transparency
 
 End every non-trivial response with:
 

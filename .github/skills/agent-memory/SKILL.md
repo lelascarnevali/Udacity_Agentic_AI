@@ -1,6 +1,7 @@
 ---
 name: agent-memory
-description: Agent memory logging for engineering learnings using Markdown entries.
+description: Agent memory logging for engineering learnings using Markdown entries. Use after completing tasks with reusable lessons, style preferences, or workflow discoveries worth retaining across sessions.
+argument-hint: '[context/topic] — e.g. "virtualenv setup" or "study-guide preferences"'
 ---
 
 # Agent Memory

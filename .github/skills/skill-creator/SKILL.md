@@ -1,7 +1,7 @@
 ---
 name: skill-creator
-description: Guide for creating effective skills. This skill should be used when users want to create a new skill (or update an existing skill) that extends Claude's capabilities with specialized knowledge, workflows, or tool integrations.
-license: Complete terms in LICENSE.txt
+description: Guide for creating effective skills. This skill should be used when users want to create a new skill (or update an existing skill) that extends Claude's or Copilot's capabilities with specialized knowledge, workflows, or tool integrations.
+argument-hint: '[skill name] — e.g. "code-review" or "deploy-staging"'
 ---
 
 # Skill Creator

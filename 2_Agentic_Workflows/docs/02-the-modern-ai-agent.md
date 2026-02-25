@@ -190,4 +190,4 @@ def agent_loop(
 
 ---
 
-**Próximo tópico:** [Padrões de Agentic Workflows](03-agentic-workflow-patterns.md) — Prompt Chaining, Routing, Paralelização, Evaluator e Orchestrator.
+**Próximo tópico:** [Modelagem de Agentic Workflows](03-agentic-workflow-modeling.md) — Do processo determinístico ao design agent-centric, tipos de agentes e padrões Evaluation/Crew Manager.

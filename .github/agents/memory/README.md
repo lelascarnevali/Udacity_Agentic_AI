@@ -1,16 +1,26 @@
 # Agent Memory Index
 
-This directory contains persistent memory files that capture learnings, preferences, and troubleshooting steps for the AI agent.
+This directory stores **persistent learnings, preferences, and troubleshooting notes** captured across sessions.
 
-When performing tasks, the agent **MUST** check this index to identify relevant memory files based on the current context or skill being used.
+> **Rule:** Memory files record *what was learned*, not *what to do*.
+> Procedures belong in `.github/skills/` (auto-loaded) or `.github/instructions/` (always-on rules).
 
-| Context / Skill | Relevant Memory File | Description |
+When performing tasks, check this index to identify relevant memory files based on context or skill.
+
+| Context / Skill | Memory File | What it contains |
 | :--- | :--- | :--- |
-| **`tech-writer` skill** | [`study-guide-preference.md`](study-guide-preference.md) | Style preferences for study guides (formulas, emojis, tables). |
-| **Python Operations** | [`virtual-environment-agent-memory.md`](virtual-environment-agent-memory.md) | Virtual environment management and Python best practices. |
-| **Terminal / Git** | [`terminal-troubleshooting.md`](terminal-troubleshooting.md) | Troubleshooting common terminal and git errors. |
-| **`agent-memory` skill** | [`agent-memory-skill-usage-agent-memory.md`](agent-memory-skill-usage-agent-memory.md) | Best practices for using the `agent-memory` skill itself. |
-| **README Work** | [`readme-agent-memory.md`](readme-agent-memory.md) | Guidelines for creating and updating README files. |
-| **Workflow Patterns** | [`workflow-memory-check-agent-memory.md`](workflow-memory-check-agent-memory.md) | Standard workflow patterns and memory check procedures. |
-| **Memory Creation** | [`how-to-write-memory-agent-memory.md`](how-to-write-memory-agent-memory.md) | Guide ensuring memory entries are useful and structured. |
-| **GPT-5 Models** | [`gpt5-model-usage-agent-memory.md`](gpt5-model-usage-agent-memory.md) | Practical notes for using `gpt-5-nano` with Chat Completions and required parameters. |
+| `tech-writer` skill | [`study-guide-preference.md`](study-guide-preference.md) | User style preferences: emojis, LaTeX, tables, code-first structure |
+| Python / Jupyter | [`virtual-environment-agent-memory.md`](virtual-environment-agent-memory.md) | venv setup quirks, uv usage, kernel matching |
+| Terminal / Git | [`terminal-troubleshooting.md`](terminal-troubleshooting.md) | Heredoc trap, known terminal errors and fixes |
+| `agent-memory` skill | [`agent-memory-skill-usage-agent-memory.md`](agent-memory-skill-usage-agent-memory.md) | Naming conventions, template path, commit policy for memory files |
+| Workflow patterns | [`workflow-memory-check-agent-memory.md`](workflow-memory-check-agent-memory.md) | *Why* Step 0 was created + skill-to-memory quick-reference table |
+| GPT-5 / Models | [`gpt5-model-usage-agent-memory.md`](gpt5-model-usage-agent-memory.md) | API differences (Responses vs Chat Completions), reasoning params, fallback strategy |
+
+## Where procedures live (not here)
+
+| Procedure | Location |
+|---|---|
+| Step 0 mandatory workflow | `AGENTS.md` → Section 3 |
+| Where to put agent knowledge | `.github/instructions/workflow-architecture.instructions.md` |
+| How to write memory entries | `.github/skills/agent-memory/SKILL.md` |
+| How to commit | `.github/skills/git-commit/SKILL.md` |
