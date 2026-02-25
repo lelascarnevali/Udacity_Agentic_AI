@@ -40,6 +40,18 @@ flowchart LR
 | **Determinística** | Responde apenas uma pergunta Python específica | Escopo fixo |
 | **Agêntica** | Planejamento → Python/Java/Debug/Features → Ferramentas → Decisão | Escopo aberto |
 
+### O que NÃO é um Workflow Agêntico
+
+A presença de IA ou LLM em etapas individuais **não torna o workflow agêntico**. O critério é se o **workflow em si** decide quais etapas executar e em que ordem.
+
+| Nível | Estrutura | Por que NÃO é agêntico |
+| :--- | :--- | :--- |
+| **1. Linear com IA** | Etapas sequenciais fixas (ex.: coleta → validação → scoring → decisão), cada uma podendo usar LLM | O fluxo executa sempre a mesma sequência — nenhuma decisão de roteamento ocorre no nível do workflow |
+| **2. Com nó de decisão** | Fluxo com `{Test OK?}` levando a dois caminhos predefinidos | Ambos os caminhos são conhecidos a priori; o workflow não cria rotas novas |
+| **3. Com seleção de tarefa** | Agente seleciona Tarefa A, B ou C — mesmo usando IA na seleção | O conjunto de caminhos possíveis está fechado pelo designer; só o caminho escolhido varia |
+
+> **Critério definitivo:** Um workflow é agêntico quando **o próprio workflow** decide *quais* etapas executar e *em que ordem*, determinando esse conjunto dinamicamente com base no contexto e objetivo — não a priori pelo designer.
+
 ---
 
 ## 3. Workflows vs. Chatbots
@@ -224,7 +236,150 @@ flowchart TD
 
 ---
 
-## 9. Golden Rules
+## 9. Como Identificar Candidatos a Agentes
+
+Ao transformar um workflow determinístico em agêntico, use este método sistemático para identificar onde introduzir agentes:
+
+| Categoria | Indicador no Workflow | Por que é um Candidato |
+| :--- | :--- | :--- |
+| 🔗 **Etapas sequenciais** | Passos que aguardam o anterior para começar | Podem virar agentes paralelos, eliminando gargalos de espera |
+| 🔀 **Pontos de inflexão** | Nós de decisão (`{Has Stock?}`, `{Weather OK?}`) | Um agente inteligente avalia o contexto dinamicamente — sem caminhos fixos predefinidos |
+| ⏳ **Estados de espera** | Passos bloqueados por recurso externo não disponível | Um agente pode monitorar, negociar e desviar o fluxo quando necessário |
+
+```mermaid
+flowchart LR
+    DW[Workflow\nDeterminístico] --> S1[1. Identificar\netapas sequenciais]
+    S1 --> S2[2. Mapear\npontos de inflexão]
+    S2 --> S3[3. Localizar\nestados de espera]
+    S3 --> AW[Workflow\nAgêntico]
+```
+
+---
+
+## 10. Exercício Aplicado: Emergency Aid Dispatch
+
+Este exercício demonstra a transformação de um workflow determinístico real em agêntico, seguindo o método da seção anterior.
+
+### Workflow Determinístico (original)
+
+Sequencial e ineficiente: estoque é verificado *antes* do clima, que é verificado *antes* das estradas — cada etapa bloqueia a próxima.
+
+```mermaid
+flowchart TD
+    Start[Start] --> Receive[Receive Request]
+    Receive --> Inventory[Check Inventory]
+    Inventory --> HasStock{Stock Available?}
+    HasStock -- No --> Order[Order Supplies and Wait]
+    HasStock -- Yes --> CheckWeather[Check Weather]
+    Order --> CheckWeather
+
+    CheckWeather --> BadWeather{Weather OK?}
+    BadWeather -- No --> Delay[Delay Dispatch]
+    BadWeather -- Yes --> CheckRoads[Check Road Conditions]
+
+    CheckRoads --> RoadClear{Roads Clear?}
+    RoadClear -- No --> AltRoute[Try Alternate Route]
+    RoadClear -- Yes --> Dispatch[Dispatch Team]
+
+    AltRoute --> RouteFound{Route Found?}
+    RouteFound -- No --> Escalate[Escalate to HQ]
+    RouteFound -- Yes --> Dispatch
+
+    Dispatch --> Delivered{Delivered?}
+    Delivered -- Yes --> End[Confirm + Close]
+    Delivered -- No --> Retry[Retry or Escalate]
+    Retry --> End
+```
+
+**Candidatos identificados pelo método:**
+- `Check Inventory`, `Check Weather`, `Check Road Conditions` → etapas sequenciais → **paralelizáveis**
+- `{Stock Available?}`, `{Weather OK?}`, `{Roads Clear?}` → pontos de inflexão → **candidatos a agentes inteligentes**
+- `Order Supplies and Wait` → estado de espera → **candidato a agente de monitoramento**
+
+### Workflow Agêntico (solução)
+
+Um **StrategicAgent** coordena três agentes paralelos. Resultado: sem gargalos sequenciais, sem espera forçada.
+
+```mermaid
+flowchart TD
+    Start[Start] --> StrategicAgent[StrategicAgent: Manage Aid Request]
+
+    subgraph Parallel Execution
+        InventoryAgent[InventoryAgent]
+        WeatherAgent[WeatherAgent]
+        RoadAgent[RoadAgent]
+    end
+
+    StrategicAgent --> InventoryAgent & WeatherAgent & RoadAgent
+
+    InventoryAgent --> StrategicAgent
+    WeatherAgent --> StrategicAgent
+    RoadAgent --> StrategicAgent
+
+    StrategicAgent --> DispatchDecision{Ready to Dispatch?}
+    DispatchDecision -- Yes --> DispatchAgent[DispatchAgent]
+    DispatchDecision -- No --> Replan[StrategicAgent: Replan or Wait]
+
+    DispatchAgent --> Confirm[StrategicAgent: Confirm Delivery]
+    Confirm --> End[End]
+```
+
+### Comparação
+
+| Aspecto | Determinístico | Agêntico |
+| :--- | :--- | :--- |
+| **Verificações** | Sequenciais — cada uma bloqueia a próxima | Paralelas — todas executam simultaneamente |
+| **Espera por estoque** | Bloqueia todo o fluxo | InventoryAgent reporta ao StrategicAgent independentemente |
+| **Decisão de despacho** | Depende de 3 condições em série | StrategicAgent sintetiza tudo e decide |
+| **Falha no roteamento** | Escalate to HQ (saída forçada) | StrategicAgent replana internamente |
+
+---
+
+## 11. Padrões de Coordenação em Frameworks
+
+Frameworks reais implementam padrões distintos de comunicação multi-agente. Os três mais comuns:
+
+### AutoGen: Padrão Standard (3 Agentes)
+
+```mermaid
+flowchart TD
+    IP[📥 Input Prompt] --> CM[🎛️ Chat Manager\nOrquestra a comunicação]
+    IP --> AS[🤖 Assistant Agent\nGera respostas e código]
+    IP --> UP[👤 User Proxy Agent\nRepresenta o usuário, executa código]
+    AS -->|coordena| CM
+    UP -->|coordina| CM
+    CM -->|relay updates + feedback| AS
+    CM -->|task progress status| UP
+    UP -->|valida conclusão| AS
+```
+
+**Dinâmica:** O ChatManager orquestra a conversa entre o AssistantAgent (gera soluções) e o UserProxyAgent (valida e executa). Os três colaboram até o prompt ser completamente respondido.
+
+### AutoGen: Padrão Nested (Worker + Critic)
+
+```mermaid
+flowchart TD
+    IP[📥 Input Prompt] --> UP2[👤 User Proxy\nValida resultado final]
+    UP2 --> WK[🛠️ Worker Agent\nTenta responder]
+    WK --> CR[🔍 Critic Agent\nAvalia a resposta]
+    CR -->|feedback| UP2
+    UP2 -->|instruções de melhoria| WK
+    UP2 --> FO[📦 Final Output]
+```
+
+**Dinâmica:** O Critic avalia o Worker e alimenta o UserProxy com feedback. O UserProxy decide se o resultado é suficiente ou envia de volta ao Worker com instruções de melhoria.
+
+### Comparação de Padrões de Frameworks
+
+| Framework | Agentes Principais | Coordenador | Ideal para |
+| :--- | :--- | :--- | :--- |
+| **AutoGen Standard** | Assistant + UserProxy | ChatManager | Tarefas de código e análise colaborativa |
+| **AutoGen Nested** | Worker + Critic | UserProxy | Refinamento iterativo de qualidade |
+| **CrewAI** | Researcher + Writer (+ outros) | Crew Manager | Pesquisa e produção de conteúdo estruturado |
+
+---
+
+## 12. Golden Rules
 
 > **Regra 1 — Comece pelo determinístico**
 > Toda boa modelagem agêntica parte do mapeamento do processo determinístico existente. Agentifique o que você já entende.
