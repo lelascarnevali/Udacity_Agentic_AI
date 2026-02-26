@@ -105,3 +105,8 @@ Ao implementar *Role-Based Prompting* em Python:
 - **Conceitos:** Attribute Layering, Generic vs Expert comparison.
 
 ````
+
+---
+
+**Tópico anterior:** [Role-Based Prompting: Guia de Engenharia](02-role-based-prompting.md)
+**Próximo tópico:** [Chain-of-Thought & ReAct](04-chain-of-thought-and-react-prompting.md)

@@ -140,3 +140,8 @@ Se o seu agente ficar "preso" alucinando ferramentas inexistentes, adicione um `
 - **Conceitos:** Runtime Loop, Tool Definition, Dynamic Information Retrieval.
 
 ````
+
+---
+
+**Tópico anterior:** [Chain-of-Thought & ReAct](04-chain-of-thought-and-react-prompting.md)
+**Próximo tópico:** [Refinamento de Instruções de Prompt e Aplicação](06-prompt-instruction-refinement-and-application.md)

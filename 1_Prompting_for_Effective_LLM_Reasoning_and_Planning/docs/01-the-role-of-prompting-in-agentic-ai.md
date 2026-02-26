@@ -77,3 +77,7 @@ Ao interagir com Agentes, use estas três alavancas para pilotar o comportamento
 
 
 ```
+
+---
+
+**Próximo tópico:** [Role-Based Prompting: Guia de Engenharia](02-role-based-prompting.md)

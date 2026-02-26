@@ -178,3 +178,8 @@ Exemplo de saída desejada:
 - Lidos: `docs/06-prompt-instruction-refinement.md`, `docs/07-applying-prompt-instruction-refinement-with-python.md`, arquivo de complemento fornecido.
 - Criado: `docs/06-07-prompt-instruction-refinement-and-application.md`
 
+---
+
+**Tópico anterior:** [Aplicando CoT & ReAct com Python](05-applying-cot-and-react-with-python.md)
+**Próximo tópico:** [Encadeamento de Prompts para Raciocínio Agêntico](07-chaining-prompts-for-agentic-reasoning.md)
+

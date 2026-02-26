@@ -398,5 +398,118 @@ flowchart TD
 
 ---
 
+## 13. Implementação em Python: Da Teoria ao Código
+
+$$
+\text{Sistema Agêntico em Python} = \text{Classes (Blueprints)} + \text{Instanciação (Configuração)} + \text{Orquestração (Fluxo)}
+$$
+
+### Abordagens de Implementação
+
+| Abordagem | Descrição | Trade-off |
+| :--- | :--- | :--- |
+| **Frameworks existentes** | LangChain, CrewAI, AutoGen — abstrações pré-construídas | Velocidade alta, controle limitado |
+| **Do zero** | Python + LLM direto — lógica central customizada | Máximo controle e compreensão profunda |
+
+> **Princípio:** Implementar "do zero" revela o que acontece dentro dos frameworks mais complexos — o conhecimento é diretamente transferível.
+
+### Três Componentes Centrais
+
+| Componente | Papel | Implementação |
+| :--- | :--- | :--- |
+| 🧠 **LLM Models** | Motor de inteligência — processa e gera respostas | Design flexível para trocar modelos sem reescrever o sistema |
+| 🛠️ **Agent Logic & Prompting** | Define comportamento: comunicação com LLM + capacidades específicas | Classes Python com método `run()` por tipo de agente |
+| 🔄 **Workflow Orchestration** | Gerencia sequência e fluxo de dados entre agentes | Script separado que instancia e coordena os agentes |
+
+### Separação de Responsabilidades
+
+Uma estrutura Python que espelha a separação lógica de conceitos:
+
+```
+seu_projeto/
+├── agent_definitions.py   # Blueprints (classes) dos agentes
+└── main_workflow.py       # Instanciação + Orquestração do workflow
+```
+
+| Camada | Responsabilidade |
+| :--- | :--- |
+| `agent_definitions.py` | **Blueprints** — classes que definem atributos e o método `run()` de cada agente |
+| `main_workflow.py` | **Instanciação** — cria objetos configurados para cada papel no workflow |
+| `main_workflow.py` | **Orquestração** — define sequência e passagem de dados entre instâncias |
+
+### Exemplo do Exercício: Workflow "Information Processing"
+
+O exercício [`exercises/3-agentic-workflow.py`](../exercises/3-agentic-workflow.py) implementa um workflow sequencial com três agentes especializados:
+
+```mermaid
+flowchart LR
+    Q[🔎 Query] --> RA[ResearchAgent]
+    RA -->|research_results| FC[FactCheckerAgent]
+    FC -->|fact_check_results| SA[SummarizerAgent]
+    SA --> S[📄 Summary]
+```
+
+**Agentes definidos:**
+
+```python
+class Agent:
+    """Blueprint base — interface comum para todos os agentes."""
+    def __init__(self, name: str):
+        self.name = name
+
+    def run(self, input_data):
+        raise NotImplementedError("Cada agente deve implementar run().")
+
+
+class ResearchAgent(Agent):
+    """Busca e retorna informações sobre um tópico."""
+    def run(self, query: str) -> str:
+        # Simula pesquisa — em produção: chamada de API ou LLM
+        return f"Research results for '{query}': contains uncertain claims."
+
+
+class FactCheckerAgent(Agent):
+    """Verifica informações e sinaliza conteúdo suspeito."""
+    suspicious_keywords = ["error", "uncertain", "debated"]
+
+    def run(self, text: str) -> dict:
+        flags = [kw for kw in self.suspicious_keywords if kw in text.lower()]
+        return {"text": text, "accuracy": "high", "verified_claims": 3, "flags": flags}
+
+
+class SummarizerAgent(Agent):
+    """Sintetiza o texto em um resumo conciso."""
+    def run(self, text: str) -> str:
+        return f"Summary: {text[:50]}..."
+```
+
+**Orquestração no workflow:**
+
+```python
+# Instanciação — cada agente configurado para seu papel
+researcher   = ResearchAgent("Research Assistant")
+fact_checker = FactCheckerAgent("Fact Checker")
+summarizer   = SummarizerAgent("Summarizer")
+
+# Orquestração — sequência explícita com passagem de dados
+query              = "Agentic workflows in AI systems"
+research_results   = researcher.run(query)
+fact_check_results = fact_checker.run(research_results)         # output vira input
+summary            = summarizer.run(fact_check_results["text"]) # output vira input
+```
+
+### Padrões Aprendidos com o Exercício
+
+| Conceito | Implementação no Código |
+| :--- | :--- |
+| **Agente como classe Python** | Cada agente: `__init__` (configuração) + `run()` (lógica de negócio) |
+| **Herança para interface comum** | Classe base `Agent` garante que todos implementem `run()` |
+| **Passagem explícita de dados** | Output de `researcher.run()` → input de `fact_checker.run()` — fluxo legível |
+| **Especialização por herança** | `FactCheckerAgent` adiciona `suspicious_keywords` sem alterar a interface |
+| **Tratamento de erro na orquestração** | A lógica de fluxo checa flags entre etapas — os agentes não se conhecem |
+
+> **Princípio de modularidade:** Cada agente é independente e testável. A orquestração decide como combiná-los — os agentes não se chamam diretamente.
+
+---
+
 **Tópico anterior:** [O Agente de IA Moderno](02-the-modern-ai-agent.md)
-**Próximo tópico:** [Padrões de Agentic Workflows](04-agentic-workflow-patterns.md) — Prompt Chaining, Routing, Paralelização, Evaluator e Orchestrator.

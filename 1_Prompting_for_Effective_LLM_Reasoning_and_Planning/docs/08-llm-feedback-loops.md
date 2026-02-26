@@ -231,4 +231,8 @@ Próximo passo: automatizar o feedback substituindo a revisão manual por uma su
 - reprompts o LLM com o código + feedback;
 - repete até `all_tests_pass` ou `max_iterations`.
 
+---
+
+**Tópico anterior:** [Encadeamento de Prompts para Raciocínio Agêntico](07-chaining-prompts-for-agentic-reasoning.md)
+
 Implemente esse loop num notebook ou script do repositório, garantindo execução em ambiente isolado, logging de resultados e limite de iterações.

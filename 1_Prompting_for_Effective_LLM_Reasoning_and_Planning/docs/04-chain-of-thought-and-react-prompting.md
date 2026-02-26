@@ -94,3 +94,8 @@ ACT: get_stock_quote(ticker="$MC")
 - **Source 2:** Transcrições (`Chain-of-Thought... Subtitles`) para definições canônicas de Zero-Shot/Few-Shot CoT e Loop ReAct.
 
 ````
+
+---
+
+**Tópico anterior:** [Implementando Role-Based Prompting](03-implementing-role-based-prompting.md)
+**Próximo tópico:** [Aplicando CoT & ReAct com Python](05-applying-cot-and-react-with-python.md)

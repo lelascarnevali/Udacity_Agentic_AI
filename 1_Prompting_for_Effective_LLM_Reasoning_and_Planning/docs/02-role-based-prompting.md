@@ -93,3 +93,8 @@ Como medir se o Role-Based Prompting está funcionando?
 - **Conceitos**: Diferença entre Role isolado vs Role com Restrições.
 
 ````
+
+---
+
+**Tópico anterior:** [O Papel do Prompting em Agentic AI](01-the-role-of-prompting-in-agentic-ai.md)
+**Próximo tópico:** [Implementando Role-Based Prompting](03-implementing-role-based-prompting.md)

@@ -291,3 +291,8 @@ def validate_order_payload(payload: dict) -> tuple[bool, str]:
  - Pydantic torna as saídas de agentes mais robustas e interoperáveis.
 
 Esses padrões formam a base de workflows agentivos confiáveis em produção.
+
+---
+
+**Tópico anterior:** [Refinamento de Instruções de Prompt e Aplicação](06-prompt-instruction-refinement-and-application.md)
+**Próximo tópico:** [Loops de Feedback para LLMs](08-llm-feedback-loops.md)

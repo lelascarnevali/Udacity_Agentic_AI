@@ -39,3 +39,9 @@ Ver arquivos: `5-applying-cot-and-react-with-python.md` e `6-prompt-instruction-
 - O título deve ser a primeira linha do arquivo, em markdown, sem numeração, símbolos ou prefixos.
 - Seguir a taxonomia e semântica dos outros docs para títulos e sumário (ex: sem "·", sem "9 -", sem ponto, sem caixa diferente).
 - Sumário visual e seções devem seguir o fluxo dos exemplos de sucesso.
+
+**Navegação entre Tópicos (rodapé do documento):**
+- NUNCA inferir o "Próximo tópico" ou "Tópico anterior" sem certeza de que o arquivo existe e qual é seu título correto.
+- Antes de escrever os links de navegação, verificar os arquivos existentes em `docs/` com Glob.
+- Se não houver certeza sobre o próximo tópico, omitir o link ou perguntar ao usuário.
+- Ao criar um documento novo, SEMPRE atualizar o rodapé do documento anterior para adicionar o link "Próximo tópico" apontando para o novo arquivo.

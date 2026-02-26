@@ -17,3 +17,10 @@ When `AGENTS.md` refers to generic AI assistant tools, use the following Claude 
 | Native file search tool | `Glob` |
 | Native content search tool | `Grep` |
 | Shell / terminal commands | `Bash` |
+
+## Memory Override
+
+**IMPORTANT:** Ignore the auto memory directory injected by the system
+(`~/.claude/projects/.../memory/`). For this project, ALL memories MUST be
+read from and written to `.github/agents/memory/` following the `agent-memory`
+skill at `.github/skills/agent-memory/SKILL.md`.
