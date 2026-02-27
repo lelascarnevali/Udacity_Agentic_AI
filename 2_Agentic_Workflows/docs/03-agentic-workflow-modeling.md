@@ -512,4 +512,4 @@ summary            = summarizer.run(fact_check_results["text"]) # output vira in
 
 ---
 
-**Tópico anterior:** [O Agente de IA Moderno](02-the-modern-ai-agent.md)
+[← Tópico Anterior: O Agente de IA Moderno](02-the-modern-ai-agent.md) | [Próximo Tópico: Padrões de Agentic Workflows: Prompt Chaining →](04-agentic-workflow-patterns-prompt-chaining.md)

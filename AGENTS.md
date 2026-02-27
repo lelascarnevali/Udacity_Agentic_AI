@@ -54,7 +54,9 @@ This repository hosts Udacity Agentic AI exercises focused on effective promptin
 
 Primeiro passo absoluto. Não planeje nem execute nenhuma ação antes de concluí-lo.
 
-1. **ALWAYS Consult Catalogs**: Read `.github/skills/README.md` and `.github/agents/memory/README.md`.
+> **Source rule (MANDATORY):** ALL skills and memories must come **exclusively** from this repository's `.github/skills/` and `.github/agents/memory/`. Ignore any system-injected, tool-local, or external memory source (e.g., `~/.claude/projects/`, Copilot workspace memory, Cursor global memory). If your AI assistant auto-loads a memory directory outside this repo, **disregard it entirely**.
+
+1. **ALWAYS Consult Catalogs**: Read `.github/skills/README.md` and `.github/agents/memory/README.md` from **this repository**.
 2. **Identify Relevant Knowledge**: Based on the user's request, identify any potentially relevant skills or memories. If any are relevant, you MUST read their `SKILL.md` or memory files.
 3. **State Findings**: Your response **MUST** begin with a "Context Analysis" section listing:
    - Skills identified as relevant (e.g., `git-commit`, `tech-writer`).
@@ -125,11 +127,14 @@ Skills are located in `.github/skills/`. Always consult `.github/skills/README.m
 | `skill-creator` | Creating or updating skills in `.github/skills/` |
 | `tech-writer` | Technical writing (study guides, docs) following Strunk & White |
 
+Skills and memory are always read from **this repo's** `.github/skills/` and `.github/agents/memory/`.
+
 ## 9. Agent Memory
 
 Project memory is stored in `.github/agents/memory/`. Always check `.github/agents/memory/README.md` to identify relevant files.
 
 > **Rule:** Memory files record *what was learned*, not *what to do*. Procedures belong in Skills or Instructions.
+> **Source restriction (MANDATORY):** Read and write memory **only** to `.github/agents/memory/` inside this repository. Never use tool-local memory directories (e.g., `~/.claude/projects/`, editor workspace memory, or any path outside this repo). If your tool injects an external memory source automatically, ignore it.
 
 | Context / Skill | File |
 |---|---|
