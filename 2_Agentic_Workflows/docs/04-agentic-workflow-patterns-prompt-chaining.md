@@ -304,4 +304,4 @@ Você dominou **Prompt Chaining**, um dos padrões mais poderosos de agentic wor
 
 ---
 
-[← Tópico Anterior: Modelagem de Agentic Workflows](03-agentic-workflow-modeling.md)
+[← Tópico Anterior: Modelagem de Agentic Workflows](03-agentic-workflow-modeling.md) | [Próximo Tópico: Padrões de Agentic Workflows: Routing →](05-agentic-workflow-patterns-routing.md)
