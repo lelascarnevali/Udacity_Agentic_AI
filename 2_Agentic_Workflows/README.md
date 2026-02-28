@@ -197,6 +197,139 @@ Final Structured Output (project plan)
 
 ---
 
+## Solution
+
+> **Instructor Note:** This section explains the reference solution for the
+> AI-Powered Agentic Workflow project. Read it after you have attempted the
+> implementation on your own. Understanding *why* each design decision was made
+> is as important as making the code run.
+
+### Reference Files
+
+| Phase | File | Description |
+|-------|------|-------------|
+| Phase 1 | [base_agents.py](./project/phase_1/workflow_agents/base_agents.py) | Agent library — 7 classes (6 student-implemented + 1 provided) |
+| Phase 1 | [direct_prompt_agent.py](./project/phase_1/direct_prompt_agent.py) … [action_planning_agent.py](./project/phase_1/action_planning_agent.py) | Individual test scripts (7 total) |
+| Phase 2 | [agentic_workflow.py](./project/phase_2/agentic_workflow.py) | Full orchestration script |
+| Phase 2 | [Product-Spec-Email-Router.txt](./project/phase_2/Product-Spec-Email-Router.txt) | Input product specification |
+
+---
+
+### Workflow
+
+1. **Listing Generation → Agent Library (Phase 1):**
+   Each agent class encapsulates a distinct agentic pattern. The `DirectPromptAgent`
+   sends raw user input without system context. The `AugmentedPromptAgent` injects a
+   persona via system prompt with an explicit "Forget all previous context" instruction.
+   The `KnowledgeAugmentedPromptAgent` adds domain knowledge alongside the persona,
+   instructing the LLM to answer *only* from provided knowledge.
+
+2. **Evaluation Loop (Phase 1):**
+   The `EvaluationAgent` orchestrates an iterative generate → evaluate → instruct →
+   refine cycle. A worker agent produces a response, then a separate evaluator LLM call
+   (at `temperature=0`) judges it against criteria. If rejected, the evaluator generates
+   correction instructions that are fed back to the worker. This continues up to
+   `max_interactions` rounds until accepted.
+
+3. **Semantic Routing (Phase 1):**
+   The `RoutingAgent` uses `text-embedding-3-large` to embed both the user input and
+   each candidate agent's description. Cosine similarity determines the best-matching
+   agent, whose function is then called. This eliminates brittle keyword matching in
+   favor of semantic understanding.
+
+4. **Action Planning (Phase 1):**
+   The `ActionPlanningAgent` receives domain knowledge about the product development
+   lifecycle and extracts an ordered list of steps from the user's high-level prompt.
+
+5. **End-to-End Orchestration (Phase 2):**
+   The `agentic_workflow.py` script loads the Email Router product spec, then:
+   - `ActionPlanningAgent` decomposes the goal into ~9 sub-tasks
+   - Each sub-task is routed via `RoutingAgent` to one of three specialized teams
+   - Each team's support function chains: `KnowledgeAugmentedPromptAgent` → `EvaluationAgent`
+   - Validated results are collected and printed as the final project plan
+
+---
+
+### Key Design Decisions
+
+#### 1. "Forget All Previous Context" in System Prompts
+
+Both `AugmentedPromptAgent` and `KnowledgeAugmentedPromptAgent` include the
+instruction *"Forget all previous context"* in their system prompts. This ensures
+each call behaves as a stateless interaction, preventing cross-contamination between
+sequential agent invocations within the same workflow.
+
+**Why it matters:** In the Phase 2 workflow, the same `KnowledgeAugmentedPromptAgent`
+instance is called repeatedly across different sub-tasks. Without this guard, the LLM
+could carry forward context from a previous step, producing user stories when asked
+for engineering tasks.
+
+#### 2. Knowledge Injection Over RAG for Role Agents
+
+The Product Manager, Program Manager, and Development Engineer agents use
+`KnowledgeAugmentedPromptAgent` (direct knowledge injection) rather than
+`RAGKnowledgePromptAgent` (embedding-based retrieval). This is intentional: the
+knowledge for each role is compact enough to fit entirely in the system prompt, making
+chunk-and-embed overhead unnecessary. RAG is reserved for scenarios where the corpus
+is too large for a single prompt window.
+
+**Lesson:** RAG adds latency and complexity. Use direct injection when the knowledge
+fits in context; reserve RAG for truly large corpora.
+
+#### 3. Evaluator Criteria as Structured Format Specifications
+
+Each `EvaluationAgent` receives criteria that specify an *exact output structure*
+rather than a subjective quality judgment:
+- Product Manager: `"As a [type of user], I want [action] so that [benefit]"`
+- Program Manager: `"Feature Name, Description, Key Functionality, User Benefit"`
+- Development Engineer: `"Task ID, Task Title, Related User Story, Description, Acceptance Criteria, Estimated Effort, Dependencies"`
+
+This converts the evaluator from a vague quality gate into a **structural validator**,
+making the accept/reject decision deterministic and auditable.
+
+#### 4. Route Descriptions as Disambiguation Contracts
+
+The `RoutingAgent` agent descriptions include negative constraints:
+- Product Manager: *"Does not define features or tasks. Does not group stories."*
+- Program Manager: *"Does not define user stories or engineering tasks."*
+- Development Engineer: *"Does not define user stories or features."*
+
+This pushes the embedding vectors apart, reducing overlap and improving routing
+accuracy for ambiguous prompts like "defining features based on user stories."
+
+#### 5. Support Functions as Composition Pattern
+
+Each role's support function (`product_manager_support_function`, etc.) follows the
+same pattern: `knowledge_agent.respond(query)` → `evaluation_agent.evaluate(response)`.
+This composition is explicit rather than hidden inside a framework, making the data
+flow transparent and debuggable.
+
+---
+
+### Key Technologies
+
+| Technology | Purpose |
+|-----------|---------|
+| OpenAI `gpt-3.5-turbo` | Chat completions for all agent responses and evaluations |
+| OpenAI `text-embedding-3-large` | Embedding generation for semantic routing |
+| Vocareum Proxy | API gateway (`base_url="https://openai.vocareum.com/v1"`) |
+| `python-dotenv` | API key management via `.env` files |
+| `numpy` | Cosine similarity calculations |
+| `pandas` | Data handling in RAG agent |
+
+---
+
+### Submission
+
+| Phase | Artifact |
+|-------|----------|
+| Phase 1 | [base_agents.py](./project/phase_1/workflow_agents/base_agents.py) — Agent library |
+| Phase 1 | [Test scripts](./project/phase_1/) — 7 individual agent test scripts |
+| Phase 2 | [agentic_workflow.py](./project/phase_2/agentic_workflow.py) — Workflow orchestration |
+| Evidence | [project/evidence/](./project/evidence/) — Terminal output captures (8 files) |
+
+---
+
 ### Execution Evidence
 
 All agents were executed against the Vocareum OpenAI proxy
