@@ -165,6 +165,15 @@ Final Structured Output (project plan)
 │   ├── 7-agentic-evaluator-optimizer.py
 │   └── *-demo.py                       ← Demo scripts
 └── project/
+    ├── evidence/                        ← Execution outputs (terminal captures)
+    │   ├── 01-direct_prompt_agent_output.txt
+    │   ├── 02-augmented_prompt_agent_output.txt
+    │   ├── 03-knowledge_augmented_prompt_agent_output.txt
+    │   ├── 04-rag_knowledge_prompt_agent_output.txt
+    │   ├── 05-evaluation_agent_output.txt
+    │   ├── 06-routing_agent_output.txt
+    │   ├── 07-action_planning_agent_output.txt
+    │   └── 08-agentic_workflow_output.txt
     ├── phase_1/
     │   ├── workflow_agents/
     │   │   ├── __init__.py
@@ -185,6 +194,41 @@ Final Structured Output (project plan)
         ├── agentic_workflow.py          ← Workflow orchestration
         └── README.md
 ```
+
+---
+
+### Execution Evidence
+
+All agents were executed against the Vocareum OpenAI proxy
+(`base_url="https://openai.vocareum.com/v1"`) and their terminal outputs
+captured in [`project/evidence/`](./project/evidence/).
+
+#### Phase 1 — Individual Agent Tests
+
+| # | Agent | Evidence File | Key Result |
+|---|-------|---------------|------------|
+| 01 | `DirectPromptAgent` | [01-direct_prompt_agent_output.txt](./project/evidence/01-direct_prompt_agent_output.txt) | Correctly answered "The capital of France is Paris." using only LLM knowledge |
+| 02 | `AugmentedPromptAgent` | [02-augmented_prompt_agent_output.txt](./project/evidence/02-augmented_prompt_agent_output.txt) | Responded with college professor persona |
+| 03 | `KnowledgeAugmentedPromptAgent` | [03-knowledge_augmented_prompt_agent_output.txt](./project/evidence/03-knowledge_augmented_prompt_agent_output.txt) | Used injected knowledge ("London, not Paris") — proves knowledge overrides LLM training data |
+| 04 | `RAGKnowledgePromptAgent` | [04-rag_knowledge_prompt_agent_output.txt](./project/evidence/04-rag_knowledge_prompt_agent_output.txt) | Provided agent — process killed due to large embedding computation |
+| 05 | `EvaluationAgent` | [05-evaluation_agent_output.txt](./project/evidence/05-evaluation_agent_output.txt) | 2 iterations: refined response from sentence → single city name ("London.") |
+| 06 | `RoutingAgent` | [06-routing_agent_output.txt](./project/evidence/06-routing_agent_output.txt) | All 3 prompts routed correctly: Texas→texas agent (0.386), Rome Italy→europe agent (0.288), Math→math agent (0.130) |
+| 07 | `ActionPlanningAgent` | [07-action_planning_agent_output.txt](./project/evidence/07-action_planning_agent_output.txt) | Extracted 8 scrambled eggs recipe steps from knowledge |
+
+#### Phase 2 — Full Agentic Workflow
+
+| Evidence File | Steps Processed | Lines |
+|---|---|---|
+| [08-agentic_workflow_output.txt](./project/evidence/08-agentic_workflow_output.txt) | 9 | 1696 |
+
+The workflow processed the prompt *"What would the development tasks for this
+product be?"* through the full pipeline:
+
+1. `ActionPlanningAgent` decomposed the goal into 9 sub-tasks.
+2. `RoutingAgent` assigned each sub-task to the best team via cosine similarity.
+3. Each team's `KnowledgeAugmentedPromptAgent` + `EvaluationAgent` generated and
+   validated structured outputs (user stories, features, and engineering tasks).
+4. Final output: a complete project plan for the Email Router product.
 
 ---
 
