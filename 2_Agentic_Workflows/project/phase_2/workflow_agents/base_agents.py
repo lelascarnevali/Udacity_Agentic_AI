@@ -15,7 +15,7 @@ class DirectPromptAgent:
 
     def respond(self, prompt):
         # Generate a response using the OpenAI API
-        client = OpenAI(api_key=self.openai_api_key)
+        client = OpenAI(base_url="https://openai.vocareum.com/v1", api_key=self.openai_api_key)
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -34,7 +34,7 @@ class AugmentedPromptAgent:
 
     def respond(self, input_text):
         """Generate a response using OpenAI API."""
-        client = OpenAI(api_key=self.openai_api_key)
+        client = OpenAI(base_url="https://openai.vocareum.com/v1", api_key=self.openai_api_key)
 
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
@@ -57,7 +57,7 @@ class KnowledgeAugmentedPromptAgent:
 
     def respond(self, input_text):
         """Generate a response using the OpenAI API."""
-        client = OpenAI(api_key=self.openai_api_key)
+        client = OpenAI(base_url="https://openai.vocareum.com/v1", api_key=self.openai_api_key)
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -222,7 +222,7 @@ class EvaluationAgent:
 
     def evaluate(self, initial_prompt):
         # This method manages interactions between agents to achieve a solution.
-        client = OpenAI(api_key=self.openai_api_key)
+        client = OpenAI(base_url="https://openai.vocareum.com/v1", api_key=self.openai_api_key)
         prompt_to_evaluate = initial_prompt
 
         for i in range(self.max_interactions):
@@ -285,7 +285,7 @@ class RoutingAgent():
         self.agents = agents
 
     def get_embedding(self, text):
-        client = OpenAI(api_key=self.openai_api_key)
+        client = OpenAI(base_url="https://openai.vocareum.com/v1", api_key=self.openai_api_key)
         response = client.embeddings.create(
             model="text-embedding-3-large",
             input=text,
@@ -326,7 +326,7 @@ class ActionPlanningAgent:
 
     def extract_steps_from_prompt(self, prompt):
 
-        client = OpenAI(api_key=self.openai_api_key)
+        client = OpenAI(base_url="https://openai.vocareum.com/v1", api_key=self.openai_api_key)
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[

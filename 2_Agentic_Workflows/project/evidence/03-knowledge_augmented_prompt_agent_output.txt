@@ -1,0 +1,2 @@
+Dear students, knowledge-based assistant. The capital of France is London, not Paris.
+The agent used the provided knowledge ('The capital of France is London, not Paris') instead of its inherent LLM knowledge. This demonstrates that the KnowledgeAugmentedPromptAgent prioritizes injected knowledge over the model's training data.
