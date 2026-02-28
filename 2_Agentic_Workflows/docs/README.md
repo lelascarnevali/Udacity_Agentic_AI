@@ -11,3 +11,4 @@ Arquivos:
 - `05-agentic-workflow-patterns-routing.md` — Padrão de Routing: classificação de inputs (rule-based vs LLM-based), task dispatch com ramificação dinâmica, agentes especialistas, sub-orquestração e otimização de recursos.
 - `06-agentic-workflow-patterns-parallelization.md` — Padrão de Paralelização: scatter-gather, estratégias de decomposição (Sectioning, Aspect-Based, Identical Tasks), estratégias de agregação (Concatenação, Votação, Synthesizer LLM) e implementação com `threading` em Python.
 - `07-agentic-workflow-patterns-evaluator-optimizer.md` — Padrão Evaluator-Optimizer: ciclo iterativo de geração, avaliação e refinamento com critérios claros, feedback acionável e condições de parada.
+- `08-agentic-workflow-patterns-orchestrator-workers.md` — Padrão Orchestrator-Workers: decomposição dinâmica de tarefas em runtime, delegação inteligente a Workers especializados e síntese dos resultados parciais em produto final coerente.

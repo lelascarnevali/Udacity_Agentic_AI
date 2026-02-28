@@ -335,4 +335,4 @@ Para aplicar os conceitos deste tópico na prática, consulte:
 
 ---
 
-[← Tópico Anterior: Padrões de Agentic Workflows: Paralelização](06-agentic-workflow-patterns-parallelization.md)
+[← Tópico Anterior: Padrões de Agentic Workflows: Paralelização](06-agentic-workflow-patterns-parallelization.md) | [Próximo Tópico: Padrões de Agentic Workflows: Orchestrator-Workers →](08-agentic-workflow-patterns-orchestrator-workers.md)
