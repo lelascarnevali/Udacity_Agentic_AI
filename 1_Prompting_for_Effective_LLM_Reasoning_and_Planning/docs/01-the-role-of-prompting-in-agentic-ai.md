@@ -80,4 +80,13 @@ Ao interagir com Agentes, use estas três alavancas para pilotar o comportamento
 
 ---
 
+## 🧪 Exercícios Práticos
+
+Para aplicar os conceitos deste tópico na prática, consulte:
+
+- 📓 [Introdução ao Prompting para Raciocínio e Planejamento com LLMs](../exercises/01-introduction-to-prompting-for-llm-reasoning-and-planning.ipynb) — exercício que demonstra o padrão de refinamento iterativo: prompt genérico → adição de role → adição de restrições
+- 📓 [Seleção de Modelos](../exercises/02-model-selection.ipynb) — mesmo exercício comparando resultados entre diferentes modelos (GPT-4o-mini, GPT-4.1-nano, GPT-5-nano)
+
+---
+
 **Próximo tópico:** [Role-Based Prompting: Guia de Engenharia](02-role-based-prompting.md)

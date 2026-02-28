@@ -180,6 +180,14 @@ Exemplo de saída desejada:
 
 ---
 
+## 🧪 Exercícios Práticos
+
+Para aplicar os conceitos deste tópico na prática, consulte:
+
+- 📓 [Lesson 3: Refinamento de Instruções de Prompt](../exercises/06-lesson-3-prompt-instruction-refinement.ipynb) — exercício hands-on de refinamento iterativo: categorizar receitas vs restrições alimentares, evoluindo o prompt em múltiplas iterações
+
+---
+
 **Tópico anterior:** [Aplicando CoT & ReAct com Python](05-applying-cot-and-react-with-python.md)
 **Próximo tópico:** [Encadeamento de Prompts para Raciocínio Agêntico](07-chaining-prompts-for-agentic-reasoning.md)
 

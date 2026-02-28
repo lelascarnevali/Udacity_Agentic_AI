@@ -294,5 +294,13 @@ Esses padrões formam a base de workflows agentivos confiáveis em produção.
 
 ---
 
+## 🧪 Exercícios Práticos
+
+Para aplicar os conceitos deste tópico na prática, consulte:
+
+- 📓 [Lesson 4: Automated Claim Triage — Encadeamento de Prompts](../exercises/07-lesson-4-chaining-prompts-for-agentic-reasoning.ipynb) — pipeline de 3 estágios (extração → avaliação de severidade → roteamento) com gate checks via Pydantic e validação estruturada
+
+---
+
 **Tópico anterior:** [Refinamento de Instruções de Prompt e Aplicação](06-prompt-instruction-refinement-and-application.md)
 **Próximo tópico:** [Loops de Feedback para LLMs](08-llm-feedback-loops.md)

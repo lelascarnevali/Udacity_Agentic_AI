@@ -233,6 +233,14 @@ Próximo passo: automatizar o feedback substituindo a revisão manual por uma su
 
 ---
 
+## 🧪 Exercícios Práticos
+
+Para aplicar os conceitos deste tópico na prática, consulte:
+
+- 📓 [Lesson 5: Implementando Feedback Loops com LLMs](../exercises/08-lesson-5-implementing-llm-feedback-loops.ipynb) — implementação completa de um loop de feedback iterativo: geração de código, execução de testes automatizados, feedback estruturado e re-prompting até convergência
+
+---
+
 **Tópico anterior:** [Encadeamento de Prompts para Raciocínio Agêntico](07-chaining-prompts-for-agentic-reasoning.md)
 
 Implemente esse loop num notebook ou script do repositório, garantindo execução em ambiente isolado, logging de resultados e limite de iterações.

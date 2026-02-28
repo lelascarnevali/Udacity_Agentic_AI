@@ -97,5 +97,14 @@ ACT: get_stock_quote(ticker="$MC")
 
 ---
 
+## 🧪 Exercícios Práticos
+
+Para aplicar os conceitos deste tópico na prática, consulte:
+
+- 📓 [Lesson 2: Chain-of-Thought — Demand-Spike Detective, Parte I](../exercises/04-lesson-2-chain-of-thought-and-react-prompting-part-i.ipynb) — aplicação de prompts CoT para diagnosticar picos de vendas em dados de varejo
+- 📓 [Lesson 2: ReAct — Demand-Spike Detective, Parte II](../exercises/05-lesson-2-chain-of-thought-and-react-prompting-part-ii.ipynb) — implementação do loop ReAct com tool calling e parsing de ações
+
+---
+
 **Tópico anterior:** [Implementando Role-Based Prompting](03-implementing-role-based-prompting.md)
 **Próximo tópico:** [Aplicando CoT & ReAct com Python](05-applying-cot-and-react-with-python.md)

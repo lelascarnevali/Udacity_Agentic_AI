@@ -90,4 +90,10 @@ Para dados em tempo real (ex.: saldo bancário) o agente deve chamar uma tool/AP
 
 ---
 
-**Exercício demonstrado:** [2_Agentic_Workflows/exercises/1-starter.py](2_Agentic_Workflows/exercises/1-starter.py)
+---
+
+## 🧪 Exercícios Práticos
+
+Para aplicar os conceitos deste tópico na prática, consulte:
+
+- 🐍 [Program Management Knowledge Agent](../exercises/1-starter.py) — compara respostas hardcoded vs. respostas geradas por LLM; introdução ao uso da API OpenAI com agentes

@@ -108,5 +108,13 @@ Ao implementar *Role-Based Prompting* em Python:
 
 ---
 
+## 🧪 Exercícios Práticos
+
+Para aplicar os conceitos deste tópico na prática, consulte:
+
+- 📓 [Lesson 1: Role-Based Prompting — Historical Figure Interviewer](../exercises/03-lesson-1-role-based-prompting.ipynb) — implementação completa do padrão "The Actor": persona de Einstein com attribute layering (baseline → persona → tone/style → Q&A interativo)
+
+---
+
 **Tópico anterior:** [Role-Based Prompting: Guia de Engenharia](02-role-based-prompting.md)
 **Próximo tópico:** [Chain-of-Thought & ReAct](04-chain-of-thought-and-react-prompting.md)

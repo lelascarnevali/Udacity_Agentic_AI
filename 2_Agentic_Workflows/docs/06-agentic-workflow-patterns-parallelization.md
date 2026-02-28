@@ -287,4 +287,13 @@ Você dominou o padrão **Paralelização**, habilitando múltiplos agentes a tr
 
 ---
 
-[← Tópico Anterior: Padrões de Agentic Workflows: Routing](05-agentic-workflow-patterns-routing.md)
+## 🧪 Exercícios Práticos
+
+Para aplicar os conceitos deste tópico na prática, consulte:
+
+- 🐍 [Agentic Parallelization — Demo](../exercises/6-agentic-parallelization-demo.py) — demonstração com PolicyAgent, TechnologyAgent e MarketAgent executando em paralelo via `threading`, com SummaryAgent agregando resultados
+- 🐍 [Agentic Parallelization — Exercício](../exercises/6-agentic-parallelization.py) — análise paralela de contratos empresariais com LegalTermsChecker, ComplianceValidator e FinancialRiskAssessor
+
+---
+
+[← Tópico Anterior: Padrões de Agentic Workflows: Routing](05-agentic-workflow-patterns-routing.md) | [Próximo Tópico: Padrões de Agentic Workflows: Evaluator-Optimizer →](07-agentic-workflow-patterns-evaluator-optimizer.md)

@@ -512,4 +512,14 @@ summary            = summarizer.run(fact_check_results["text"]) # output vira in
 
 ---
 
+## 🧪 Exercícios Práticos
+
+Para aplicar os conceitos deste tópico na prática, consulte:
+
+- 📐 [Modelagem Agentic com Mermaid — Instruções](../exercises/2-agentic-workflow-instructions.md) — guia passo a passo para transformar um workflow determinístico em diagrama agêntico com Mermaid
+- 📐 [Modelagem Agentic com Mermaid — Solução](../exercises/2-agentic-workflow.md) — diagrama Mermaid final do workflow agêntico Emergency Aid Dispatch
+- 🐍 [Agentic Workflow em Python](../exercises/3-agentic-workflow.py) — implementação com `ResearchAgent`, `FactCheckerAgent` e `SummarizerAgent` demonstrando classes de agentes e orquestração
+
+---
+
 [← Tópico Anterior: O Agente de IA Moderno](02-the-modern-ai-agent.md) | [Próximo Tópico: Padrões de Agentic Workflows: Prompt Chaining →](04-agentic-workflow-patterns-prompt-chaining.md)

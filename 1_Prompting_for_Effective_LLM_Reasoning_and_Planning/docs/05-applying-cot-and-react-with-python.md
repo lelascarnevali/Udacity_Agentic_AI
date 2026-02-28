@@ -143,5 +143,14 @@ Se o seu agente ficar "preso" alucinando ferramentas inexistentes, adicione um `
 
 ---
 
+## 🧪 Exercícios Práticos
+
+Para aplicar os conceitos deste tópico na prática, consulte:
+
+- 📓 [Demand-Spike Detective, Parte I — Chain-of-Thought](../exercises/04-lesson-2-chain-of-thought-and-react-prompting-part-i.ipynb) — construção de prompts CoT para análise de dados de vendas, promoções, clima e concorrentes
+- 📓 [Demand-Spike Detective, Parte II — ReAct Loop](../exercises/05-lesson-2-chain-of-thought-and-react-prompting-part-ii.ipynb) — implementação code-first do ciclo Think/Act/Observe com parsing via regex e execução de ferramentas
+
+---
+
 **Tópico anterior:** [Chain-of-Thought & ReAct](04-chain-of-thought-and-react-prompting.md)
 **Próximo tópico:** [Refinamento de Instruções de Prompt e Aplicação](06-prompt-instruction-refinement-and-application.md)

@@ -96,5 +96,14 @@ Como medir se o Role-Based Prompting está funcionando?
 
 ---
 
+## 🧪 Exercícios Práticos
+
+Para aplicar os conceitos deste tópico na prática, consulte:
+
+- 📓 [Introdução ao Prompting](../exercises/01-introduction-to-prompting-for-llm-reasoning-and-planning.ipynb) — demonstra o "Paradoxo do Papel Isolado": baseline vs role-only vs role + restrições
+- 📓 [Lesson 1: Role-Based Prompting](../exercises/03-lesson-1-role-based-prompting.ipynb) — exercício completo de construção de persona (Albert Einstein) com camadas de atributos, tom e estilo
+
+---
+
 **Tópico anterior:** [O Papel do Prompting em Agentic AI](01-the-role-of-prompting-in-agentic-ai.md)
 **Próximo tópico:** [Implementando Role-Based Prompting](03-implementing-role-based-prompting.md)

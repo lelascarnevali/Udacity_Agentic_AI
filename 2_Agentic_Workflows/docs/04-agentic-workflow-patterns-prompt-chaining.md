@@ -304,4 +304,13 @@ Você dominou **Prompt Chaining**, um dos padrões mais poderosos de agentic wor
 
 ---
 
+## 🧪 Exercícios Práticos
+
+Para aplicar os conceitos deste tópico na prática, consulte:
+
+- 🐍 [Prompt Chaining — Demo](../exercises/4-prompt-chaining-demo.py) — demonstração do padrão com cadeia Researcher → Writer usando a API OpenAI
+- 🐍 [Prompt Chaining — Exercício](../exercises/4-prompt-chaining.py) — cadeia de 4 agentes para otimização de refinaria: Feedstock Analyst → Distillation Planner → Market Analyst → Production Optimizer
+
+---
+
 [← Tópico Anterior: Modelagem de Agentic Workflows](03-agentic-workflow-modeling.md) | [Próximo Tópico: Padrões de Agentic Workflows: Routing →](05-agentic-workflow-patterns-routing.md)

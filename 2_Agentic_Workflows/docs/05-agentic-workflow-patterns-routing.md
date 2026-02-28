@@ -273,4 +273,13 @@ Você dominou o padrão **Routing**, habilitando sistemas de IA a distribuir tar
 
 ---
 
+## 🧪 Exercícios Práticos
+
+Para aplicar os conceitos deste tópico na prática, consulte:
+
+- 🐍 [Agentic Routing — Demo](../exercises/5-agentic-routing-demo.py) — demonstração do padrão Routing com agentes especializados e classificação LLM dinâmica
+- 🐍 [Agentic Routing — Exercício](../exercises/5-agentic-routing.py) — routing aplicado a cenário retail com Product Researcher, Customer Analyzer e Pricing Strategist
+
+---
+
 [← Tópico Anterior: Padrões de Agentic Workflows: Prompt Chaining](04-agentic-workflow-patterns-prompt-chaining.md) | [Próximo Tópico: Padrões de Agentic Workflows: Paralelização →](06-agentic-workflow-patterns-parallelization.md)
