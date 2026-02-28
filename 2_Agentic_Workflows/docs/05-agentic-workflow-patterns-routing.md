@@ -273,4 +273,4 @@ Você dominou o padrão **Routing**, habilitando sistemas de IA a distribuir tar
 
 ---
 
-[← Tópico Anterior: Padrões de Agentic Workflows: Prompt Chaining](04-agentic-workflow-patterns-prompt-chaining.md)
+[← Tópico Anterior: Padrões de Agentic Workflows: Prompt Chaining](04-agentic-workflow-patterns-prompt-chaining.md) | [Próximo Tópico: Padrões de Agentic Workflows: Paralelização →](06-agentic-workflow-patterns-parallelization.md)
