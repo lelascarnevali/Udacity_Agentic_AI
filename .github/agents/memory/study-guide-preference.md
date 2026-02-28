@@ -32,6 +32,7 @@ Ver arquivos: `5-applying-cot-and-react-with-python.md` e `6-prompt-instruction-
 - [ ] Código é original e educacional (não específico/copiado)?
 - [ ] Usa emojis, tabelas e LaTeX adequadamente?
 - [ ] Seguiu "The Elements of Style" (voz ativa, forma positiva)?
+- [ ] Exercício correspondente referenciado no doc com seção `## 🧪 Exercícios Práticos`?
 
 **Padronização de Estrutura (lições do item 9):**
 - Nunca usar bloco de "nota técnica" ou comentários antes do título.
@@ -45,3 +46,17 @@ Ver arquivos: `5-applying-cot-and-react-with-python.md` e `6-prompt-instruction-
 - Antes de escrever os links de navegação, verificar os arquivos existentes em `docs/` com Glob.
 - Se não houver certeza sobre o próximo tópico, omitir o link ou perguntar ao usuário.
 - Ao criar um documento novo, SEMPRE atualizar o rodapé do documento anterior para adicionar o link "Próximo tópico" apontando para o novo arquivo.
+
+**Referência de Exercícios nos Documentos (aprendizado de 2026-02-28):**
+- SEMPRE que um exercício novo for adicionado ao módulo (`.ipynb`, `.py` ou `.md` em `exercises/`), o documento `docs/` que aborda especificamente o conteúdo daquele exercício DEVE ser atualizado com uma seção `## 🧪 Exercícios Práticos`.
+- A seção deve ser inserida **antes dos links de navegação** (rodapé) do documento correspondente.
+- Usar o padrão abaixo para cada entrada na seção:
+  ```
+  - 📓 [Nome Descritivo do Exercício](../exercises/nome-do-arquivo.ipynb) — breve descrição do que o exercício cobre
+  - 🐍 [Nome Descritivo](../exercises/nome-do-arquivo.py) — breve descrição (para scripts Python)
+  - 📐 [Nome Descritivo](../exercises/nome-do-arquivo.md) — breve descrição (para exercícios Mermaid/Markdown)
+  ```
+- Usar **path relativo** a partir de `docs/` (i.e., `../exercises/arquivo`).
+- Diferenciar arquivos de **demo** (`*-demo.py`) dos arquivos de **exercício principal** (`*.py`) na descrição.
+- Se existir tanto uma demo quanto um exercício principal sobre o mesmo tema, incluir **ambos** na seção.
+- O checklist de finalização deve incluir: `[ ] Exercício correspondente referenciado no doc?`
