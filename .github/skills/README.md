@@ -30,6 +30,13 @@ This directory contains specialized skills that extend Copilot's capabilities wi
 **Location:** [.github/skills/git-commit/](.github/skills/git-commit/)
 
 
+### `mermaid-diagrams`
+
+**Description:** Comprehensive guide for creating software diagrams using Mermaid syntax. Use when users need to create, visualize, or document software through diagrams including class diagrams (domain modeling, object-oriented design), sequence diagrams (application flows, API interactions, code execution), flowcharts (processes, algorithms, user journeys), entity relationship diagrams (database schemas), C4 architecture diagrams (system context, containers, components), state diagrams, git graphs, pie charts, gantt charts, or any other diagram type. Triggers include requests to "diagram", "visualize", "model", "map out", "show the flow", or when explaining system architecture, database design, code structure, or user/application flows.
+
+**Location:** [.github/skills/mermaid-diagrams/](.github/skills/mermaid-diagrams/)
+
+
 ### `prompt-engineering`
 
 **Description:** Use this skill when you writing commands, hooks, skills for Agent, or prompts for sub agents or any other LLM interaction, including optimizing prompts, improving LLM outputs, or designing production prompt templates.
@@ -71,4 +78,4 @@ This is integrated into the `skill-creator` workflow - see that skill for detail
 
 ---
 
-*Last updated: 2026-02-17 21:32:40*
+*Last updated: 2026-03-02 21:52:00*
