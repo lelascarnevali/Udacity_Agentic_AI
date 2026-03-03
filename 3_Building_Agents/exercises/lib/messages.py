@@ -1,15 +1,16 @@
 """Lightweight message models used by the exercises.
 
-This module defines small, serializable message classes that mirror the
-typical roles used in agent pipelines: system, user, assistant (AI), and
-tool. Models are intentionally minimal: they provide a `dict()` method that
-returns a JSON-serializable mapping suitable for logging or sending to an
-LLM/agent runtime.
+This module provides compact, serializable message classes that represent
+the common roles in agent pipelines: `system`, `user`, `assistant` (AI), and
+`tool`. Each model focuses on a minimal payload (`content`) and exposes a
+`dict()` helper that returns a JSON-safe mapping suitable for logging or
+sending to an LLM/agent runtime.
 
-Guidelines for maintainers/readers:
-- Keep message payloads small (primarily `content`).
-- Extend `AIMessage.tool_calls` objects only with the minimal fields needed
-  by downstream tooling (id, type, function.name, function.arguments).
+Maintainability notes:
+- Keep messages small — prefer `content` over large nested structures.
+- `AIMessage.tool_calls` may contain richer objects; this module serializes
+    only the minimal fields downstream consumers need (id, type,
+    function.name, function.arguments).
 """
 
 from pydantic import BaseModel
@@ -19,6 +20,9 @@ from typing import Optional, Union, List, Dict, Any, Literal
 class BaseMessage(BaseModel):
     """Base message shared by all specific role models.
 
+    A minimal message container with a textual `content` field. Subclasses
+    add a `role` literal to indicate the message origin.
+
     Attributes:
         content: Optional[str] -- textual payload of the message (default "").
     """
@@ -26,23 +30,32 @@ class BaseMessage(BaseModel):
     content: Optional[str] = ""
 
     def dict(self) -> Dict:
-        """Return a JSON-safe dict for the message.
+        """Return a JSON-safe dict representation of the message.
 
         Uses Pydantic's `model_dump` with `exclude_none=True` to omit unset
-        fields. This keeps logs compact and avoids serializing `None` values.
+        fields, producing a compact mapping safe for JSON serialization.
+
+        Returns:
+            dict: A JSON-serializable representation of the message.
         """
 
         return self.model_dump(mode="json", exclude_none=True)
 
 
 class SystemMessage(BaseMessage):
-    """Message originating from system-level context (instructions, config)."""
+    """Message originating from system-level context (instructions/config).
+
+    The `role` field is set to the literal "system".
+    """
 
     role: Literal["system"] = "system"
 
 
 class UserMessage(BaseMessage):
-    """Message produced by a human user (user input / prompt)."""
+    """Message produced by a human user (user input / prompt).
+
+    The `role` field is set to the literal "user".
+    """
 
     role: Literal["user"] = "user"
 
@@ -50,9 +63,11 @@ class UserMessage(BaseMessage):
 class ToolMessage(BaseMessage):
     """Message emitted by a tool during execution.
 
-    Fields:
-        tool_call_id: str -- unique id of the tool invocation (required)
-        name: Optional[str] -- optional human-friendly tool name
+    Attributes:
+        tool_call_id: str -- unique id of the tool invocation (required).
+        name: Optional[str] -- optional human-friendly tool name.
+
+    The `role` field is set to the literal "tool".
     """
 
     role: Literal["tool"] = "tool"
@@ -61,25 +76,30 @@ class ToolMessage(BaseMessage):
 
 
 class AIMessage(BaseMessage):
-    """Assistant/agent message.
+    """Assistant/agent message with optional tool-call metadata.
 
-    Optionally contains `tool_calls`, a list of tool-call objects returned by
-    the agent. Those objects are often richer than this library needs; the
-    `dict()` method extracts the minimal shape useful for downstream consumers
-    (logging, replay, or invoking real tools): id, type and function name/
-    arguments.
+    `AIMessage` represents responses produced by an assistant or agent. It may
+    include `tool_calls`, a list of objects describing tool invocations
+    returned by the model. The library serializes only a compact subset of
+    each tool call (id, type, function.name, function.arguments) for logging
+    and for decision-making about invoking actual tool implementations.
     """
 
     role: Literal["assistant"] = "assistant"
     tool_calls: Optional[List[Any]] = None
 
     def dict(self) -> Dict:
-        """Return a JSON-safe dict for the AI message, including tool calls.
+        """Return a JSON-safe dict for the AI message, including normalized
+        `tool_calls` when present.
 
-        We intentionally exclude the raw `tool_calls` from the base dump to
-        control the exact keys serialized for each tool call. If `tool_calls`
-        is present, transform each entry into a minimal dictionary with the
-        fields consumers expect.
+        The default Pydantic dump excludes the `tool_calls` field so the
+        method can control serialization shape. When `tool_calls` exists each
+        entry is mapped to a minimal dict with the keys `id`, `type` and
+        a `function` object containing `name` and `arguments`.
+
+        Returns:
+            dict: JSON-serializable mapping representing the AI message and
+                any normalized tool call metadata.
         """
 
         base = self.model_dump(mode="json", exclude_none=True, exclude={"tool_calls"})

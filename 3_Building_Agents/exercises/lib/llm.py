@@ -14,6 +14,7 @@ Notes for readers:
 
 import os
 from typing import List, Optional, Dict, Any
+from pydantic import BaseModel
 from openai import OpenAI
 from lib.messages import (
     AnyMessage,
@@ -41,6 +42,21 @@ class LLM:
         tools: Optional[List[Tool]] = None,
         api_key: Optional[str] = None
     ):
+        """Create an `LLM` adapter instance.
+
+        Args:
+            model: Model identifier passed to the underlying client.
+            temperature: Sampling temperature (defaults to 0.0 for
+                deterministic exercise outputs).
+            tools: Optional list of `Tool` instances to register up-front.
+            api_key: Optional API key; when omitted the `OPENAI_API_KEY`
+                environment variable is used. Keys prefixed with `voc-`
+                switch the client to a Vocarum-compatible base URL.
+
+        The initializer configures the OpenAI client and prepares an
+        index of registered `Tool`s keyed by name for payload construction.
+        """
+
         self.model = model
         self.temperature = temperature
 
@@ -65,19 +81,31 @@ class LLM:
         }
 
     def register_tool(self, tool: Tool):
-        """Register a `Tool` instance so it's included in request payloads.
+        """Register a `Tool` for inclusion in subsequent requests.
 
-        Typical use: `llm.register_tool(tool)` where `tool` is produced via the
-        `@tool` decorator in `lib.tooling`.
+        Args:
+            tool: A `Tool` object (typically created by the `@tool`
+                decorator in `lib.tooling`).
+
+        Side effects:
+            Adds `tool` to the adapter's `self.tools` mapping keyed by
+            `tool.name`, so `_build_payload` will include its schema.
         """
 
         self.tools[tool.name] = tool
 
     def _build_payload(self, messages: List[BaseMessage]) -> Dict[str, Any]:
-        """Construct the chat completion payload expected by the client.
+        """Build the request payload sent to the OpenAI-style client.
 
-        Converts `BaseMessage` objects to their JSON-safe dict form and
-        appends tool/function schemas when any tools are registered.
+        Args:
+            messages: List of `BaseMessage` instances to include in the
+                chat exchange. Each message is converted to a JSON-safe
+                dict via its `.dict()` helper.
+
+        Returns:
+            A dict containing `model`, `temperature`, and `messages`. If
+            tools are registered the payload also contains a `tools`
+            entry (list of tool schemas) and `tool_choice: "auto"`.
         """
 
         payload = {
@@ -93,11 +121,15 @@ class LLM:
         return payload
 
     def _convert_input(self, input: Any) -> List[BaseMessage]:
-        """Normalize input into a list of `BaseMessage` instances.
+        """Normalize various input forms into a list of `BaseMessage`.
 
-        Accepts a raw string (becomes a `UserMessage`), a single `BaseMessage`,
-        or a pre-built list of `BaseMessage` instances. Raises `ValueError` for
-        unsupported input types to make errors explicit for exercises/tests.
+        Supported inputs:
+        - `str`: converted to a single `UserMessage` with `content` set.
+        - `BaseMessage`: wrapped in a single-element list.
+        - `list` of `BaseMessage`: returned unchanged after validation.
+
+        Raises:
+            ValueError: if `input` is not one of the supported types.
         """
 
         if isinstance(input, str):
@@ -109,17 +141,37 @@ class LLM:
         else:
             raise ValueError(f"Invalid input type {type(input)}.")
 
-    def invoke(self, input: str | BaseMessage | List[BaseMessage]) -> AIMessage:
-        """Invoke the model and return an `AIMessage` instance.
+    def invoke(self, 
+               input: str | BaseMessage | List[BaseMessage], 
+               response_format: BaseModel = None,) -> AIMessage:
+        """Invoke the model and return an `AIMessage` containing the result.
 
-        The returned `AIMessage` contains the model's textual content and any
-        structured `tool_calls` produced by the model. Callers may examine
-        `tool_calls` to decide whether to execute a function/tool.
+        Args:
+            input (str | BaseMessage | List[BaseMessage]): User input or
+                pre-built message(s) to send to the model.
+            response_format (Optional[BaseModel]): If provided, a Pydantic
+                model used to parse structured model responses via the
+                beta parsing endpoint.
+
+        Returns:
+            AIMessage: object with `content` (str) and optional
+                `tool_calls` (structured data) produced by the model.
+
+        Notes:
+            When `response_format` is set the adapter uses the beta
+            `.parse()` endpoint; otherwise it calls the standard
+            `.create()` endpoint. Any `tool_calls` returned by the model
+            are preserved on the returned `AIMessage` for callers to
+            inspect and (optionally) execute.
         """
 
         messages = self._convert_input(input)
         payload = self._build_payload(messages)
-        response = self.client.chat.completions.create(**payload)
+        if response_format:
+            payload.update({"response_format": response_format})
+            response = self.client.beta.chat.completions.parse(**payload)
+        else:
+            response = self.client.chat.completions.create(**payload)
         choice = response.choices[0]
         message = choice.message
 

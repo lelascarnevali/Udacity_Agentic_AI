@@ -1,14 +1,28 @@
-"""Utilities for exposing Python callables as function-like tools.
+"""Tooling utilities to expose Python callables as compact, model-ready tools.
 
-This module provides a small `Tool` adapter that introspects a Python
-callable (signature and type hints) and produces a JSON-schema-like function
-description suitable for model function-calling integrations.
+This module provides a lightweight `Tool` adapter and the `@tool` decorator
+to convert ordinary Python callables into small, JSON-schema-like function
+descriptions suitable for LLM function-calling integrations used in the
+exercises.
 
-Primary responsibilities:
-- Infer a compact JSON schema for function parameters from type hints.
-- Provide a callable wrapper (`Tool`) that can be invoked directly or via
-  the `execute()` API which accepts a dict of arguments.
-- Offer the `@tool` decorator for convenient declaration of tools.
+Key behaviors:
+- Infer a compact parameter schema from function signatures and type hints
+    (supports `Literal`, `Optional`/`Union`, lists, dicts and primitives).
+- Represent date/time types as ISO-format strings for runtime interchange.
+- Expose a `Tool` wrapper that is callable, provides `execute(args: dict)`,
+    and can produce a schema via `Tool.dict()` for registration with an LLM.
+
+Usage example:
+        @tool
+        def add(x: int, y: int) -> int:
+                return x + y
+
+        t = add  # `t` is a Tool instance
+        schema = t.dict()  # compact schema suitable for model function-calling
+
+Notes:
+- The generated schema is intentionally compact and exercise-focused; it is
+    not a full JSON Schema implementation and favors clarity over completeness.
 """
 
 import inspect
@@ -38,6 +52,15 @@ class Tool:
         name: Optional[str] = None,
         description: Optional[str] = None
     ):
+        """Initialize the `Tool` wrapper.
+
+        Args:
+            func: The underlying callable to expose as a tool.
+            name: Optional explicit name to use instead of the function name.
+            description: Optional description; defaults to the wrapped function's
+                docstring when not provided.
+        """
+
         self.func = func
         self.name = name or func.__name__
         self.description = description or inspect.getdoc(func)
@@ -53,8 +76,13 @@ class Tool:
     def _build_param_schema(self, name: str, param: inspect.Parameter):
         """Build a small schema for a single parameter.
 
-        Returns a dict containing the parameter name, its inferred JSON schema,
-        and whether it is required.
+        Args:
+            name: The parameter name.
+            param: The `inspect.Parameter` instance to analyze.
+
+        Returns:
+            A dict with keys `name`, `schema` and `required` describing the
+            parameter and its inferred JSON-schema-like type mapping.
         """
 
         param_type = self.type_hints.get(name, str)
@@ -68,9 +96,15 @@ class Tool:
     def _infer_json_schema_type(self, typ: Any) -> dict:
         """Map Python type hints to a compact JSON-schema-like mapping.
 
-        Handles `Literal` (as enums), `Union`/`Optional`, lists and dicts, and
-        falls back to string for unknown types. Date/datetime are represented as
-        strings for simplicity (ISO format expected at runtime).
+        Args:
+            typ: A Python type or typing annotation to convert.
+
+        Returns:
+            A dict representing a compact JSON-schema-like type description.
+
+        Notes:
+            Supports `Literal`, `Union`/`Optional`, lists, dicts and primitive
+            types. Date/time types are represented as strings (ISO-8601).
         """
 
         origin = get_origin(typ)
@@ -118,9 +152,9 @@ class Tool:
     def dict(self) -> dict:
         """Return a compact function schema suitable for model function-calling.
 
-        The structure matches the small subset used in the exercises: a
-        top-level type of `function` with a `function` object that lists
-        `parameters` in JSON-schema style.
+        Returns:
+            A dict containing the function schema (name, description, parameters)
+            using a compact JSON-schema-like structure used by the exercises.
         """
 
         return {
@@ -143,28 +177,53 @@ class Tool:
         }
 
     def __call__(self, *args, **kwargs):
-        """Allow the `Tool` to be invoked like the original function.
+        """Invoke the wrapped callable with the provided arguments.
 
-        This forwards positional and keyword args directly to the wrapped
-        callable, making `Tool` usable in test code as a drop-in wrapper.
+        Args:
+            *args: Positional arguments forwarded to the underlying function.
+            **kwargs: Keyword arguments forwarded to the underlying function.
+
+        Returns:
+            The value returned by the wrapped function.
         """
 
         return self.func(*args, **kwargs)
 
     def execute(self, args: Dict[str, Any]) -> Any:
-        """Execute the tool with the provided arguments mapping.
+        """Execute the tool using a mapping of argument names to values.
 
-        Typical runtime usage: `tool.execute({'x': 1, 'y': 2})`.
+        Args:
+            args: A mapping of parameter names to values to pass to the function.
+
+        Returns:
+            The result of invoking the underlying function with the provided
+            arguments.
+
+        Example:
+            `tool.execute({'x': 1, 'y': 2})`
         """
 
         return self.func(**args)
 
     def __repr__(self):
+        """Return a concise representation for debugging.
+
+        Returns:
+            A short string including the tool name and parameter names.
+        """
+
         return f"<Tool name={self.name} params={[p['name'] for p in self.parameters]}>"
 
     @classmethod
     def from_func(cls, func: Callable):
-        """Convenience constructor from a raw callable."""
+        """Create and return a `Tool` instance wrapping `func`.
+
+        Args:
+            func: The callable to wrap.
+
+        Returns:
+            A `Tool` instance wrapping `func`.
+        """
 
         return cls(func)
 
@@ -188,9 +247,25 @@ def tool(func=None, *, name: str = None, description: str = None):
     """
 
     def wrapper(f):
+        """Return a decorator that converts a callable into a `Tool` instance.
+
+        The wrapper preserves the original function's metadata via
+        `functools.wraps` and returns a `Tool` wrapping the function.
+        """
+
         @wraps(f)
         def wrapped(*args, **kwargs):
+            """Passthrough wrapper that forwards calls to the original function.
+
+            Preserves the original function's metadata via `functools.wraps` and
+            forwards positional and keyword arguments unchanged. The decorator
+            ultimately returns a `Tool` instance, so this wrapper is not the
+            decorator's final return value; it exists primarily to maintain
+            metadata and identical call semantics if invoked directly.
+            """
+
             return f(*args, **kwargs)
+
         return Tool(f, name=name, description=description)
     
     # @tool or @tool(name="foo")
