@@ -59,6 +59,23 @@ Este ciclo se repete até que o Validador aprove o conteúdo.
     *   **Se a pontuação for < 9**: "REPROVADO. Pontuação: [X/10]. Ações para o Escritor: [Liste aqui os pontos específicos de melhoria para cada item do checklist que não teve nota máxima]."
     *   **Se a pontuação for >= 9**: "APROVADO. Pontuação: [X/10]. O conteúdo atinge o padrão de qualidade."
 
+    *   **Requisitos adicionais do Validador (MANDATÓRIO)**:
+            - Ao aprovar, o Validador deve **incluir** no seu feedback duas linhas claras indicando o `Tópico Atual` (título e link relativo para o arquivo aprovado) e o `Próximo Tópico` (título e link relativo). Use o mesmo formato de navegação presente nos documentos do módulo, por exemplo:
+                    - Exemplo de linha de navegação (use um bloco de código ao inserir nos arquivos):
+
+        ```text
+        &#91;← Tópico Anterior: Módulo 3 — Índice&#93;&#40;README.md&#41; | &#91;Próximo Tópico: Structured Outputs: Tornando Respostas de IA Acionáveis →&#93;&#40;02-structured-outputs.md&#41;
+        &#91;← Tópico Anterior: Estendendo Agentes com Ferramentas&#93;&#40;01-extending-agents-with-tools.md&#41; | &#91;Próximo Tópico: Módulo 3 — Índice →&#93;&#40;README.md&#41;
+        ```
+
+                **Formato obrigatório:**
+
+        ```text
+        &#91;← Tópico Anterior: &lt;Título Anterior&gt;&#93;&#40;&lt;arquivo-anterior.md&gt;&#41; | &#91;Próximo Tópico: &lt;Título Próximo&gt; →&#93;&#40;&lt;arquivo-proximo.md&gt;&#41;
+        ```
+            - Se o arquivo anterior existir, o Validador também deve verificar e, quando necessário, **atualizar a linha de navegação** no arquivo anterior para apontar corretamente para o `Tópico Atual` como seu "Próximo Tópico" (e vice-versa). Se essas edições afetarem links/permalinks em massa, o Validador deve PAUSAR e pedir consentimento do usuário antes de renomeações em lote.
+            - Se não houver um próximo tópico definido ainda, o Validador deve apontar para o índice do módulo (`README.md`) como placeholder.
+
 **Etapa 3: Finalização**
 1.  Quando o Validador aprovar o conteúdo, execute a ação de **CRIAR** ou **ATUALIZAR** o arquivo `.md` no caminho definido na Etapa 1.
 2.  **Confirmação Final**: Informe ao usuário: "Workflow concluído. O arquivo [caminho/completo/do/arquivo.md] foi salvo com sucesso."

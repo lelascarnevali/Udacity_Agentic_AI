@@ -254,3 +254,5 @@ flowchart TD
     - **Validação e segurança:** nunca executar entradas não validadas (ex.: evitar `eval` em produção); sanitizar argumentos antes de executar; limitar tentativas para evitar loops infinitos.
     - **Design de instruções:** instruções do sistema devem deixar explícito quando usar ferramentas e quais precondições (ex.: "usar `get_games` antes de calcular estatísticas").
     - **Debug e observabilidade:** registrar mensagens trocadas (System/User/Tool/Model) e inspecionar `tool_calls`/`tool_call_id` para depurar falhas na integração.
+
+    [Próximo Tópico: Structured Outputs - Tornando Respostas de IA Acionáveis →](02-structured-outputs.md)

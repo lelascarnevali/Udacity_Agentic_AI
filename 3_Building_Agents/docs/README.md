@@ -11,6 +11,7 @@ Guias de estudo, cheat sheets e referências técnicas para construir agentes in
    - Implementação prática com schemas JSON
    - Armadilhas comuns e debugging
 
----
-
-**← Voltar:** [Módulo 3](../README.md)
+2. **[Structured Outputs: Tornando Respostas de IA Acionáveis](02-structured-outputs.md)**
+   - Saídas estruturadas (JSON tipado) para integração com sistemas
+   - Output parsers e function calling
+   - Exemplo com Pydantic e estratégias de fallback
