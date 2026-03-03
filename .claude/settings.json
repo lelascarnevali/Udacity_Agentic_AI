@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(../../.venv/bin/jupyter nbconvert --to script /tmp/test-output.ipynb --stdout)",
+      "Bash(python3 -c \":*)"
+    ]
+  }
+}
