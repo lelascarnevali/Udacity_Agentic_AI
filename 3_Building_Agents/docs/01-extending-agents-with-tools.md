@@ -239,4 +239,18 @@ flowchart TD
 
 ---
 
-**← Anterior** | [Índice de Módulo](README.md)
+## 🧪 Exercícios práticos e aprendizados
+
+- **Referências dos exercícios:**
+    - [Exercício: Tool Calling (Hands-on)](../exercises/1-tool-calling-exercise.ipynb) — implementação de uma classe `Agent`, ciclo de vida das `tool_calls` e exemplos de ferramentas (`calculate`, `get_games`).
+    - [Demo: Using Tools (Fluxo)](../exercises/1-tool-calling-demo.ipynb) — fluxo completo de uma chamada de ferramenta (`get_weather`), extração de `tool_call_id`, execução e retorno ao modelo.
+
+- **Aprendizados principais extraídos dos exercícios:**
+    - **Responsabilidades do agente:** inicializar com `role`, `instructions` e um registro de `tools`; processar mensagens, decidir quando chamar ferramentas e incorporar respostas de ferramentas ao contexto.
+    - **Fluxo de mensagens:** o modelo emite um `tool_call` (JSON) → backend executa a função → cria-se um `ToolMessage` com `tool_call_id` e `name` → reenvia-se ao modelo → modelo finaliza a resposta.
+    - **Estrutura das ferramentas:** ferramentas devem ter descrições claras, tipos/assinaturas bem definidas e retornar dados estruturados (não apenas strings). Exemplos: `get_weather(city: str) -> dict`, `calculate(expression: str) -> float`.
+    - **Tratamento de `tool_call_id`:** preservar e propagar o identificador da chamada (`tool_call_id`) ao criar o `ToolMessage` para que o modelo possa correlacionar resultados com a chamada original.
+    - **Loop robusto de execução:** iterar sobre `tool_calls` até que o modelo não solicite mais chamadas; validar existência da ferramenta e capturar/expor erros de forma estruturada para que o modelo possa reagir.
+    - **Validação e segurança:** nunca executar entradas não validadas (ex.: evitar `eval` em produção); sanitizar argumentos antes de executar; limitar tentativas para evitar loops infinitos.
+    - **Design de instruções:** instruções do sistema devem deixar explícito quando usar ferramentas e quais precondições (ex.: "usar `get_games` antes de calcular estatísticas").
+    - **Debug e observabilidade:** registrar mensagens trocadas (System/User/Tool/Model) e inspecionar `tool_calls`/`tool_call_id` para depurar falhas na integração.
