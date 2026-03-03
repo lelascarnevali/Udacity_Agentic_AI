@@ -41,6 +41,12 @@ Ver arquivos: `5-applying-cot-and-react-with-python.md` e `6-prompt-instruction-
 - Seguir a taxonomia e semântica dos outros docs para títulos e sumário (ex: sem "·", sem "9 -", sem ponto, sem caixa diferente).
 - Sumário visual e seções devem seguir o fluxo dos exemplos de sucesso.
 
+**Diagramas e Visualizações:**
+- Usar a skill `mermaid-diagrams` (`.github/skills/mermaid-diagrams/SKILL.md`) para criar fluxos e diagramas em vez de ASCII art.
+- Para fluxos de execução/processos: usar `sequenceDiagram` (atores e mensagens) ou `flowchart` (decisões e passos).
+- Exemplo: Fluxo de Function Calling = `sequenceDiagram` com participantes (User, Model, Backend, Tool).
+- Salvar diagramas mermaid inline no markdown com blocos ` ```mermaid ... ``` `.
+
 **Navegação entre Tópicos (rodapé do documento):**
 - NUNCA inferir o "Próximo tópico" ou "Tópico anterior" sem certeza de que o arquivo existe e qual é seu título correto.
 - Antes de escrever os links de navegação, verificar os arquivos existentes em `docs/` com Glob.
