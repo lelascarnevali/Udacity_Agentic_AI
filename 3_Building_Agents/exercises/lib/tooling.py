@@ -255,13 +255,11 @@ def tool(func=None, *, name: str = None, description: str = None):
 
         @wraps(f)
         def wrapped(*args, **kwargs):
-            """Passthrough wrapper that forwards calls to the original function.
+            """Passthrough wrapper to preserve call semantics if needed.
 
-            Preserves the original function's metadata via `functools.wraps` and
-            forwards positional and keyword arguments unchanged. The decorator
-            ultimately returns a `Tool` instance, so this wrapper is not the
-            decorator's final return value; it exists primarily to maintain
-            metadata and identical call semantics if invoked directly.
+            Note: the decorator returns a `Tool` instance, so `wrapped` is only
+            kept to preserve metadata and does not become the final return
+            value of the decorator in this implementation.
             """
 
             return f(*args, **kwargs)
