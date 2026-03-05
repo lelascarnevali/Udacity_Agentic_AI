@@ -98,4 +98,4 @@ Pydantic é a ponte entre o JSON gerado pelo LLM e os objetos tipados da aplica�
 
 ---
 
-[← Tópico Anterior: Estendendo Agentes com Ferramentas](01-extending-agents-with-tools.md)
+[← Tópico Anterior: Estendendo Agentes com Ferramentas](01-extending-agents-with-tools.md) | [Próximo Tópico: Gerenciamento de Estado em Agentes →](03-agent-state-management.md)

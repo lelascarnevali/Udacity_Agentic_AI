@@ -15,3 +15,9 @@ Guias de estudo, cheat sheets e referências técnicas para construir agentes in
    - Saídas estruturadas (JSON tipado) para integração com sistemas
    - Output parsers e function calling
    - Exemplo com Pydantic e estratégias de fallback
+
+3. **[Gerenciamento de Estado em Agentes](03-agent-state-management.md)**
+   - LLMs são apátridas: por que agentes precisam de estado
+   - Estado efêmero como memória de trabalho da tarefa
+   - State machines: passos modulares com TypedDict
+   - Loop de execução e transições condicionais
