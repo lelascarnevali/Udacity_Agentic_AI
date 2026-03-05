@@ -45,6 +45,16 @@ $$\text{Estado}_{n+1} = f(\text{Estado}_n, \text{Passo}_n)$$
 
 Cada passo **recebe** um estado e **retorna** uma versão atualizada — nunca modifica o estado in-place.
 
+### 📖 Terminologia da State Machine
+
+| Termo | Papel na Arquitetura |
+|---|---|
+| 🟢 **Entry Point** | O nó inicial a partir do qual a máquina começa as operações |
+| 📦 **State Schema** | Abordagem estruturada que define os atributos do estado compartilhado entre todos os nós |
+| 🔷 **Step / Node Logic** | Função que recebe o estado atual e retorna um novo estado com base na lógica do nó |
+| ➡️ **Transition / Edge** | Define como a execução se move de um passo para o próximo — pode ser direta ou condicional |
+| 🔴 **Termination** | Marca o fim do workflow, sinalizando a conclusão das operações |
+
 ### Passos Típicos em um Agente
 
 | Passo | Responsabilidade |
@@ -61,14 +71,12 @@ Cada passo **recebe** um estado e **retorna** uma versão atualizada — nunca m
 
 ```mermaid
 flowchart TD
-    A["👤 User Query"] --> B["Estado Inicial Vazio"]
-    B --> C["📝 Preparar Prompt\nSistema + Usuário"]
-    C --> D["🧠 Chamar LLM"]
-    D --> E{"Solicitou\nFerramentas?"}
-    E -->|Sim| F["⚙️ Executar Ferramentas"]
-    F --> G["🔄 Atualizar Estado\ncom Resultados"]
-    G --> D
-    E -->|Não| H["✅ Resposta Final"]
+    A["🟢 ENTRY POINT\n👤 User Query"] -->|"➡️ Transition"| B["🔷 NODE: Preparar Prompt\nSistema + Usuário"]
+    B -->|"➡️ Transition"| C["🔷 NODE: Chamar LLM 🧠"]
+    C --> D{"🔀 ROUTER\nSolicitou Ferramentas?"}
+    D -->|"➡️ Sim (Loop)"| E["🔷 NODE: Executar Ferramentas ⚙️"]
+    E -->|"➡️ Transition (Loop)"| C
+    D -->|"➡️ Não"| F["🔴 TERMINATION\n✅ Resposta Final"]
 ```
 
 ---
@@ -137,6 +145,143 @@ def execute_tools(state: AgentState, tools_registry: dict) -> AgentState:
         "messages": state["messages"] + tool_results,
         "tool_calls": [],  # Limpar após execução para evitar loops
     }
+```
+
+### Técnicas Avançadas: Routing e Loops
+
+**Routing** e **Loops** são as duas técnicas que elevam a flexibilidade de uma state machine básica:
+
+| Técnica | O que faz | Quando usar |
+|---|---|---|
+| **Routing** | Uma função examina o estado e redireciona para um de vários nós possíveis | Pós-LLM: ir para ferramentas, validação, ou terminar |
+| **Loop** | Uma transição aponta de volta para um nó anterior | Ciclos LLM → ferramentas → LLM até a resposta final |
+
+```python
+# Routing: múltiplos destinos possíveis a partir de um nó
+def route_step(state: AgentState) -> str:
+    if state["tool_calls"]:
+        return "execute_tools"
+    if state.get("needs_validation"):
+        return "validate"
+    return "end"
+
+# Loop: retorno explícito para reiniciar o ciclo
+# tools → llm (nova iteração com resultados incorporados)
+workflow.add_edge("execute_tools", "call_llm")
+workflow.add_conditional_edges("call_llm", route_step, {
+    "execute_tools": "execute_tools",
+    "validate": "validate",
+    "end": END,
+})
+```
+
+> **Observar transições de estado** durante a execução é essencial para debugging: cada nó registra o que recebeu e o que retornou, tornando o fluxo de dados rastreável e testável.
+
+---
+
+## 🏗️ Construindo uma State Machine em Python
+
+O processo segue cinco etapas bem definidas — da declaração do schema até a execução e observação:
+
+```mermaid
+flowchart TD
+    S["📦 STATE SCHEMA
+    ─────────────────
+    query · instructions
+    messages · tool_calls"]
+
+    S -->|"alimenta"| A
+
+    A["🟢 ENTRY POINT
+    prepare_step()"]
+
+    A -->|"➡️ Transition / Edge"| B["🔷 NODE LOGIC
+    llm_step()"]
+
+    B --> R{"🔀 Router
+    route_after_llm()"}
+
+    R -->|"➡️ Transition / Edge"| C["🔷 NODE LOGIC
+    tools_step()"]
+
+    C -->|"➡️ Transition / Loop"| B
+
+    R -->|"➡️ Transition / Edge"| E["🔴 TERMINATION
+    END"]
+```
+
+### 1️⃣ Definir o State Schema
+
+Declare os atributos compartilhados entre todos os nós. Esse schema é o contrato que garante consistência:
+
+```python
+from typing import TypedDict
+
+class AgentState(TypedDict):
+    query: str
+    instructions: str
+    messages: list[dict]
+    tool_calls: list[dict]
+```
+
+### 2️⃣ Definir a Lógica dos Nós (Step Functions)
+
+Cada nó é uma função pura — sem efeitos colaterais externos ao estado:
+
+```python
+def prepare_step(state: AgentState) -> AgentState:
+    """Entry Point: inicializa o histórico de mensagens."""
+    ...
+
+def llm_step(state: AgentState) -> AgentState:
+    """Node: chama o LLM e captura tool_calls."""
+    ...
+
+def tools_step(state: AgentState) -> AgentState:
+    """Node: executa ferramentas e incorpora resultados."""
+    ...
+```
+
+### 3️⃣ Conectar os Nós (Definir Transições/Arestas)
+
+As arestas definem o fluxo entre nós — diretas ou condicionais:
+
+```python
+# Transição direta (Edge)
+workflow.add_edge("prepare", "call_llm")
+
+# Transição condicional (Router)
+workflow.add_conditional_edges(
+    "call_llm",
+    route_after_llm,                     # função de roteamento
+    {"execute_tools": "tools", "end": END},  # mapa de destinos
+)
+
+# Loop: tools retorna ao LLM para nova iteração
+workflow.add_edge("tools", "call_llm")
+```
+
+### 4️⃣ Definir Entry Point e Termination
+
+```python
+workflow.set_entry_point("prepare")  # 🟢 Nó inicial
+# END é importado do framework e sinaliza 🔴 Termination
+```
+
+### 5️⃣ Executar e Observar Transições
+
+```python
+agent = workflow.compile()
+
+initial_state: AgentState = {
+    "query": "Qual é a temperatura em São Paulo?",
+    "instructions": "Você é um assistente útil.",
+    "messages": [],
+    "tool_calls": [],
+}
+
+final_state = agent.invoke(initial_state)
+# Cada transição pode ser inspecionada: o que entrou e o que saiu de cada nó
 ```
 
 ---
