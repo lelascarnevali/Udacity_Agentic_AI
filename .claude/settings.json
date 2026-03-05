@@ -57,7 +57,7 @@
   },
   
   "plansDirectory": "./reports",
-  "outputStyle": "Explanatory",
+  "outputStyle": "Default",
   "statusLine": {
     "type": "command",
     "command": "echo 'shayan's best practice status line'",
