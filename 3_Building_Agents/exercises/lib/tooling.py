@@ -28,10 +28,16 @@ Notes:
 import inspect
 import datetime
 from typing import (
-    Callable, Any, get_type_hints, get_origin, get_args,
-    Literal, Optional, Union, List, Dict
+    Any, Callable,
+    Literal, Optional, Union, TypeAlias,
+    get_type_hints, get_origin, get_args,
 )
 from functools import wraps
+from openai.types.chat.chat_completion_message_tool_call import ChatCompletionMessageToolCall
+
+
+# Type alias for OpenAI's tool call implementation
+ToolCall: TypeAlias = ChatCompletionMessageToolCall
 
 
 class Tool:
@@ -189,22 +195,6 @@ class Tool:
 
         return self.func(*args, **kwargs)
 
-    def execute(self, args: Dict[str, Any]) -> Any:
-        """Execute the tool using a mapping of argument names to values.
-
-        Args:
-            args: A mapping of parameter names to values to pass to the function.
-
-        Returns:
-            The result of invoking the underlying function with the provided
-            arguments.
-
-        Example:
-            `tool.execute({'x': 1, 'y': 2})`
-        """
-
-        return self.func(**args)
-
     def __repr__(self):
         """Return a concise representation for debugging.
 
@@ -266,5 +256,5 @@ def tool(func=None, *, name: str = None, description: str = None):
 
         return Tool(f, name=name, description=description)
     
-    # @tool or @tool(name="foo")
+    # @tool ou @tool(name="foo")
     return wrapper(func) if func else wrapper
