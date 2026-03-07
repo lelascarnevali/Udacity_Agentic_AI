@@ -106,13 +106,19 @@ class LLM:
             A dict containing `model`, `temperature`, and `messages`. If
             tools are registered the payload also contains a `tools`
             entry (list of tool schemas) and `tool_choice: "auto"`.
+
+        Note:
+            Temperature is omitted for gpt-5 family models as they don't
+            support explicit temperature settings.
         """
 
         payload = {
             "model": self.model,
-            "temperature": self.temperature,
             "messages": [m.dict() for m in messages],
         }
+
+        if not self.model.startswith("gpt-5"):
+            payload["temperature"] = self.temperature
 
         if self.tools:
             payload["tools"] = [tool.dict() for tool in self.tools.values()]
