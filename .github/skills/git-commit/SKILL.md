@@ -50,18 +50,21 @@ BREAKING CHANGE: `extends` key behavior changed
 
 ## Workflow
 
-### 1. Analyze Diff
+### 1. Analyze Diff (MANDATORY — run before generating any commit message)
 
 ```bash
-# If files are staged, use staged diff
+# Step 1a: Always check status first
+git status --porcelain
+
+# Step 1b: If files are staged, read the full staged diff
 git diff --staged
 
-# If nothing staged, use working tree diff
+# Step 1c: If nothing is staged, read the working tree diff
 git diff
-
-# Also check status
-git status --porcelain
 ```
+
+> NEVER skip this step. The commit message MUST be derived from the actual diff output,
+> not inferred from filenames or git status alone.
 
 ### 2. Stage Files (if needed)
 
@@ -88,6 +91,8 @@ Analyze the diff to determine:
 - **Type**: What kind of change is this?
 - **Scope**: What area/module is affected?
 - **Description**: One-line summary of what changed (present tense, imperative mood, <72 chars)
+
+> Derive type, scope, and description **directly from the diff content**. If the diff was not read, go back to Step 1.
 
 ### 4. Execute Commit
 

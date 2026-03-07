@@ -24,3 +24,7 @@ When `AGENTS.md` refers to generic AI assistant tools, use the following Claude 
 (`~/.claude/projects/.../memory/`). For this project, ALL memories MUST be
 read from and written to `.github/agents/memory/` following the `agent-memory`
 skill at `.github/skills/agent-memory/SKILL.md`.
+
+## Subagent Model Selection
+
+When spawning subagents during planning or execution, use **`claude-haiku-4-5-20251001`** for tasks that are simple and self-contained (e.g., reading a file, searching for a pattern, running a single command, fetching a URL). Reserve the currently selected model for tasks that require reasoning, judgment, or multi-step planning.
