@@ -21,3 +21,9 @@ Guias de estudo, cheat sheets e referências técnicas para construir agentes in
    - Estado efêmero como memória de trabalho da tarefa
    - State machines: passos modulares com TypedDict
    - Loop de execução e transições condicionais
+
+4. **[Short-Term Memory em Agentes](04-short-term-memory.md)**
+   - Memória como contexto simulado injetado no prompt
+   - Taxonomia: estado (run) vs. sessão vs. longo prazo
+   - Estratégias: histórico completo, janela deslizante e sumarização
+   - Diferença entre estado do agente e memória de sessão

@@ -311,4 +311,4 @@ $$\text{Estado Efêmero} = \text{Memória de Trabalho da Tarefa Atual}$$
 
 ---
 
-[← Tópico Anterior: Structured Outputs: Tornando Respostas de IA Acionáveis](02-structured-outputs.md) | [Próximo Tópico: Módulo 3 — Índice →](README.md)
+[← Tópico Anterior: Structured Outputs: Tornando Respostas de IA Acionáveis](02-structured-outputs.md) | [Próximo Tópico: Short-Term Memory em Agentes →](04-short-term-memory.md)
