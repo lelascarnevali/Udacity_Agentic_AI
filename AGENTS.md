@@ -10,7 +10,7 @@
 
 ### Step 0 — Context Analysis (executa em todo prompt, sem exceção)
 
-> Skills e memórias vêm **exclusivamente** de `.github/skills/` e `.github/agents/memory/`. Ignore fontes externas (`~/.claude/projects/`, Copilot workspace, etc.).
+> Skills e memórias vêm **exclusivamente** de `.github/skills/` e `.github/agents/memory/`. (Overrides de ferramentas específicas estão em `CLAUDE.md`.)
 
 1. Leia `.github/skills/README.md` e `.github/agents/memory/README.md`.
 2. Identifique skills e memórias relevantes; leia seus arquivos se aplicável.
@@ -34,18 +34,16 @@
 
 ## 2. Commit Policy (MANDATORY)
 
-1. Consulte a skill `git-commit` em `.github/skills/git-commit/SKILL.md` antes de qualquer commit.
-2. Prefira `scripts/commit_with_skill.py` para automação.
-3. Antes de gerar a mensagem, rode `git diff --staged` (ou `git diff`) e baseie a mensagem no diff real.
-4. Sem operações destrutivas (force push, hard reset) sem aprovação explícita do usuário.
-5. Só commite quando explicitamente solicitado.
+- Só commite quando explicitamente solicitado pelo usuário.
+- Siga o procedimento completo em `.github/skills/git-commit/SKILL.md` (diff analysis, staging, mensagem, safety protocol).
+- Prefira `scripts/commit_with_skill.py` para automação.
 
 ---
 
 ## 3. Skills & Memory
 
 - **Skills:** `.github/skills/` — catálogo em `.github/skills/README.md`.
-- **Memory:** `.github/agents/memory/` — índice em `.github/agents/memory/README.md`. Arquivos registram *o que foi aprendido*, não procedimentos.
+- **Memory:** `.github/agents/memory/` — índice em `.github/agents/memory/README.md`.
 - **Onde colocar novo conhecimento:** `.github/instructions/workflow-architecture.instructions.md`.
 
 ---

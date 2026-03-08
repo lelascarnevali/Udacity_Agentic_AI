@@ -1,6 +1,6 @@
 ---
 name: git-commit
-description: 'Execute git commit with conventional commit message analysis, intelligent staging, and message generation. Use when user asks to commit changes, create a git commit, or mentions "/commit". Supports: (1) Auto-detecting type and scope from changes, (2) Generating conventional commit messages from diff, (3) Interactive commit with optional type/scope/description overrides, (4) Intelligent file staging for logical grouping'
+description: Automate git commits using Conventional Commits. Trigger phrases: "commit changes", "create a git commit", "use /commit". Use when needing to auto-detect commit type/scope, generate messages from diffs, and intelligently stage files.
 argument-hint: '[type] [scope] [description] — or leave empty for auto-detection'
 ---
 
@@ -8,99 +8,42 @@ argument-hint: '[type] [scope] [description] — or leave empty for auto-detecti
 
 ## Overview
 
-Create standardized, semantic git commits using the Conventional Commits specification. Analyze the actual diff to determine appropriate type, scope, and message.
-
-## Conventional Commit Format
-
-```
-<type>[optional scope]: <description>
-
-[optional body]
-
-[optional footer(s)]
-```
-
-## Commit Types
-
-| Type       | Purpose                        |
-| ---------- | ------------------------------ |
-| `feat`     | New feature                    |
-| `fix`      | Bug fix                        |
-| `docs`     | Documentation only             |
-| `style`    | Formatting/style (no logic)    |
-| `refactor` | Code refactor (no feature/fix) |
-| `perf`     | Performance improvement        |
-| `test`     | Add/update tests               |
-| `build`    | Build system/dependencies      |
-| `ci`       | CI/config changes              |
-| `chore`    | Maintenance/misc               |
-| `revert`   | Revert commit                  |
-
-## Breaking Changes
-
-```
-# Exclamation mark after type/scope
-feat!: remove deprecated endpoint
-
-# BREAKING CHANGE footer
-feat: allow config to extend other configs
-
-BREAKING CHANGE: `extends` key behavior changed
-```
+This skill helps you create standardized, semantic git commits using the Conventional Commits specification. It analyzes the diff to determine the appropriate type, scope, and message for your commit.
 
 ## Workflow
 
-### 1. Analyze Diff (MANDATORY — run before generating any commit message)
+### 1. Analyze Diff
 
-```bash
-# Step 1a: Always check status first
-git status --porcelain
+1. Run `git status --porcelain` to check the current status.
+2. If files are staged, use `git diff --staged` to read the full staged diff.
+3. If nothing is staged, use `git diff` to read the working tree diff.
 
-# Step 1b: If files are staged, read the full staged diff
-git diff --staged
+> Ensure the commit message is derived from the actual diff output.
 
-# Step 1c: If nothing is staged, read the working tree diff
-git diff
-```
+### 2. Stage Files
 
-> NEVER skip this step. The commit message MUST be derived from the actual diff output,
-> not inferred from filenames or git status alone.
+If you need to stage files:
 
-### 2. Stage Files (if needed)
+1. Use `git add path/to/file1 path/to/file2` to stage specific files.
+2. Use `git add *.test.*` or `git add src/components/*` to stage by pattern.
+3. Use `git add -p` for interactive staging.
 
-If nothing is staged or you want to group changes differently:
-
-```bash
-# Stage specific files
-git add path/to/file1 path/to/file2
-
-# Stage by pattern
-git add *.test.*
-git add src/components/*
-
-# Interactive staging
-git add -p
-```
-
-**Never commit secrets** (.env, credentials.json, private keys).
+> Avoid committing sensitive files like `.env` or `credentials.json`.
 
 ### 3. Generate Commit Message
 
-Analyze the diff to determine:
+1. Determine the **Type**: What kind of change is this?
+2. Determine the **Scope**: What area/module is affected?
+3. Write a **Description**: A one-line summary of what changed.
 
-- **Type**: What kind of change is this?
-- **Scope**: What area/module is affected?
-- **Description**: One-line summary of what changed (present tense, imperative mood, <72 chars)
-
-> Derive type, scope, and description **directly from the diff content**. If the diff was not read, go back to Step 1.
+> Derive type, scope, and description directly from the diff content.
 
 ### 4. Execute Commit
 
-```bash
-# Single line
-git commit -m "<type>[scope]: <description>"
+1. For a single line commit: `git commit -m "<type>[scope]: <description>"`
+2. For multi-line commit with body/footer:
 
-# Multi-line with body/footer
+```bash
 git commit -m "$(cat <<'EOF'
 <type>[scope]: <description>
 
@@ -113,16 +56,35 @@ EOF
 
 ## Best Practices
 
-- One logical change per commit
-- Present tense: "add" not "added"
-- Imperative mood: "fix bug" not "fixes bug"
-- Reference issues: `Closes #123`, `Refs #456`
-- Keep description under 72 characters
+- Commit one logical change at a time.
+- Use present tense and imperative mood.
+- Reference issues with `Closes #123` or `Refs #456`.
+- Keep descriptions under 72 characters.
 
 ## Git Safety Protocol
 
-- NEVER update git config
-- NEVER run destructive commands (--force, hard reset) without explicit request
-- NEVER skip hooks (--no-verify) unless user asks
-- NEVER force push to main/master
-- If commit fails due to hooks, fix and create NEW commit (don't amend)
+- Avoid updating git config or running destructive commands without explicit request.
+- Do not skip hooks unless requested.
+- Avoid force pushing to main/master.
+- If a commit fails due to hooks, fix the issue and create a new commit.
+
+## Troubleshooting
+
+1. **Commit message rejected by hooks**: Review the error message, fix the issues, and create a new commit.
+2. **Staging errors**: Verify the staging area with `git status` and stage files as needed.
+3. **Incorrect commit message format**: Ensure the message follows the Conventional Commits specification.
+4. **Unstaged changes**: Use `git status` to ensure all intended changes are staged.
+
+## Example
+
+### Input
+
+User says: "commit changes with type 'fix', scope 'auth', description 'resolve login issue'"
+
+### Output
+
+```bash
+git commit -m "fix(auth): resolve login issue"
+```
+
+For detailed information on commit types and breaking changes, refer to the [Conventional Commits Reference](reference/conventional-commits.md).

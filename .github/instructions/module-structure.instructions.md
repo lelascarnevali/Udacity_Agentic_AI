@@ -14,13 +14,13 @@ N_Module_Name/
   README.md
 ```
 
-## Notebook conventions
+## Notebook Conventions
 - Use `.venv/` at workspace root — always activate before running Python: `source .venv/bin/activate`
 - Cell outputs should be cleared before committing notebooks
 - LaTeX formulas in Markdown cells: inline `$E=mc^2$`, block `$$\int f(x)\,dx$$`
 - Imports go in the first code cell; constants in the second
 
-## Exercise file naming
+## Exercise File Naming
 - `01-topic-slug.ipynb`, `02-next-topic.ipynb` — zero-padded, kebab-case
 - Shared helpers go in `exercises/libs/<module>_lib.py`
 
@@ -31,3 +31,7 @@ N_Module_Name/
 | `2_Agentic_Workflows/` | Agentic workflow modeling, modern AI agents |
 | `3_Building_Agents/` | Agent construction patterns |
 | `4_Multi-Agent_Systems/` | Multi-agent orchestration |
+
+## Related Files
+- For more details on the overall project structure, refer to the [README.md](../README.md) file.
+- Specific exercises can be found in the respective module directories under `exercises/`.

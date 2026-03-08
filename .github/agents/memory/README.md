@@ -5,7 +5,7 @@ This directory stores **persistent learnings, preferences, and troubleshooting n
 > **Rule:** Memory files record *what was learned*, not *what to do*.
 > Procedures belong in `.github/skills/` (auto-loaded) or `.github/instructions/` (always-on rules).
 
-When performing tasks, check this index to identify relevant memory files based on context or skill.
+When performing tasks, check this index to identify relevant memory files based on context or skill. To create or update entries, follow `.github/skills/agent-memory/SKILL.md`.
 
 | Context / Skill | Memory File | What it contains |
 | :--- | :--- | :--- |
@@ -20,7 +20,7 @@ When performing tasks, check this index to identify relevant memory files based 
 
 | Procedure | Location |
 |---|---|
-| Step 0 mandatory workflow | `AGENTS.md` → Section 3 |
+| Step 0 mandatory workflow | `AGENTS.md` → Section 1 |
 | Where to put agent knowledge | `.github/instructions/workflow-architecture.instructions.md` |
 | How to write memory entries | `.github/skills/agent-memory/SKILL.md` |
 | How to commit | `.github/skills/git-commit/SKILL.md` |

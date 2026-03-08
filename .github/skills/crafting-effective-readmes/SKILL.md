@@ -1,6 +1,6 @@
 ---
 name: crafting-effective-readmes
-description: Use when writing or improving README files. Not all READMEs are the same — provides templates and guidance matched to your audience and project type.
+description: Provides templates and guidance for writing or improving README files for various projects. Use when you need to create, update, or review README files. Trigger phrases include 'How do I write a README for my open source project?' and 'What should I include in my personal project README?' Key capabilities include providing templates, identifying essential sections, and offering troubleshooting advice.
 argument-hint: '[path/to/README.md or module name]'
 ---
 
@@ -8,7 +8,7 @@ argument-hint: '[path/to/README.md or module name]'
 
 ## Overview
 
-READMEs answer questions your audience will have. Different audiences need different information - a contributor to an OSS project needs different context than future-you opening a config folder.
+READMEs are crucial for effectively communicating project details to your audience. Different audiences require different information. For example, a contributor to an open-source project needs different context than a future-you opening a config folder.
 
 **Always ask:** Who will read this, and what do they need to know?
 
@@ -28,7 +28,7 @@ READMEs answer questions your audience will have. Different audiences need diffe
 ### Step 2: Task-Specific Questions
 
 **Creating initial README:**
-1. What type of project? (see Project Types below)
+1. What type of project? (see Project Types in references)
 2. What problem does this solve in one sentence?
 3. What's the quickest path to "it works"?
 4. Anything notable to highlight?
@@ -53,17 +53,6 @@ READMEs answer questions your audience will have. Different audiences need diffe
 
 After drafting, ask: **"Anything else to highlight or include that I might have missed?"**
 
-## Project Types
-
-| Type | Audience | Key Sections | Template |
-|------|----------|--------------|----------|
-| **Open Source** | Contributors, users worldwide | Install, Usage, Contributing, License | `templates/oss.md` |
-| **Personal** | Future you, portfolio viewers | What it does, Tech stack, Learnings | `templates/personal.md` |
-| **Internal** | Teammates, new hires | Setup, Architecture, Runbooks | `templates/internal.md` |
-| **Config** | Future you (confused) | What's here, Why, How to extend, Gotchas | `templates/xdg-config.md` |
-
-**Ask the user** if unclear. Don't assume OSS defaults for everything.
-
 ## Essential Sections (All Types)
 
 Every README needs at minimum:
@@ -72,8 +61,32 @@ Every README needs at minimum:
 2. **Description** - What + why in 1-2 sentences  
 3. **Usage** - How to use it (examples help)
 
+## Input/Output Examples
+
+**Example Input:**
+- "How do I write a README for my open source project?"
+
+**Example Output:**
+- A structured README with sections: Install, Usage, Contributing, License.
+
+**Example Input:**
+- "What should I include in my personal project README?"
+
+**Example Output:**
+- A README with sections: What it does, Tech stack, Learnings.
+
 ## References
 
-- `section-checklist.md` - Which sections to include by project type
+- For detailed guidance on section inclusion, see [section-checklist.md](path/to/section-checklist.md)
 - `style-guide.md` - Common README mistakes and prose guidance
 - `using-references.md` - Guide to deeper reference materials
+
+## Troubleshooting
+
+- **If the README is not clear:** Add more examples or consult the `style-guide.md` for common mistakes.
+- **If sections are missing:** Refer to `section-checklist.md` to ensure all necessary parts are included.
+- **If the README is outdated:** Follow the steps in the "Updating existing content" section to refresh it.
+- **If the README lacks clarity:** Add examples or consult the `style-guide.md` for common mistakes.
+- **If the README is missing sections:** An error message should indicate which sections are missing based on the checklist.
+
+---

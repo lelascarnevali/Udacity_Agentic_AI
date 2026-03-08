@@ -1,6 +1,6 @@
 ---
 name: prompt-engineering
-description: Use this skill when writing commands, hooks, skills for Agent, or prompts for sub agents or any other LLM interaction, including optimizing prompts, improving LLM outputs, or designing production prompt templates.
+description: Optimize prompts for better LLM outputs, such as writing commands, hooks, skills for Agent, or prompts for sub-agents. Trigger phrases include 'optimize my prompt for better results', 'help me design effective prompts', and 'improve LLM outputs'.
 argument-hint: '[describe the prompt or LLM interaction to optimize]'
 ---
 
@@ -212,6 +212,15 @@ If verification fails, revise your response."""
 - Cache common prompt prefixes
 - Batch similar requests when possible
 
+## Troubleshooting
+
+### Common Issues and Solutions
+
+- **Inconsistent LLM Output**: If the LLM output is inconsistent, try adding more examples or refining the prompt constraints.
+- **High Token Usage**: Reduce token usage by simplifying prompts and removing unnecessary examples.
+- **Ambiguous Responses**: Clarify instructions and provide more specific examples to guide the LLM.
+- **Edge Case Failures**: Test prompts on a variety of inputs, including edge cases, to ensure robustness.
+
 ---
 
 # Agent Prompting Best Practices
@@ -352,7 +361,7 @@ Do not modify the command or add additional flags.
 
 # Persuasion Principles for Agent Communication
 
-Usefull for writing prompts, including but not limited to: commands, hooks, skills for Claude Code, or prompts for sub agents or any other LLM interaction.
+Useful for writing prompts, including but not limited to: commands, hooks, skills for Claude Code, or prompts for sub-agents or any other LLM interaction.
 
 ## Overview
 

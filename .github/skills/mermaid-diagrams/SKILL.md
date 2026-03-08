@@ -1,6 +1,6 @@
 ---
 name: mermaid-diagrams
-description: Comprehensive guide for creating software diagrams using Mermaid syntax. Use when users need to create, visualize, or document software through diagrams including class diagrams (domain modeling, object-oriented design), sequence diagrams (application flows, API interactions, code execution), flowcharts (processes, algorithms, user journeys), entity relationship diagrams (database schemas), C4 architecture diagrams (system context, containers, components), state diagrams, git graphs, pie charts, gantt charts, or any other diagram type. Triggers include requests to "diagram", "visualize", "model", "map out", "show the flow", or when explaining system architecture, database design, code structure, or user/application flows.
+description: Create and visualize software architecture and process flows using Mermaid diagrams. Use this skill when you need to model, map out, or show the flow of systems, databases, or user interactions. Key capabilities include generating class diagrams, sequence diagrams, flowcharts, and more with simple text syntax. Trigger phrases: diagram, visualize, model, map out, show the flow.
 ---
 
 # Mermaid Diagramming
@@ -133,27 +133,24 @@ erDiagram
     }
 ```
 
-## Detailed References
+## Instructions
 
-For in-depth guidance on specific diagram types, see:
-
-- **[references/class-diagrams.md](references/class-diagrams.md)** - Domain modeling, relationships (association, composition, aggregation, inheritance), multiplicity, methods/properties
-- **[references/sequence-diagrams.md](references/sequence-diagrams.md)** - Actors, participants, messages (sync/async), activations, loops, alt/opt/par blocks, notes
-- **[references/flowcharts.md](references/flowcharts.md)** - Node shapes, connections, decision logic, subgraphs, styling
-- **[references/erd-diagrams.md](references/erd-diagrams.md)** - Entities, relationships, cardinality, keys, attributes
-- **[references/c4-diagrams.md](references/c4-diagrams.md)** - System context, container, component diagrams, boundaries
-- **[references/architecture-diagrams.md](references/architecture-diagrams.md)** - Cloud services, infrastructure, CI/CD deployments
-- **[references/advanced-features.md](references/advanced-features.md)** - Themes, styling, configuration, layout options
+1. **Select Diagram Type**: Determine the appropriate diagram type based on your needs (e.g., class, sequence, flowchart).
+2. **Define Diagram**: Write the diagram using Mermaid syntax, starting with the diagram type.
+3. **Add Elements**: Include nodes, relationships, and other elements specific to the diagram type.
+4. **Use Comments**: Add `%%` comments to clarify complex parts of the diagram.
+5. **Validate Syntax**: Use the Mermaid Live Editor to check for syntax errors.
+6. **Render and Export**: Render the diagram in supported platforms or export using the Mermaid CLI or Docker.
 
 ## Best Practices
 
-1. **Start Simple** - Begin with core entities/components, add details incrementally
-2. **Use Meaningful Names** - Clear labels make diagrams self-documenting
-3. **Comment Extensively** - Use `%%` comments to explain complex relationships
-4. **Keep Focused** - One diagram per concept; split large diagrams into multiple focused views
-5. **Version Control** - Store `.mmd` files alongside code for easy updates
-6. **Add Context** - Include titles and notes to explain diagram purpose
-7. **Iterate** - Refine diagrams as understanding evolves
+1. **Start Simple** - Begin with core entities/components, add details incrementally.
+2. **Use Meaningful Names** - Clear labels make diagrams self-documenting.
+3. **Comment Extensively** - Use `%%` comments to explain complex relationships.
+4. **Keep Focused** - One diagram per concept; split large diagrams into multiple focused views.
+5. **Version Control** - Store `.mmd` files alongside code for easy updates.
+6. **Add Context** - Include titles and notes to explain diagram purpose.
+7. **Iterate** - Refine diagrams as understanding evolves.
 
 ## Configuration and Theming
 
@@ -194,10 +191,17 @@ flowchart LR
 
 ## Common Pitfalls
 
-- **Breaking characters** - Avoid `{}` in comments, use proper escape sequences for special characters
-- **Syntax errors** - Misspellings break diagrams; validate syntax in Mermaid Live
-- **Overcomplexity** - Split complex diagrams into multiple focused views
-- **Missing relationships** - Document all important connections between entities
+- **Breaking characters** - Avoid `{}` in comments, use proper escape sequences for special characters.
+- **Syntax errors** - Misspellings break diagrams; validate syntax in Mermaid Live.
+- **Overcomplexity** - Split complex diagrams into multiple focused views.
+- **Missing relationships** - Document all important connections between entities.
+
+## Troubleshooting
+
+- **Diagram not rendering**: Check for syntax errors or unsupported characters. Use Mermaid Live Editor to validate and preview.
+- **Unsupported diagram type**: Ensure the diagram type is supported by Mermaid.
+- **Export issues**: Verify CLI installation and Docker setup for exporting diagrams.
+- **If a diagram fails to render**: Check for missing diagram type declaration or incorrect syntax. Validate using the Mermaid Live Editor.
 
 ## When to Create Diagrams
 
