@@ -65,18 +65,18 @@ class WorkerAgent:
 class ZoningAgent(WorkerAgent):
     def run(self, original_task: str, task_description: str) -> str:
         prompt = f"""
-You are a zoning permit expert.
+                You are a zoning permit expert.
 
-Main Task: {original_task}
-Subtask Type: {self.task_type}
-Subtask Description: {task_description}
+                Main Task: {original_task}
+                Subtask Type: {self.task_type}
+                Subtask Description: {task_description}
 
-<response>
-- Explain the purpose of this step.
-- Describe required documents or portals.
-- Note any blockers like zoning conflicts or variances.
-</response>
-"""
+                <response>
+                - Explain the purpose of this step.
+                - Describe required documents or portals.
+                - Note any blockers like zoning conflicts or variances.
+                </response>
+                """
         raw_output = llm_call(prompt)
         result = extract_xml(raw_output, "response")
         if not result:
@@ -87,18 +87,18 @@ Subtask Description: {task_description}
 class SitePlanAgent(WorkerAgent):
     def run(self, original_task: str, task_description: str) -> str:
         prompt = f"""
-You are a site planning advisor.
+                You are a site planning advisor.
 
-Main Task: {original_task}
-Subtask Type: {self.task_type}
-Subtask Description: {task_description}
+                Main Task: {original_task}
+                Subtask Type: {self.task_type}
+                Subtask Description: {task_description}
 
-<response>
-- What does site planning involve?
-- What approvals or drawings are needed?
-- Who reviews them and why might they reject it?
-</response>
-"""
+                <response>
+                - What does site planning involve?
+                - What approvals or drawings are needed?
+                - Who reviews them and why might they reject it?
+                </response>
+                """
         raw_output = llm_call(prompt)
         result = extract_xml(raw_output, "response")
         if not result:
@@ -109,18 +109,18 @@ Subtask Description: {task_description}
 class GenericAgent(WorkerAgent):
     def run(self, original_task: str, task_description: str) -> str:
         prompt = f"""
-You are a permitting assistant.
+                You are a permitting assistant.
 
-Main Task: {original_task}
-Subtask Type: {self.task_type}
-Subtask Description: {task_description}
+                Main Task: {original_task}
+                Subtask Type: {self.task_type}
+                Subtask Description: {task_description}
 
-<response>
-- Describe this subtask.
-- List how to execute it.
-- Include potential challenges.
-</response>
-"""
+                <response>
+                - Describe this subtask.
+                - List how to execute it.
+                - Include potential challenges.
+                </response>
+                """
         raw_output = llm_call(prompt)
         result = extract_xml(raw_output, "response")
         if not result:
