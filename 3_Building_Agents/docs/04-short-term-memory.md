@@ -86,66 +86,100 @@ Ao longo de sessões distintas, o sistema extrai **preferências** e fatos relev
 
 ---
 
-## 💻 Implementando as Estratégias em Python
+## 💻 Implementando Memória com `ShortTermMemory`
 
-### Histórico Completo
+### Estado estendido com `session_id`
+
+Para suportar memória de sessão, o `AgentState` inclui um campo `session_id` que conecta cada execução à sua sessão na memória:
 
 ```python
-from typing import TypedDict
+from typing import TypedDict, Optional
 
-class SessionState(TypedDict):
-    session_id: str
-    messages: list[dict]
-
-def add_message(state: SessionState, role: str, content: str) -> SessionState:
-    """Adiciona mensagem ao histórico completo da sessão."""
-    new_message = {"role": role, "content": content}
-    return {**state, "messages": state["messages"] + [new_message]}
-
-def build_prompt_full_history(state: SessionState) -> list[dict]:
-    """Retorna todo o histórico para injeção no prompt."""
-    return state["messages"]
+class AgentState(TypedDict):
+    user_query: str
+    instructions: str
+    messages: list
+    current_tool_calls: Optional[list]
+    session_id: str   # Identificador da sessão — agrupa execuções na memória
 ```
 
-### Janela Deslizante
+### API de `ShortTermMemory`
+
+A classe `ShortTermMemory` de `lib.memory` armazena objetos `Run` organizados por `session_id`:
 
 ```python
-def build_prompt_sliding_window(
-    state: SessionState,
-    window_size: int = 10
-) -> list[dict]:
-    """Retorna apenas as últimas N mensagens da sessão."""
-    return state["messages"][-window_size:]
+from lib.memory import ShortTermMemory
+from lib.state_machine import Run
+
+memory = ShortTermMemory()
+
+# Criar sessão para um usuário
+memory.create_session("user_42")
+
+# Adicionar um Run ao final da sessão após cada execução
+run_object: Run = workflow.run(initial_state)
+memory.add(run_object, session_id="user_42")
+
+# Recuperar o último Run para extrair o histórico de mensagens
+last_run: Run = memory.get_last_object("user_42")
+if last_run:
+    previous_messages = last_run.get_final_state()["messages"]
+
+# Resetar a sessão (apaga o histórico)
+memory.reset("user_42")
 ```
 
-### Sumarização
+`ShortTermMemory` armazena objetos `Run` — não mensagens diretamente. Chamar `get_final_state()["messages"]` no último `Run` extrai o histórico completo da conversa anterior, que é então injetado como `previous_messages` na próxima execução.
+
+### Padrão `MemoryAgent`
+
+O `MemoryAgent` combina a máquina de estados com `ShortTermMemory` para criar continuidade entre execuções:
 
 ```python
-def summarize_history(
-    messages: list[dict],
-    llm_client,
-    max_messages: int = 20
-) -> list[dict]:
-    """
-    Quando o histórico excede max_messages, resume as mensagens mais antigas
-    e mantém apenas as recentes completas.
-    """
-    if len(messages) <= max_messages:
-        return messages
+class MemoryAgent:
+    """Agente com memória de curto prazo por sessão."""
 
-    older = messages[:-max_messages]
-    recent = messages[-max_messages:]
+    def __init__(self, instructions: str, tools: list = None):
+        self.instructions = instructions
+        self.tools = tools or []
+        self.memory = ShortTermMemory()
+        self.workflow = self._create_state_machine()
 
-    summary_prompt = [
-        {"role": "system", "content": "Resuma a conversa anterior de forma concisa."},
-        *older
-    ]
-    summary = llm_client.complete(summary_prompt)
+    def invoke(self, query: str, session_id: str = "default") -> Run:
+        # Criar sessão se ainda não existir
+        self.memory.create_session(session_id)
 
-    return [
-        {"role": "assistant", "content": f"[Resumo da conversa anterior]: {summary}"},
-        *recent
-    ]
+        # Recuperar histórico de mensagens da sessão anterior
+        previous_messages = []
+        last_run: Run = self.memory.get_last_object(session_id)
+        if last_run:
+            previous_messages = last_run.get_final_state()["messages"]
+
+        initial_state: AgentState = {
+            "user_query": query,
+            "instructions": self.instructions,
+            "messages": previous_messages,   # Injeta histórico no prompt
+            "current_tool_calls": None,
+            "session_id": session_id,
+        }
+
+        run_object = self.workflow.run(initial_state)
+        self.memory.add(run_object, session_id)   # Persiste o Run na memória
+        return run_object
+```
+
+O agente não mantém estado interno entre chamadas — reconstrói o contexto a partir da memória a cada `invoke`. O `previous_messages` do último `Run` torna-se o ponto de partida do campo `messages` na próxima execução, implementando a estratégia de **Histórico Completo**.
+
+### As três estratégias em código
+
+```python
+# Histórico Completo — todas as mensagens anteriores
+previous_messages = last_run.get_final_state()["messages"]
+
+# Janela Deslizante — apenas as N mensagens mais recentes
+previous_messages = last_run.get_final_state()["messages"][-10:]
+
+# Sumarização — ver exercício 4 para implementação completa
 ```
 
 ---
@@ -155,10 +189,10 @@ def summarize_history(
 | Aspecto | Estado (`AgentState`) | Memória de Sessão |
 |---|---|---|
 | **Escopo** | Uma execução (`run`) | Uma sessão (`session`) |
-| **Conteúdo** | Variáveis de execução (`tool_calls`, `messages`) | Histórico de múltiplas execuções |
+| **Conteúdo** | `user_query`, `instructions`, `messages`, `current_tool_calls` | Histórico de objetos Run por session_id |
 | **Propósito** | Mover o agente entre passos | Manter continuidade da conversa |
 | **Identificador** | `run_id` | `session_id` |
-| **Exemplo** | Ferramentas pendentes de execução | O que o usuário perguntou há 3 mensagens |
+| **Exemplo** | Ferramentas pendentes no passo atual | O que o usuário perguntou há 3 mensagens |
 
 > **Dica:** Você pode usar memória de sessão para **acumular estados** de diferentes execuções, agrupando-os pelo mesmo `session_id`.
 
@@ -196,4 +230,4 @@ $$\text{Short-Term Memory} = \text{Histórico da Sessão Injetado no Prompt}$$
 
 ---
 
-[← Tópico Anterior: Gerenciamento de Estado em Agentes](03-agent-state-management.md) | [Próximo Tópico: Módulo 3 — Índice →](README.md)
+[← Tópico Anterior: Gerenciamento de Estado em Agentes](03-agent-state-management.md) | [Próximo Tópico: Ferramentas Externas e APIs →](05-external-apis-and-tools.md)

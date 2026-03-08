@@ -105,79 +105,92 @@ sequenceDiagram
 
 ## 💡 Implementação de Function Calling
 
-### Definindo Ferramentas (Schema JSON)
+### Implementação com o Decorator `@tool`
 
 ```python
-# ✅ BOAS PRÁTICAS: Descrições claras e precisas
-tools = [
-    {
-        "name": "get_weather",
-        "description": "Recupera a condição climática atual para uma cidade",
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "city": {
-                    "type": "string",
-                    "description": "Nome da cidade (ex: 'São Paulo', 'Rio de Janeiro')"
-                },
-                "unit": {
-                    "type": "string",
-                    "enum": ["celsius", "fahrenheit"],
-                    "description": "Unidade de temperatura desejada"
-                }
-            },
-            "required": ["city"]
-        }
-    },
-    {
-        "name": "calculate",
-        "description": "Realiza operações matemáticas simples e complexas",
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "expression": {
-                    "type": "string",
-                    "description": "Expressão matemática a ser avaliada (ex: '2 + 2', '15 * 3')"
-                }
-            },
-            "required": ["expression"]
-        }
-    }
-]
+from lib.tooling import tool
+
+@tool
+def calculate(expression: str) -> float:
+    """Evaluate a mathematical expression.
+    Args:
+        expression (str): A Python arithmetic expression, e.g. '(98+97)/2'
+    """
+    return eval(expression)
+
+@tool
+def get_games(num_games: int = 1, top: bool = True) -> list:
+    """Returns the top or bottom N games by score from the dataset.
+    Args:
+        num_games (int): Number of games to return (default 1)
+        top (bool): If True returns highest-scored games, else lowest (default True)
+    """
+    data = [
+        {"Game": "The Legend of Zelda: Breath of the Wild", "Platform": "Switch", "Score": 98},
+        {"Game": "Super Mario Odyssey", "Platform": "Switch", "Score": 97},
+        # ... dataset truncado para brevidade
+    ]
+    return sorted(data, key=lambda x: x["Score"], reverse=top)[:num_games]
 ```
 
-### Processando Chamadas de Ferramentas
+> O decorator `@tool` extrai o schema JSON automaticamente da assinatura de tipos e da docstring da função. O LLM usa a docstring para decidir quando e como chamar a ferramenta. `tool.dict()` retorna o schema no formato exato esperado pela API de function calling.
+
+### Processando Chamadas de Ferramentas com a Classe `Agent`
 
 ```python
-# ✅ BOAS PRÁTICAS: Loop robusto de ferramenta
-def handle_tool_calls(model_response, tools_registry):
-    """Processa chamadas de ferramenta do modelo."""
+from lib.llm import LLM
+from lib.messages import SystemMessage, UserMessage, ToolMessage
+import json
 
-    if not model_response.get("tool_calls"):
-        return model_response.get("content")
+class Agent:
+    """Agente que encapsula o loop de chamada de ferramentas."""
 
-    for tool_call in model_response["tool_calls"]:
-        tool_name = tool_call["name"]
-        arguments = tool_call["arguments"]
+    def __init__(self, role: str, instructions: str, tools: list = None):
+        self.role = role
+        self.instructions = instructions
+        self.tools = tools or []
+        self.llm = LLM(model="gpt-4o-mini", tools=self.tools)
 
-        # Buscar ferramenta no registro
-        if tool_name not in tools_registry:
-            result = {"error": f"Ferramenta '{tool_name}' não encontrada"}
-        else:
-            try:
-                # Executar a ferramenta
-                result = tools_registry[tool_name](**arguments)
-            except Exception as e:
-                result = {"error": str(e)}
+    def invoke(self, user_message: str) -> str:
+        messages = [
+            SystemMessage(content=f"Role: {self.role}. {self.instructions}"),
+            UserMessage(content=user_message),
+        ]
+        ai_message = self.llm.invoke(messages)
+        messages.append(ai_message)
 
-        # Retornar resultado ao modelo
-        yield {
-            "tool_name": tool_name,
-            "result": result
-        }
+        # Loop: executa ferramentas enquanto o modelo continuar solicitando
+        while ai_message.tool_calls:
+            for tool_call in ai_message.tool_calls:
+                tool_name = tool_call.function.name
+                tool_args = json.loads(tool_call.function.arguments)
+                matched = next((t for t in self.tools if t.name == tool_name), None)
+                if matched:
+                    result = matched(**tool_args)
+                    messages.append(ToolMessage(
+                        content=str(result),
+                        tool_call_id=tool_call.id,
+                        name=tool_name
+                    ))
+            ai_message = self.llm.invoke(messages)
+            messages.append(ai_message)
+
+        return ai_message.content
 ```
 
-O fluxo de processamento segue este padrão:
+> Este é o padrão implementado no Exercício 1. O `tool_call_id` deve ser preservado e ecoado no `ToolMessage` para que o LLM possa correlacionar resultados com a chamada original. O loop `while ai_message.tool_calls` corresponde ao fluxograma abaixo.
+
+```python
+# Exemplo de uso
+agent = Agent(
+    role="Game Stats Assistant",
+    instructions="Use get_games para buscar dados antes de responder.",
+    tools=[get_games, calculate]
+)
+response = agent.invoke("Qual é o melhor jogo do dataset?")
+```
+
+O loop de execução implementado em `Agent.invoke()` segue este padrão:
 
 ```mermaid
 flowchart TD

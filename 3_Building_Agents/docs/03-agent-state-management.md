@@ -27,11 +27,10 @@ $$\text{Agente Eficaz} = \text{LLM} + \text{Ferramentas} + \text{Estado}$$
 
 | Componente | Tipo | Descrição |
 |---|---|---|
-| `query` | `str` | Consulta original do usuário |
+| `user_query` | `str` | Consulta original do usuário |
 | `instructions` | `str` | Mensagem de sistema (persona, regras) |
 | `messages` | `list[dict]` | Histórico completo da conversa |
-| `tool_calls` | `list[dict]` | Chamadas de ferramentas pendentes de execução |
-| `results` | `list[dict]` | Resultados intermediários de ferramentas |
+| `current_tool_calls` | `list[dict]` | Chamadas de ferramentas pendentes de execução |
 
 > **Estado Efêmero:** O estado existe apenas durante a execução da tarefa. Quando a tarefa termina, o estado é descartado — funciona como **memória de trabalho**, não como memória de longo prazo.
 
@@ -87,29 +86,35 @@ flowchart TD
 from typing import TypedDict
 
 class AgentState(TypedDict):
-    query: str             # Consulta original do usuário
-    instructions: str      # Mensagem de sistema
-    messages: list[dict]   # Histórico da conversa
-    tool_calls: list[dict] # Ferramentas pendentes de execução
+    user_query: str             # Consulta original do usuário
+    instructions: str           # Mensagem de sistema (persona, regras)
+    messages: list              # Histórico completo da conversa
+    current_tool_calls: list    # Chamadas de ferramentas pendentes de execução
 ```
 
 Cada função da máquina de estados aceita e retorna um `AgentState` — garantindo fluxo de dados consistente entre os passos.
 
 ```python
-def prepare_messages(state: AgentState) -> AgentState:
-    """Prepara o histórico com instrução de sistema e consulta do usuário."""
-    system = {"role": "system", "content": state["instructions"]}
-    user = {"role": "user", "content": state["query"]}
-    return {**state, "messages": [system, user]}
+from lib.messages import SystemMessage, UserMessage, AIMessage
 
-def call_llm(state: AgentState, llm_client) -> AgentState:
-    """Chama o LLM e atualiza o estado com a resposta e tool_calls."""
-    response = llm_client.complete(state["messages"])
-    updated_messages = state["messages"] + [response.message]
+def prepare_messages_step(state: AgentState) -> AgentState:
+    """Entry Point: inicializa o histórico de mensagens."""
     return {
-        **state,
-        "messages": updated_messages,
-        "tool_calls": response.tool_calls or [],
+        "messages": [
+            SystemMessage(content=state["instructions"]),
+            UserMessage(content=state["user_query"]),
+        ]
+    }
+
+def llm_step(state: AgentState) -> AgentState:
+    """Node: chama o LLM e captura current_tool_calls."""
+    from lib.llm import LLM
+    llm = LLM(model="gpt-4o-mini", tools=tools)
+    response = llm.invoke(state["messages"])
+    ai_message = AIMessage(content=response.content, tool_calls=response.tool_calls)
+    return {
+        "messages": state["messages"] + [ai_message],
+        "current_tool_calls": response.tool_calls or None,
     }
 ```
 
@@ -120,30 +125,30 @@ def call_llm(state: AgentState, llm_client) -> AgentState:
 A transição entre passos é **dinâmica**: o próximo passo depende do conteúdo do estado atual.
 
 ```python
-def route_after_llm(state: AgentState) -> str:
-    """Decide o próximo passo com base no estado atual."""
-    if state["tool_calls"]:
-        return "execute_tools"  # O modelo quer usar ferramentas
-    return "end"                # Resposta final pronta
+def check_tool_calls(state: AgentState):
+    """Router: decide o próximo Step com base no estado atual."""
+    if state.get("current_tool_calls"):
+        return tool_executor   # Step instance — o motor resolve para step_id
+    return termination         # Sentinel Termination
 
-def execute_tools(state: AgentState, tools_registry: dict) -> AgentState:
-    """Executa ferramentas pendentes e atualiza o estado com os resultados."""
-    tool_results = []
-    for call in state["tool_calls"]:
-        tool_fn = tools_registry.get(call["name"])
-        if tool_fn:
-            result = tool_fn(**call["args"])
-        else:
-            result = {"error": f"Ferramenta '{call['name']}' não encontrada"}
-        tool_results.append({
-            "role": "tool",
-            "content": str(result),
-            "tool_call_id": call["id"],
-        })
+import json
+from lib.messages import ToolMessage
+
+def tool_step(state: AgentState) -> AgentState:
+    """Node: executa ferramentas pendentes e atualiza o estado com os resultados."""
+    tool_messages = []
+    for call in state["current_tool_calls"] or []:
+        matched = next((t for t in tools if t.name == call.function.name), None)
+        if matched:
+            result = matched(**json.loads(call.function.arguments))
+            tool_messages.append(ToolMessage(
+                content=json.dumps(result),
+                tool_call_id=call.id,
+                name=call.function.name
+            ))
     return {
-        **state,
-        "messages": state["messages"] + tool_results,
-        "tool_calls": [],  # Limpar após execução para evitar loops
+        "messages": state["messages"] + tool_messages,
+        "current_tool_calls": None,   # Limpar após execução para evitar loops
     }
 ```
 
@@ -157,22 +162,21 @@ def execute_tools(state: AgentState, tools_registry: dict) -> AgentState:
 | **Loop** | Uma transição aponta de volta para um nó anterior | Ciclos LLM → ferramentas → LLM até a resposta final |
 
 ```python
-# Routing: múltiplos destinos possíveis a partir de um nó
-def route_step(state: AgentState) -> str:
-    if state["tool_calls"]:
-        return "execute_tools"
-    if state.get("needs_validation"):
-        return "validate"
-    return "end"
+# Routing: função examina o estado e retorna o próximo Step
+def check_tool_calls(state: AgentState):
+    if state.get("current_tool_calls"):
+        return tool_executor
+    return termination
 
-# Loop: retorno explícito para reiniciar o ciclo
-# tools → llm (nova iteração com resultados incorporados)
-workflow.add_edge("execute_tools", "call_llm")
-workflow.add_conditional_edges("call_llm", route_step, {
-    "execute_tools": "execute_tools",
-    "validate": "validate",
-    "end": END,
-})
+# Transição com roteamento condicional
+workflow.connect(
+    source=llm_processor,
+    targets=[tool_executor, termination],
+    condition=check_tool_calls
+)
+
+# Loop: tool_executor retorna ao llm_processor para nova iteração
+workflow.connect(source=tool_executor, targets=llm_processor)
 ```
 
 > **Observar transições de estado** durante a execução é essencial para debugging: cada nó registra o que recebeu e o que retornou, tornando o fluxo de dados rastreável e testável.
@@ -187,8 +191,8 @@ O processo segue cinco etapas bem definidas — da declaração do schema até a
 flowchart TD
     S["📦 STATE SCHEMA
     ─────────────────
-    query · instructions
-    messages · tool_calls"]
+    user_query · instructions
+    messages · current_tool_calls"]
 
     S -->|"alimenta"| A
 
@@ -218,28 +222,24 @@ Declare os atributos compartilhados entre todos os nós. Esse schema é o contra
 from typing import TypedDict
 
 class AgentState(TypedDict):
-    query: str
+    user_query: str
     instructions: str
-    messages: list[dict]
-    tool_calls: list[dict]
+    messages: list
+    current_tool_calls: list
 ```
 
-### 2️⃣ Definir a Lógica dos Nós (Step Functions)
+### 2️⃣ Envolver a Lógica nos Steps
 
 Cada nó é uma função pura — sem efeitos colaterais externos ao estado:
 
 ```python
-def prepare_step(state: AgentState) -> AgentState:
-    """Entry Point: inicializa o histórico de mensagens."""
-    ...
+from lib.state_machine import Step, EntryPoint, Termination
 
-def llm_step(state: AgentState) -> AgentState:
-    """Node: chama o LLM e captura tool_calls."""
-    ...
-
-def tools_step(state: AgentState) -> AgentState:
-    """Node: executa ferramentas e incorpora resultados."""
-    ...
+entry = EntryPoint[AgentState]()
+message_prep = Step[AgentState]("message_prep", prepare_messages_step)
+llm_processor = Step[AgentState]("llm_processor", llm_step)
+tool_executor = Step[AgentState]("tool_executor", tool_step)
+termination = Termination[AgentState]()
 ```
 
 ### 3️⃣ Conectar os Nós (Definir Transições/Arestas)
@@ -247,42 +247,52 @@ def tools_step(state: AgentState) -> AgentState:
 As arestas definem o fluxo entre nós — diretas ou condicionais:
 
 ```python
-# Transição direta (Edge)
-workflow.add_edge("prepare", "call_llm")
+from lib.state_machine import StateMachine
 
-# Transição condicional (Router)
-workflow.add_conditional_edges(
-    "call_llm",
-    route_after_llm,                     # função de roteamento
-    {"execute_tools": "tools", "end": END},  # mapa de destinos
+workflow = StateMachine(AgentState)
+workflow.add_steps([entry, message_prep, llm_processor, tool_executor, termination])
+
+# Transições diretas
+workflow.connect(entry, message_prep)
+workflow.connect(message_prep, llm_processor)
+
+# Transição condicional: roteamento pós-LLM
+workflow.connect(
+    source=llm_processor,
+    targets=[tool_executor, termination],
+    condition=check_tool_calls
 )
 
-# Loop: tools retorna ao LLM para nova iteração
-workflow.add_edge("tools", "call_llm")
+# Loop: após executar tools, volta ao LLM para nova iteração
+workflow.connect(source=tool_executor, targets=llm_processor)
 ```
 
 ### 4️⃣ Definir Entry Point e Termination
 
-```python
-workflow.set_entry_point("prepare")  # 🟢 Nó inicial
-# END é importado do framework e sinaliza 🔴 Termination
-```
+`EntryPoint` e `Termination` são steps sentinela — não contêm lógica de negócio. A `StateMachine` inicia a execução em `EntryPoint` e para automaticamente ao atingir `Termination`.
 
 ### 5️⃣ Executar e Observar Transições
 
 ```python
-agent = workflow.compile()
-
 initial_state: AgentState = {
-    "query": "Qual é a temperatura em São Paulo?",
-    "instructions": "Você é um assistente útil.",
+    "user_query": "Qual é o melhor jogo do dataset?",
+    "instructions": "Você é um analista de games. Use get_games para buscar dados.",
     "messages": [],
-    "tool_calls": [],
+    "current_tool_calls": None,
 }
 
-final_state = agent.invoke(initial_state)
-# Cada transição pode ser inspecionada: o que entrou e o que saiu de cada nó
+run_object = workflow.run(initial_state)
+
+# run_object é um objeto Run — contém Snapshots de cada transição
+final_state = run_object.get_final_state()
+print(final_state["messages"])
+
+# Para inspecionar cada transição individualmente:
+for snapshot in run_object.snapshots:
+    print(snapshot)
 ```
+
+`workflow.run()` retorna um objeto `Run` que contém `Snapshot`s de cada passo executado — habilitando auditoria completa do fluxo. `run_object.get_final_state()` é o atalho para o estado do último snapshot.
 
 ---
 
@@ -308,6 +318,13 @@ $$\text{Estado Efêmero} = \text{Memória de Trabalho da Tarefa Atual}$$
 | 🔄 **State machine = previsibilidade** | Passos modulares com entradas e saídas bem definidas |
 | ⏳ **Estado efêmero** | Existe apenas durante a tarefa; não persiste automaticamente |
 | 🔀 **Transições dinâmicas** | O agente decide seu próprio próximo passo com base no estado |
+
+---
+
+## 🧪 Exercícios Práticos
+
+- 📓 [State Machine — Demo](../exercises/3-state-machine-demo.ipynb) — demonstração completa com `StateMachine`, `Step`, `EntryPoint`, `Termination`, roteamento condicional e loop
+- 📓 [State Machine — Exercício](../exercises/3-state-machine-exercise.ipynb) — implemente `AgentState`, funções de passo e máquina de estados usando `lib.state_machine`
 
 ---
 

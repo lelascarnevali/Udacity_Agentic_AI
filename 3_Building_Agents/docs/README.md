@@ -27,3 +27,10 @@ Guias de estudo, cheat sheets e referências técnicas para construir agentes in
    - Taxonomia: estado (run) vs. sessão vs. longo prazo
    - Estratégias: histórico completo, janela deslizante e sumarização
    - Diferença entre estado do agente e memória de sessão
+
+5. **[Ferramentas Externas e APIs](05-external-apis-and-tools.md)**
+   - APIs como ponte entre raciocínio e ação no mundo real
+   - Autenticação: API Key vs OAuth
+   - Tratamento de falhas: retry, fallback e escalação
+   - Observabilidade, segurança e mínimo de privilégio
+   - Model Context Protocol (MCP): o padrão emergente para tool use

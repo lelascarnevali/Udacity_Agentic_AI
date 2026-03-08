@@ -33,25 +33,26 @@ Function calling (quando suportado pelo provedor) é ainda mais robusto: o model
 
 ## Modelando dados complexos com Pydantic
 
-Para esquemas complexos (listas, objetos aninhados, datas, enums) use Pydantic em Python. Exemplo de um `ActionItem`:
+Para esquemas complexos com listas e objetos aninhados, use Pydantic. O `MeetingSummary` contém uma lista de `ActionItem` — dois níveis de aninhamento. Pydantic valida o schema na construção: se o LLM retornar campos incorretos, um `ValidationError` é lançado imediatamente, permitindo retry ou fallback.
 
 ```python
-from pydantic import BaseModel
-from datetime import datetime
-from typing import Literal
+from pydantic import BaseModel, Field
+from typing import Annotated, List
 
 class ActionItem(BaseModel):
-    title: str
-    due_date: datetime
-    owner: str
-    status: Literal["open", "closed"]
+    """Representa uma tarefa atribuída a um responsável."""
+    task: Annotated[str, Field(description="Tarefa a ser executada")]
+    assignee: Annotated[str, Field(description="Responsável pela tarefa")]
+    due_date: Annotated[str, Field(description="Prazo de conclusão")]
 
-# Exemplo de uso: parsear a saída do modelo e validar
-raw = get_model_output()
-item = ActionItem.parse_raw(raw)
+class MeetingSummary(BaseModel):
+    """Resumo estruturado de uma reunião."""
+    title: Annotated[str, Field(description="Título da reunião")]
+    date: Annotated[str, Field(description="Data da reunião")]
+    participants: Annotated[List[str], Field(description="Participantes da reunião")]
+    key_points: Annotated[List[str], Field(description="Pontos principais discutidos")]
+    action_items: Annotated[List[ActionItem], Field(description="Tarefas geradas na reunião")]
 ```
-
-Pydantic fornece contrato e validação — se o modelo retornar `"status": "very"`, a validação falhará e a aplicação poderá agir.
 
 ## Diagrama: fluxo de saída estruturada
 
@@ -63,21 +64,59 @@ flowchart LR
   C --> E[Downstream System (Tickets, DB, API)]
 ```
 
-## Exemplo de Function Calling (esquema simplificado)
+## As três estratégias de output parsing
 
-```json
-{
-  "name": "create_ticket",
-  "arguments": {
-    "type": "object",
-    "properties": {
-      "issue_type": {"type": "string"},
-      "urgency": {"type": "string","enum":["low","medium","high"]},
-      "customer_email": {"type":"string","format":"email"}
-    },
-    "required":["issue_type","urgency"]
-  }
-}
+| Estratégia | Parser | Quando usar |
+|---|---|---|
+| Texto livre | `StrOutputParser` | Respostas conversacionais simples |
+| JSON genérico | `JsonOutputParser` | Estruturas conhecidas sem validação Pydantic |
+| Modelo Pydantic | `PydanticOutputParser` | Contrato forte com validação de tipos e aninhamento |
+
+## Implementação com `StructuredAgent`
+
+A classe `StructuredAgent` encapsula o padrão de saída estruturada usando `response_format` e `JsonOutputParser`:
+
+```python
+from lib.llm import LLM
+from lib.parsers import JsonOutputParser, PydanticOutputParser
+from lib.messages import SystemMessage, UserMessage
+
+class StructuredAgent:
+    """Agente que retorna respostas em formato estruturado."""
+
+    def __init__(self, role: str, instructions: str, output_model=None):
+        self.role = role
+        self.instructions = instructions
+        self.output_model = output_model
+        self.llm = LLM(model="gpt-4o-mini")
+
+    def invoke(self, user_message: str) -> dict:
+        messages = [
+            SystemMessage(content=f"Role: {self.role}. {self.instructions}"),
+            UserMessage(content=user_message),
+        ]
+        if self.output_model:
+            # response_format instrui o modelo a produzir JSON compatível com o schema Pydantic
+            ai_message = self.llm.invoke(input=messages, response_format=self.output_model)
+            return JsonOutputParser().parse(ai_message)
+        ai_message = self.llm.invoke(messages)
+        return {"response": ai_message.content}
+```
+
+`response_format=output_model` instrui o LLM a produzir JSON compatível com o schema Pydantic. `JsonOutputParser().parse(ai_message)` decodifica o JSON de `ai_message.content` em um dicionário Python. Para validação rigorosa em tempo de execução, `PydanticOutputParser(model_class=MeetingSummary).parse(ai_message)` retorna uma instância tipada de `MeetingSummary`.
+
+```python
+# Exemplo de uso
+agent = StructuredAgent(
+    role="Meeting Assistant",
+    instructions="Sumarize reuniões em formato estruturado.",
+    output_model=MeetingSummary
+)
+summary = agent.invoke(meeting_transcript)
+
+# Validação opcional com Pydantic
+validated = MeetingSummary(**summary)
+print(validated.action_items[0].assignee)
 ```
 
 ## Estratégias de resiliência
@@ -95,6 +134,13 @@ Pydantic é a ponte entre o JSON gerado pelo LLM e os objetos tipados da aplica�
 - Use esquemas (JSON Schema / Pydantic) para contratos claros.
 - Prefira function calling quando disponível.
 - Valide sempre e projete estratégias de fallback.
+
+---
+
+## 🧪 Exercícios Práticos
+
+- 📓 [Structured Outputs — Demo](../exercises/2-structured-outputs-demo.ipynb) — demonstração completa do fluxo com `StructuredAgent`, `MeetingSummary` e `ActionItem`
+- 📓 [Structured Outputs — Exercício](../exercises/2-structured-outputs-exercise.ipynb) — implemente `StructuredAgent` com `output_model`, `JsonOutputParser` e validação Pydantic
 
 ---
 
