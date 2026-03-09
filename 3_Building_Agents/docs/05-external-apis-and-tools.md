@@ -449,4 +449,4 @@ $$\text{Agente Real} = \text{Raciocínio} + \text{APIs} + \text{Resiliência} + 
 
 ---
 
-[← Tópico Anterior: Short-Term Memory em Agentes](04-short-term-memory.md) | [Próximo Tópico: Módulo 3 — Índice →](README.md)
+[← Tópico Anterior: Short-Term Memory em Agentes](04-short-term-memory.md) | [Próximo Tópico: Agentes de Busca na Web →](06-web-search-agents.md)

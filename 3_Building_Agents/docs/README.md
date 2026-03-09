@@ -34,3 +34,10 @@ Guias de estudo, cheat sheets e referências técnicas para construir agentes in
    - Tratamento de falhas: retry, fallback e escalação
    - Observabilidade, segurança e mínimo de privilégio
    - Model Context Protocol (MCP): o padrão emergente para tool use
+
+6. **[Agentes de Busca na Web](06-web-search-agents.md)**
+   - Web search vs. web browsing: diferenças e escopo
+   - Grounding: ancorar respostas em evidências verificáveis
+   - APIs de busca: SerpAPI, Tavily e Bing
+   - Pipeline de interpretação e seleção de resultados
+   - Armadilhas: ruído, desinformação e dados desatualizados
