@@ -41,3 +41,11 @@ Guias de estudo, cheat sheets e referências técnicas para construir agentes in
    - APIs de busca: SerpAPI, Tavily e Bing
    - Pipeline de interpretação e seleção de resultados
    - Armadilhas: ruído, desinformação e dados desatualizados
+
+7. **[Interagindo com Bancos de Dados](07-interacting-with-databases.md)**
+   - Agentes que lêem e escrevem em dados estruturados reais
+   - Tipos de BD: relacional, NoSQL, vetorial e grafo
+   - text2SQL: tradução de linguagem natural para SQL com guardrails
+   - Busca semântica com bancos vetoriais e cosine similarity
+   - RAG como padrão arquitetural (não depende de vetores)
+   - Abordagem híbrida: SQL filtra, vetor ranqueia

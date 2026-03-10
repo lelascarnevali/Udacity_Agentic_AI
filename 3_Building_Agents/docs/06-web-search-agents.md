@@ -258,4 +258,4 @@ $$\text{Agente Pesquisador} = \text{LLM} + \text{Search API} + \text{Grounding} 
 
 ---
 
-[← Tópico Anterior: Ferramentas Externas e APIs](05-external-apis-and-tools.md) | [Próximo Tópico: Módulo 3 — Índice →](README.md)
+[← Tópico Anterior: Ferramentas Externas e APIs](05-external-apis-and-tools.md) | [Próximo Tópico: Interagindo com Bancos de Dados →](07-interacting-with-databases.md)
