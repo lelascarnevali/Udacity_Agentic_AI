@@ -289,4 +289,4 @@ $$\text{Agente com BD} = \text{text2SQL} + \text{Busca Vetorial} + \text{Guardra
 
 ---
 
-[← Tópico Anterior: Agentes de Busca na Web](06-web-search-agents.md) | [Próximo Tópico: Módulo 3 — Índice →](README.md)
+[← Tópico Anterior: Agentes de Busca na Web](06-web-search-agents.md) | [Próximo Tópico: Agentic RAG — De Busca Passiva a Raciocínio Ativo →](08-agentic-rag.md)

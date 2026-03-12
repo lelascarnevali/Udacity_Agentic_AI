@@ -49,3 +49,11 @@ Guias de estudo, cheat sheets e referências técnicas para construir agentes in
    - Busca semântica com bancos vetoriais e cosine similarity
    - RAG como padrão arquitetural (não depende de vetores)
    - Abordagem híbrida: SQL filtra, vetor ranqueia
+
+8. **[Agentic RAG — De Busca Passiva a Raciocínio Ativo](08-agentic-rag.md)**
+   - RAG básico vs. Agentic RAG: de pipeline passivo a loop de raciocínio
+   - Loop Retrieve-Reflect-Retry: avaliar, reformular, re-tentar
+   - Estudo de caso: Zillow Offers — resposta rasa vs. explicação em camadas
+   - Capacidades agênticas: decisão de recuperação, inspeção, reformulação, pivotamento
+   - Heurísticas de avaliação e estratégias de retry
+   - Espectro de complexidade: router, reflexivo, planejador
