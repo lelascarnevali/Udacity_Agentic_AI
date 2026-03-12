@@ -159,9 +159,18 @@ class VectorStoreManager:
         self.embedding_function = self._create_embedding_function(openai_api_key)
 
     def _create_embedding_function(self, api_key: str) -> EmbeddingFunction:
-        embeddings_fn = embedding_functions.OpenAIEmbeddingFunction(
-            api_key=api_key
-        )
+        # Detect Vocareum key and use custom endpoint
+        if api_key.startswith('voc-'):
+            embeddings_fn = embedding_functions.OpenAIEmbeddingFunction(
+                api_key=api_key,
+                api_base="https://openai.vocareum.com/v1",
+                model_name="text-embedding-3-small"
+            )
+        else:
+            embeddings_fn = embedding_functions.OpenAIEmbeddingFunction(
+                api_key=api_key,
+                model_name="text-embedding-3-small"
+            )
         return embeddings_fn
 
     def __repr__(self):
