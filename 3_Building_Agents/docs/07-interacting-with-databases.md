@@ -97,40 +97,36 @@ def text_to_sql_query(
     - Use apenas SELECT (nunca DELETE, DROP, UPDATE sem aprovação explícita).
     - Sempre use parâmetros ou LIMIT para evitar resultados excessivos.
     - Se a pergunta não puder ser respondida com o schema, retorne: SQL_IMPOSSIVEL
+from typing import List, Any
+import sqlalchemy
+from sqlalchemy import text, create_engine
+from lib.tooling import tool
+
+# Connect to database via Engine
+DB_ENGINE = create_engine("sqlite:///07-sales.db")
+
+@tool
+def list_tables_tool() -> List[str]:
+    """List all tables in database"""
+    inspector = sqlalchemy.inspect(DB_ENGINE)
+    return inspector.get_table_names()
+
+@tool
+def get_table_schema_tool(table_name: str) -> List[str]:
+    """Get tables schema to understand the columns"""
+    inspector = sqlalchemy.inspect(DB_ENGINE)
+    return str(inspector.get_columns(table_name))
+
+@tool
+def execute_sql_tool(query: str) -> Any:
     """
-    return llm_call(prompt).strip()
-
-
-def execute_safe_query(
-    connection: sqlite3.Connection,
-    query: str,
-    allowed_prefix: str = "SELECT",
-) -> list[dict[str, Any]]:
+    Execute SQL query and return result. 
+    This will automatically connect to the database and execute the query.
+    However, if the query is not valid, an error will be raised
     """
-    Executa query apenas se iniciar com o prefixo permitido.
-
-    Args:
-        connection: Conexão com o banco de dados.
-        query: Query SQL a executar.
-        allowed_prefix: Tipo de operação permitida (default: SELECT).
-
-    Returns:
-        Lista de dicionários com os resultados.
-
-    Raises:
-        PermissionError: Se a query não iniciar com o prefixo permitido.
-    """
-    normalized = query.strip().upper()
-    if not normalized.startswith(allowed_prefix.upper()):
-        raise PermissionError(
-            f"Query bloqueada: apenas '{allowed_prefix}' é permitido. "
-            f"Query recebida: {query[:60]}..."
-        )
-
-    cursor = connection.cursor()
-    cursor.execute(query)
-    columns = [desc[0] for desc in cursor.description or []]
-    return [dict(zip(columns, row)) for row in cursor.fetchall()]
+    with DB_ENGINE.begin() as connection:
+        answer = connection.execute(text(query)).fetchall()
+    return str(answer)
 ```
 
 ---

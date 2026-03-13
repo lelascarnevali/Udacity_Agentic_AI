@@ -375,59 +375,24 @@ flowchart TD
 ### Exemplo conceitual de servidor MCP
 
 ```python
-from typing import Any
+from lib.tooling import tool
 
-
-def define_tool_schema(
-    name: str,
-    description: str,
-    parameters: dict[str, Any],
-) -> dict[str, Any]:
+@tool
+def get_weather(city: str) -> str:
     """
-    Define o schema de uma ferramenta no formato compatível com MCP.
-
+    Retorna o tempo atual para uma cidade especificada.
+    
     Args:
-        name: Identificador único da ferramenta.
-        description: Descrição clara do que a ferramenta faz.
-        parameters: Schema JSON dos parâmetros aceitos.
-
-    Returns:
-        Schema da ferramenta pronto para registro no servidor MCP.
+        city: Nome da cidade para buscar o tempo.
     """
-    return {
-        "name": name,
-        "description": description,
-        "inputSchema": {
-            "type": "object",
-            "properties": parameters,
-            "required": list(parameters.keys()),
-        },
-    }
+    # Lógica de chamada da API aqui, ex: usando requests ou client SDK
+    return f"O tempo em {city} é ensolarado e agradável."
 
+# A função encapsulada ganha a capacidade de gerar seu schema
+schema_mcp_compativel = get_weather.dict()
 
-def handle_tool_call(
-    tool_name: str,
-    arguments: dict[str, Any],
-    tool_registry: dict[str, Any],
-) -> dict[str, Any]:
-    """
-    Roteia uma chamada de ferramenta para o executor correto.
-
-    Args:
-        tool_name: Nome da ferramenta a executar.
-        arguments: Argumentos fornecidos pelo modelo.
-        tool_registry: Mapeamento nome → função executora.
-
-    Returns:
-        Resultado da execução no formato MCP.
-    """
-    if tool_name not in tool_registry:
-        return {"error": f"Ferramenta '{tool_name}' não encontrada."}
-
-    executor = tool_registry[tool_name]
-    result = executor(**arguments)
-
-    return {"content": [{"type": "text", "text": str(result)}]}
+# O objeto pode ser executado diretamente pelo Agente
+resultado = get_weather(city="São Paulo")
 ```
 
 ---

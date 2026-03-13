@@ -98,52 +98,36 @@ flowchart LR
 
 ```python
 import os
-import httpx
-from typing import Any
+from datetime import datetime
+from typing import Dict
+from tavily import TavilyClient
+from lib.tooling import tool
 
+@tool
+def web_search(query: str) -> Dict:
+    \"\"\"
+    Perform a web search using the Tavily API and return the results.
+    \"\"\"
+    api_key = os.getenv("TAVILY_API_KEY")
+    client = TavilyClient(api_key=api_key)
 
-def web_search(
-    query: str,
-    num_results: int = 5,
-    api_key: str | None = None,
-) -> list[dict[str, Any]]:
-    """
-    Realiza busca web via Tavily e retorna lista de resultados estruturados.
-
-    Args:
-        query: Pergunta ou termo de busca.
-        num_results: Número máximo de resultados a retornar.
-        api_key: Chave da API Tavily. Se None, usa TAVILY_API_KEY do ambiente.
-
-    Returns:
-        Lista de dicionários com title, url, content e score.
-
-    Raises:
-        httpx.HTTPStatusError: Se a chamada à API falhar.
-    """
-    key = api_key or os.getenv("TAVILY_API_KEY", "")
-    endpoint = "https://api.tavily.com/search"
-
-    payload = {
-        "api_key": key,
-        "query": query,
-        "max_results": num_results,
-        "search_depth": "basic",
+    search_result = client.search(
+                query=query,
+                search_depth="advanced",
+                include_summary=True,
+                include_raw_content=False,
+                include_images=False)
+    
+    formatted_result = {
+        "answer": search_result.get("answer", ""),
+        "results": search_result.get("results", []),
+        "search_metadata": {
+            "timestamp": datetime.now().isoformat(),
+            "query": query,
+        }
     }
 
-    response = httpx.post(endpoint, json=payload, timeout=10.0)
-    response.raise_for_status()
-
-    results = response.json().get("results", [])
-    return [
-        {
-            "title": r.get("title", ""),
-            "url": r.get("url", ""),
-            "content": r.get("content", ""),
-            "score": r.get("score", 0.0),
-        }
-        for r in results
-    ]
+    return formatted_result
 ```
 
 ---

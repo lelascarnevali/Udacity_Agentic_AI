@@ -57,3 +57,11 @@ Guias de estudo, cheat sheets e referências técnicas para construir agentes in
    - Capacidades agênticas: decisão de recuperação, inspeção, reformulação, pivotamento
    - Heurísticas de avaliação e estratégias de retry
    - Espectro de complexidade: router, reflexivo, planejador
+
+9. **[Memória de Longo Prazo em Agentes](09-long-term-memory.md)**
+   - Long-term memory vs. short-term memory: persistência entre sessões
+   - Três tipos: semântica (fatos), episódica (eventos), procedural (comportamento)
+   - Armazenamento: vector stores, bancos relacionais, document stores
+   - Escopos de acesso: user-scoped, team-scoped, global-scoped
+   - Implementação com `LongTermMemory` e integração como tools do agente
+   - Long-Term Memory vs. RAG: diferenças fundamentais

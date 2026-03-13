@@ -207,4 +207,4 @@ $$\text{Agentic RAG} = \underbrace{\text{Recuperar}}_{\text{buscar contexto}} + 
 
 ---
 
-[← Tópico Anterior: Interagindo com Bancos de Dados](07-interacting-with-databases.md) | [Próximo Tópico: Módulo 3 — Índice →](README.md)
+[← Tópico Anterior: Interagindo com Bancos de Dados](07-interacting-with-databases.md) | [Próximo Tópico: Memória de Longo Prazo em Agentes →](09-long-term-memory.md)

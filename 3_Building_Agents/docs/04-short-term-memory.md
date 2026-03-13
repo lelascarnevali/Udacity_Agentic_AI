@@ -93,13 +93,15 @@ Ao longo de sessões distintas, o sistema extrai **preferências** e fatos relev
 Para suportar memória de sessão, o `AgentState` inclui um campo `session_id` que conecta cada execução à sua sessão na memória:
 
 ```python
-from typing import TypedDict, Optional
+from typing import TypedDict, List, Optional
+from lib.tooling import ToolCall
 
 class AgentState(TypedDict):
     user_query: str
     instructions: str
-    messages: list
-    current_tool_calls: Optional[list]
+    messages: List[dict]
+    current_tool_calls: Optional[List[ToolCall]]
+    comparison: Optional[str]
     session_id: str   # Identificador da sessão — agrupa execuções na memória
 ```
 
@@ -153,7 +155,9 @@ class MemoryAgent:
         previous_messages = []
         last_run: Run = self.memory.get_last_object(session_id)
         if last_run:
-            previous_messages = last_run.get_final_state()["messages"]
+            last_state = last_run.get_final_state()
+            if last_state:
+                previous_messages = last_state["messages"]
 
         initial_state: AgentState = {
             "user_query": query,
@@ -174,10 +178,11 @@ O agente não mantém estado interno entre chamadas — reconstrói o contexto a
 
 ```python
 # Histórico Completo — todas as mensagens anteriores
-previous_messages = last_run.get_final_state()["messages"]
+last_state = last_run.get_final_state()
+previous_messages = last_state["messages"] if last_state else []
 
 # Janela Deslizante — apenas as N mensagens mais recentes
-previous_messages = last_run.get_final_state()["messages"][-10:]
+previous_messages = last_state["messages"][-10:] if last_state else []
 
 # Sumarização — ver exercício 4 para implementação completa
 ```
