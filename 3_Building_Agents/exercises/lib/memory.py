@@ -1,3 +1,16 @@
+"""Memory management systems for agentic workflows.
+
+This module provides two tiers of memory to support conversational agents:
+1. `ShortTermMemory`: A session-based, in-memory store for tracking the
+    immediate history of execution (Runs, States, etc.) within a local context.
+2. `LongTermMemory`: A persistent, vector-backed store for user preferences
+    and facts that should survive across multiple sessions or deployments.
+
+Design notes:
+- Short-term memory uses deep copies to prevent side effects between steps.
+- Long-term memory uses semantic search (vector embeddings) for retrieval.
+"""
+
 from typing import Any, Dict, List, Optional
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
@@ -14,11 +27,25 @@ class SessionNotFoundError(Exception):
 
 @dataclass
 class ShortTermMemory():
-    """Manage the history of objects across multiple sessions"""
+    """Manages the history of objects across multiple conversation sessions.
+
+    `ShortTermMemory` acts as the "working memory" for the agent system. It
+    organizes execution data (like `Run` objects from a state machine) into
+    isolated sessions. Each session maintains a chronological list of events.
+
+    Key behaviors:
+    - Deep-copies objects when adding to history to ensure data immutability.
+    - Automatically initializes a "default" session if none is specified.
+    - Provides lifecycle management (create, reset, delete) for sessions.
+
+    Attributes:
+        sessions (Dict[str, List[Any]]): A mapping of session IDs to their
+            respective chronological object lists.
+    """
     sessions: Dict[str, List[Any]] = field(default_factory=lambda: {})
 
     def __post_init__(self):
-        """Initialize the default session"""
+        """Initialize the default session upon creation."""
         self.create_session("default")
 
     def __str__(self) -> str:
@@ -29,13 +56,15 @@ class ShortTermMemory():
         return self.__str__()
 
     def create_session(self, session_id: str) -> bool:
-        """Create a new session
+        """Initialize a new isolated memory session.
         
         Args:
-            session_id: Unique identifier for the session
+            session_id: A unique identifier for the session (e.g., a user ID
+                or a specific conversation UUID).
             
         Returns:
-            bool: True if session was created, False if it already existed
+            bool: True if the session was newly created, False if it already
+                existed (preserving the existing history).
         """
         if session_id in self.sessions:
             return False
@@ -43,16 +72,17 @@ class ShortTermMemory():
         return True
 
     def delete_session(self, session_id: str) -> bool:
-        """Delete a session
+        """Permanently remove a session and all its stored history.
         
         Args:
-            session_id: Session to delete
+            session_id: Identifier of the session to delete.
             
         Returns:
-            bool: True if session was deleted, False if it didn't exist
+            bool: True if the session was found and deleted, False otherwise.
             
         Raises:
-            ValueError: If attempting to delete the default session
+            ValueError: If attempting to delete the 'default' session, which
+                must always exist for system stability.
         """
         if session_id == "default":
             raise ValueError("Cannot delete the default session")
@@ -62,74 +92,80 @@ class ShortTermMemory():
         return True
 
     def _validate_session(self, session_id: str):
-        """Validate that a session exists
+        """Internal helper to verify session existence.
         
         Args:
-            session_id: Session ID to validate
+            session_id: The ID to check against active sessions.
             
         Raises:
-            SessionNotFoundError: If session doesn't exist
+            SessionNotFoundError: If the ID does not map to an existing session.
         """
         if session_id not in self.sessions:
             raise SessionNotFoundError(f"Session '{session_id}' not found")
 
     def add(self, object: Any, session_id: Optional[str] = None):
-        """Add a new object to the history
+        """Append a new object to a session's history.
+        
+        The object is deep-copied before being stored to prevent future
+        modifications to the in-memory history from affecting external state.
         
         Args:
-            object: Object to add to history
-            session_id: Optional session ID to add to (uses default if None)
+            object: The data or object to store (e.g., a `Run` result).
+            session_id: The session ID to append to. Defaults to "default".
             
         Raises:
-            SessionNotFoundError: If specified session doesn't exist
+            SessionNotFoundError: If the specified session has not been created.
         """
         session_id = session_id or "default"
         self._validate_session(session_id)
         self.sessions[session_id].append(copy.deepcopy(object))
 
     def get_all_objects(self, session_id: Optional[str] = None) -> List[Any]:
-        """Get all objects for a session
+        """Retrieve the complete chronological history of a session.
         
         Args:
-            session_id: Optional session ID (uses default if None)
+            session_id: The target session ID. Defaults to "default".
             
         Returns:
-            List of objects in the session
+            List[Any]: A list of deep-copied objects from the history.
             
         Raises:
-            SessionNotFoundError: If specified session doesn't exist
+            SessionNotFoundError: If the session doesn't exist.
         """
         session_id = session_id or "default"
         self._validate_session(session_id)
         return [copy.deepcopy(obj) for obj in self.sessions[session_id]]
 
     def get_last_object(self, session_id: Optional[str] = None) -> Optional[Any]:
-        """Get the most recent object for a session
+        """Retrieve the most recently added object from a session.
         
         Args:
-            session_id: Optional session ID (uses default if None)
+            session_id: The target session ID. Defaults to "default".
             
         Returns:
-            The last object in the session if it exists, None if session is empty
+            Optional[Any]: The last object in the list, or None if the
+                session history is currently empty.
             
         Raises:
-            SessionNotFoundError: If specified session doesn't exist
+            SessionNotFoundError: If the session doesn't exist.
         """
         objects = self.get_all_objects(session_id)
         return objects[-1] if objects else None
 
     def get_all_sessions(self) -> List[str]:
-        """Get all session IDs"""
+        """Return a list of all currently active session IDs."""
         return list(self.sessions.keys())
 
     def reset(self, session_id: Optional[str] = None):
-        """Reset memory for a specific session or all sessions
+        """Clear the history of a specific session or all sessions.
         
         Args:
-            session_id: Optional session ID to reset. If None, resets all sessions.
+            session_id: Identifier of the session to clear. If None,
+                every active session is wiped clean.
             
         Raises:
-            SessionNotFoundError: If specified session doesn't exist
+            SessionNotFoundError: If a specific session_id is provided
+                but does not exist.
         """
         if session_id is None:
             # Reset all sessions to empty lists
@@ -140,16 +176,16 @@ class ShortTermMemory():
             self.sessions[session_id] = []
 
     def pop(self, session_id: Optional[str] = None) -> Optional[Any]:
-        """Remove and return the last object from a session
+        """Remove and return the most recent object from a session.
         
         Args:
-            session_id: Optional session ID to pop from (uses default if None)
+            session_id: The target session ID. Defaults to "default".
             
         Returns:
-            The last object in the session if it exists, None if session is empty
+            Optional[Any]: The removed object, or None if empty.
             
         Raises:
-            SessionNotFoundError: If specified session doesn't exist
+            SessionNotFoundError: If the session doesn't exist.
         """
         session_id = session_id or "default"
         self._validate_session(session_id)

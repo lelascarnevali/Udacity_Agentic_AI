@@ -128,7 +128,7 @@ The application is structured as a progressive pipeline:
 
 ### Reference Notebook
 
-Open and run [project_starter.ipynb](project_starter.ipynb) cell by cell.
+Open and run [project_starter.ipynb](project/project_starter.ipynb) cell by cell.
 Each section maps directly to a rubric criterion described below.
 
 ---
