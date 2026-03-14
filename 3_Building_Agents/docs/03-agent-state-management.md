@@ -323,8 +323,8 @@ $$\text{Estado Efêmero} = \text{Memória de Trabalho da Tarefa Atual}$$
 
 ## 🧪 Exercícios Práticos
 
-- 📓 [State Machine — Demo](../exercises/3-state-machine-demo.ipynb) — demonstração completa com `StateMachine`, `Step`, `EntryPoint`, `Termination`, roteamento condicional e loop
-- 📓 [State Machine — Exercício](../exercises/3-state-machine-exercise.ipynb) — implemente `AgentState`, funções de passo e máquina de estados usando `lib.state_machine`
+- 📓 [State Machine — Demo](../exercises/03-state-machine-demo.ipynb) — demonstração completa com `StateMachine`, `Step`, `EntryPoint`, `Termination`, roteamento condicional e loop
+- 📓 [State Machine — Exercício](../exercises/03-state-machine-exercise.ipynb) — implemente `AgentState`, funções de passo e máquina de estados usando `lib.state_machine`
 
 ---
 

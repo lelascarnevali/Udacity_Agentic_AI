@@ -255,8 +255,8 @@ flowchart TD
 ## 🧪 Exercícios práticos e aprendizados
 
 - **Referências dos exercícios:**
-    - [Exercício: Tool Calling (Hands-on)](../exercises/1-tool-calling-exercise.ipynb) — implementação de uma classe `Agent`, ciclo de vida das `tool_calls` e exemplos de ferramentas (`calculate`, `get_games`).
-    - [Demo: Using Tools (Fluxo)](../exercises/1-tool-calling-demo.ipynb) — fluxo completo de uma chamada de ferramenta (`get_weather`), extração de `tool_call_id`, execução e retorno ao modelo.
+    - [Exercício: Tool Calling (Hands-on)](../exercises/01-tool-calling-exercise.ipynb) — implementação de uma classe `Agent`, ciclo de vida das `tool_calls` e exemplos de ferramentas (`calculate`, `get_games`).
+    - [Demo: Using Tools (Fluxo)](../exercises/01-tool-calling-demo.ipynb) — fluxo completo de uma chamada de ferramenta (`get_weather`), extração de `tool_call_id`, execução e retorno ao modelo.
 
 - **Aprendizados principais extraídos dos exercícios:**
     - **Responsabilidades do agente:** inicializar com `role`, `instructions` e um registro de `tools`; processar mensagens, decidir quando chamar ferramentas e incorporar respostas de ferramentas ao contexto.

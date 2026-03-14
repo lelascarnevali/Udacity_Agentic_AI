@@ -230,8 +230,8 @@ $$\text{Short-Term Memory} = \text{Histórico da Sessão Injetado no Prompt}$$
 
 ## 🧪 Exercícios Práticos
 
-- 📓 [Short-Term Memory — Demo](../exercises/4-short-term-memory-demo.ipynb) — demonstração completa com `ShortTermMemory`, múltiplas sessões e personas (comentarista de futebol, GPS de navegação)
-- 📓 [Short-Term Memory — Exercício](../exercises/4-short-term-memory-exercise.ipynb) — implemente seu próprio `ChatBot` com suporte a múltiplas sessões e gerenciamento de ciclo de vida
+- 📓 [Short-Term Memory — Demo](../exercises/04-short-term-memory-demo.ipynb) — demonstração completa com `ShortTermMemory`, múltiplas sessões e personas (comentarista de futebol, GPS de navegação)
+- 📓 [Short-Term Memory — Exercício](../exercises/04-short-term-memory-exercise.ipynb) — implemente seu próprio `ChatBot` com suporte a múltiplas sessões e gerenciamento de ciclo de vida
 
 ---
 

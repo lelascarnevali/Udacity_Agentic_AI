@@ -65,3 +65,9 @@ Guias de estudo, cheat sheets e referências técnicas para construir agentes in
    - Escopos de acesso: user-scoped, team-scoped, global-scoped
    - Implementação com `LongTermMemory` e integração como tools do agente
    - Long-Term Memory vs. RAG: diferenças fundamentais
+
+10. **[Agentic Evaluation: Medindo o Que Importa](10-agentic-evaluation.md)**
+    - Avaliação de performance de agentes: por que é essencial evitar drift
+    - Quatro dimensões: Task Completion, Quality Control, Tool Interaction, System Metrics
+    - Três estratégias: Final Response (Black Box), Single-Step e Trajectory Evaluation
+    - Componentes de teste: Inputs, Outputs, Reference Data e Evaluators (ex: LLM-as-judge)

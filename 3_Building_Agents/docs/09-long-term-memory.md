@@ -345,4 +345,4 @@ $$\text{Long-Term Memory} = \underbrace{\text{Semântica}}_{\text{fatos e prefer
 
 ---
 
-[← Tópico Anterior: Agentic RAG — De Busca Passiva a Raciocínio Ativo](08-agentic-rag.md) | [Próximo Tópico: Módulo 3 — Índice →](README.md)
+[← Tópico Anterior: Agentic RAG — De Busca Passiva a Raciocínio Ativo](08-agentic-rag.md) | [Próximo Tópico: Agentic Evaluation: Medindo o Que Importa →](10-agentic-evaluation.md)
