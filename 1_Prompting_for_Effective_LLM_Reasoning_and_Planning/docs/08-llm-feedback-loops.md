@@ -241,5 +241,6 @@ Para aplicar os conceitos deste tópico na prática, consulte:
 
 ---
 
-**Tópico anterior:** [Encadeamento de Prompts para Raciocínio Agêntico](07-chaining-prompts-for-agentic-reasoning.md) | [Próximo Tópico: Módulo 3 — Índice →](1_Prompting_for_Effective_LLM_Reasoning_and_Planning/README.md)
+**Tópico anterior:** [Encadeamento de Prompts para Raciocínio Agêntico](07-chaining-prompts-for-agentic-reasoning.md)
 
+Implemente esse loop num notebook ou script do repositório, garantindo execução em ambiente isolado, logging de resultados e limite de iterações.

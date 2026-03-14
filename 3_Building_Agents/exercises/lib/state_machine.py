@@ -1,22 +1,3 @@
-"""A lightweight synchronous State Machine engine for agentic workflows.
-
-This module provides the core orchestration engine used to build complex,
-multi-step agent behaviors. It uses a graph-based approach where "Steps"
-(nodes) perform computation on a shared "State" and "Transitions" (edges)
-define the flow of execution.
-
-Key characteristics:
-- Synchronous execution loop with full observability (snapshots/logs).
-- Support for complex branching via conditional transitions.
-- Type-safe state management using Python's `TypedDict` and `Generic`.
-- Separation of concerns between business logic (Steps) and orchestration
-    (StateMachine).
-
-The engine is designed for pedagogical clarity, making it easy to trace
-how an agent progresses from an initial query to a final answer through
-intermediate steps like "tool execution" or "context retrieval".
-"""
-
 from typing import Any, Callable, Dict, List, Optional, Union, TypeVar, Generic, cast, Type, TypedDict, get_type_hints
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -29,37 +10,10 @@ StateSchema = TypeVar("StateSchema")
 
 @dataclass
 class Resource:
-    """Shared immutable or long-lived resources for state machine steps.
-
-    Resources act as a dependency injection container, providing steps
-    with access to external services (like LLM clients or Vector Stores)
-    without polluting the mutable State object.
-
-    Attributes:
-        vars (Dict[str, Any]): A mapping of resource names to their instances.
-    """
     vars: Dict[str, Any]
 
-
 class Step(Generic[StateSchema]):
-    """An atomic unit of computation within a workflow.
-
-    A `Step` encapsulates a piece of business logic that transforms the
-    current state. It is uniquely identified within a StateMachine by its
-    `step_id`.
-
-    The logic function can accept either just the `state` or both `state`
-    and `resource`. It should return a dictionary containing only the
-    fields of the state it has updated.
-    """
-
     def __init__(self, step_id: str, logic: Callable[[StateSchema], Dict]):
-        """Initialize a new Step.
-
-        Args:
-            step_id: A unique string identifier for the step.
-            logic: A callable implementing the step's transformation logic.
-        """
         self.step_id = step_id
         self.logic = logic
         # Store the number of parameters the logic function expects
@@ -72,11 +26,7 @@ class Step(Generic[StateSchema]):
         return self.__str__()
 
     def _calculate_params_count(self):
-        """Calculate the number of parameters excluding 'self' for bound methods.
-
-        Returns:
-            int: The count of arguments the internal logic function expects.
-        """
+        """Calculate the number of parameters excluding 'self' for bound methods"""
         if inspect.ismethod(self.logic):
             # For bound methods, subtract 1 to exclude 'self'
             return self.logic.__func__.__code__.co_argcount - 1
@@ -85,20 +35,6 @@ class Step(Generic[StateSchema]):
             return self.logic.__code__.co_argcount
 
     def run(self, state: StateSchema, state_schema: Type[StateSchema], resource: Resource=None) -> StateSchema:
-        """Execute the step's logic and return the updated state.
-
-        This method handles argument dispatching (injecting resources if needed)
-        and ensures that the returned state preserves type safety by merging
-        the logic's output with the existing state.
-
-        Args:
-            state: The current state of the workflow.
-            state_schema: The TypedDict class defining the state's structure.
-            resource: Optional Resource container for dependency injection.
-
-        Returns:
-            The new state after the logic has been applied.
-        """
         # Call logic function with appropriate number of arguments
         if self.logic_params_count == 1:
             result = self.logic(state)
@@ -123,38 +59,21 @@ class Step(Generic[StateSchema]):
 
 
 class EntryPoint(Step[StateSchema]):
-    """Marker step representing the start of a workflow.
-
-    Every `StateMachine` must have exactly one `EntryPoint`. It performs
-    no logic and serves only to signal where execution begins.
-    """
+    """Special step that marks the beginning of the workflow.
+    Users should connect this step to their first business logic step."""
     def __init__(self):
         super().__init__("__entry__", lambda x: {})
 
 
 class Termination(Step[StateSchema]):
-    """Marker step representing the end of a workflow.
-
-    Execution stops immediately when a `Termination` step is reached.
-    """
+    """Special step that marks the end of the workflow.
+    Users should connect their final business logic step(s) to this step."""
     def __init__(self):
         super().__init__("__termination__", lambda x: {})
 
 
 @dataclass
 class Transition(Generic[StateSchema]):
-    """A directed edge between steps in the workflow.
-
-    Transitions define how the StateMachine moves from one step to the next.
-    They can be static (one-to-one) or conditional (one-to-many based on
-    state evaluation).
-
-    Attributes:
-        source: ID of the step where the transition originates.
-        targets: List of possible destination step IDs.
-        condition: Optional function that decides which target to move to
-            based on the current state.
-    """
     source: str
     targets: List[str]
     condition: Optional[Callable[[StateSchema], Union[str, List[str], Step[StateSchema], List[Step[StateSchema]]]]] = None
@@ -166,14 +85,6 @@ class Transition(Generic[StateSchema]):
         return self.__str__()
 
     def resolve(self, state: StateSchema) -> List[str]:
-        """Determine the next step(s) based on the current state.
-
-        Args:
-            state: The state after the source step has finished execution.
-
-        Returns:
-            A list of step IDs to transition to.
-        """
         if self.condition:
             result = self.condition(state)
             if isinstance(result, Step):
@@ -188,18 +99,7 @@ class Transition(Generic[StateSchema]):
 
 @dataclass
 class Snapshot(Generic[StateSchema]):
-    """A point-in-time record of the machine's state.
-
-    Snapshots provide auditability and debugging capabilities by capturing
-    exactly what the state looked like after a specific step was executed.
-
-    Attributes:
-        snapshot_id: Unique identifier for this record.
-        timestamp: When the snapshot was created.
-        state_data: A copy of the state data at this moment.
-        state_schema: The schema used to validate the state.
-        step_id: The ID of the step that produced this state.
-    """
+    """Represents a single state snapshot in time"""
     snapshot_id: str
     timestamp: datetime
     state_data: StateSchema
@@ -215,7 +115,6 @@ class Snapshot(Generic[StateSchema]):
     @classmethod
     def create(cls, state_data: StateSchema, state_schema: Type[StateSchema],
                step_id:str) -> 'Snapshot[StateSchema]':
-        """Create a new snapshot for the current step and state."""
         return cls(
             snapshot_id=str(uuid.uuid4()),
             timestamp=datetime.now(),
@@ -227,11 +126,7 @@ class Snapshot(Generic[StateSchema]):
 
 @dataclass
 class Run(Generic[StateSchema]):
-    """The execution history of a single state machine invocation.
-
-    A `Run` tracks the entire journey of a state through the workflow,
-    from start to termination, including all intermediate snapshots.
-    """
+    """Represents a single execution run of the state machine"""
     run_id: str
     start_timestamp: datetime
     snapshots: List[Snapshot[StateSchema]] = field(default_factory=list)
@@ -245,7 +140,6 @@ class Run(Generic[StateSchema]):
 
     @classmethod
     def create(cls) -> 'Run[StateSchema]':
-        """Initialize a new execution run."""
         return cls(
             run_id=str(uuid.uuid4()),
             start_timestamp=datetime.now()
@@ -253,47 +147,30 @@ class Run(Generic[StateSchema]):
 
     @property
     def metadata(self) -> Dict:
-        """Return execution statistics (IDs, timestamps, counts)."""
         return {
             "run_id": self.run_id,
             "start_timestamp": self.start_timestamp.strftime("%Y-%m-%d %H:%M:%S.%f"),
-            "end_timestamp": self.end_timestamp.strftime("%Y-%m-%d %H:%M:%S.%f") if self.end_timestamp else None,
+            "end_timestamp": self.end_timestamp.strftime("%Y-%m-%d %H:%M:%S.%f"),
             "snapshot_counts": len(self.snapshots)
         }
 
     def add_snapshot(self, snapshot: Snapshot[StateSchema]):
-        """Add a new snapshot to this run's history."""
+        """Add a new snapshot to this run"""
         self.snapshots.append(snapshot)
 
     def complete(self):
-        """Mark the run as finished and record the end timestamp."""
+        """Mark this run as complete"""
         self.end_timestamp = datetime.now()
 
     def get_final_state(self) -> Optional[StateSchema]:
-        """Retrieve the state data from the last snapshot in the run."""
+        """Get the final state of this run"""
         if not self.snapshots:
             return None
         return self.snapshots[-1].state_data
 
 
 class StateMachine(Generic[StateSchema]):
-    """The core engine that executes a graph of steps.
-
-    The `StateMachine` orchestrates the flow of data through steps and
-    transitions. It manages the execution loop, handles termination, and
-    provides a complete record (Run) of the execution.
-
-    Internal structure:
-    - `steps`: Registry of all available steps in the graph.
-    - `transitions`: Mappings of source steps to their outgoing edges.
-    """
-
     def __init__(self, state_schema: Type[StateSchema]):
-        """Initialize the machine with a specific state schema.
-
-        Args:
-            state_schema: A TypedDict class defining the shape of the state.
-        """
         self.state_schema = state_schema
         self.steps: Dict[str, Step[StateSchema]] = {}
         self.transitions: Dict[str, List[Transition[StateSchema]]] = {}
@@ -306,7 +183,7 @@ class StateMachine(Generic[StateSchema]):
         return self.__str__()
 
     def add_steps(self, steps: List[Step[StateSchema]]):
-        """Register a list of steps with the machine."""
+        """Add steps to the workflow"""
         for step in steps:
             self.steps[step.step_id] = step
 
@@ -316,13 +193,6 @@ class StateMachine(Generic[StateSchema]):
         targets: Union[Step[StateSchema], str, List[Union[Step[StateSchema], str]]],
         condition: Optional[Callable[[StateSchema], Union[str, List[str]]]] = None
     ):
-        """Define a transition from a source step to one or more target steps.
-
-        Args:
-            source: The originating step or its ID.
-            targets: The destination step(s) or their IDs.
-            condition: Optional logic to select the next step at runtime.
-        """
         src_id = source.step_id if isinstance(source, Step) else source
         target_list = targets if isinstance(targets, list) else [targets]
         target_ids = [t.step_id if isinstance(t, Step) else t for t in target_list]
@@ -331,23 +201,7 @@ class StateMachine(Generic[StateSchema]):
             self.transitions[src_id] = []
         self.transitions[src_id].append(transition)
 
-    def run(self, state: StateSchema, resource: Resource = None) -> Run[StateSchema]:
-        """Start execution of the machine with the provided initial state.
-
-        This is the main execution loop. It will:
-        1. Find the `EntryPoint`.
-        2. Execute the current step.
-        3. Record a snapshot.
-        4. Resolve the next step via transitions.
-        5. Repeat until a `Termination` step is reached.
-
-        Args:
-            state: The initial values for the state schema.
-            resource: Optional dependency injector for steps.
-
-        Returns:
-            A Run object containing the execution history and final state.
-        """
+    def run(self, state: StateSchema, resource: Resource = None):
         # Validate that state has at least one field from the schema
         expected_fields = get_type_hints(self.state_schema)
         state_fields = set(state.keys())
