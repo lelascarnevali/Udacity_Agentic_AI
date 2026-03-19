@@ -8,6 +8,10 @@ Este módulo explora a arquitetura e implementação de sistemas onde múltiplos
     *   Conceito de fluxo agentético vs. sequencial.
     *   A metáfora do restaurante para papéis e responsabilidades.
     *   Componentes fundamentais: Funções, Ferramentas e Memória.
+2.  **[Design de Arquitetura Multi-Agente](02-designing-multi-agent-architecture.md)**
+    *   Termos-chave e pensamento arquitetural.
+    *   Padrão Orquestrador.
+    *   Padrão Peer-to-Peer e Especialização de Papéis.
 
 ---
 &#91;← Voltar para a Raiz&#93;&#40;../../README.md&#41;

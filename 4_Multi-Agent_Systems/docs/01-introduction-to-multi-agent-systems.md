@@ -62,4 +62,4 @@ Ao final deste módulo, você será capaz de:
 - 📓 [Introdução ao Planejamento](../exercises/01-planning-intro.ipynb) — Primeiros passos na estruturação de tarefas multi-agente.
 
 ---
-&#91;← Tópico Anterior: Módulo 4 — Índice&#93;&#40;README.md&#41; | &#91;Próximo Tópico: Módulo 4 — Índice →&#93;&#40;README.md&#41;
+&#91;← Tópico Anterior: Módulo 4 — Índice&#93;&#40;README.md&#41; | &#91;Próximo Tópico: Design de Arquitetura Multi-Agente →&#93;&#40;02-designing-multi-agent-architecture.md&#41;
