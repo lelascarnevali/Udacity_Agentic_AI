@@ -30,7 +30,7 @@ def create_diagram(title, nodes, edges, node_labels=None, node_types=None, edge_
     pos["Arrernte Language Specialist"] = (2*horizontal_spacing, vertical_spacing)
     pos["Pitjantjatjara Language Specialist"] = (2*horizontal_spacing, -vertical_spacing)
     pos["Knowledge Base Lookup"] = (3*horizontal_spacing, 0)
-    pos["Translation Verification Agent"] = (0, vertical_spacing)
+    pos["Translation Verification Agent"] = (2.5*horizontal_spacing, 1.5*vertical_spacing)
     
     node_colors = []
     node_shapes = []
@@ -168,8 +168,6 @@ def extended_uluru_exercise():
         ("Pitjantjatjara Language Specialist", "Knowledge Base Lookup"),
         ("Knowledge Base Lookup", "Arrernte Language Specialist"),
         ("Knowledge Base Lookup", "Pitjantjatjara Language Specialist"),
-        ("Arrernte Language Specialist", "Language Identification"),
-        ("Pitjantjatjara Language Specialist", "Language Identification"),
         ("Language Identification", "Visitor Input"),
         ("Arrernte Language Specialist", "Translation Verification Agent"),
         ("Pitjantjatjara Language Specialist", "Translation Verification Agent"),
