@@ -30,6 +30,7 @@ def create_diagram(title, nodes, edges, node_labels=None, node_types=None, edge_
     pos["Arrernte Language Specialist"] = (2*horizontal_spacing, vertical_spacing)
     pos["Pitjantjatjara Language Specialist"] = (2*horizontal_spacing, -vertical_spacing)
     pos["Knowledge Base Lookup"] = (3*horizontal_spacing, 0)
+    pos["Translation Verification Agent"] = (0, vertical_spacing)
     
     node_colors = []
     node_shapes = []
@@ -156,7 +157,7 @@ def extended_uluru_exercise():
         "Arrernte Language Specialist",
         "Pitjantjatjara Language Specialist",
         "Knowledge Base Lookup",
-        # TODO: Add your new nodes here
+        "Translation Verification Agent",  
     ]
     
     edges = [
@@ -170,7 +171,11 @@ def extended_uluru_exercise():
         ("Arrernte Language Specialist", "Language Identification"),
         ("Pitjantjatjara Language Specialist", "Language Identification"),
         ("Language Identification", "Visitor Input"),
-        # TODO: Add your new edges here
+        ("Arrernte Language Specialist", "Translation Verification Agent"),
+        ("Pitjantjatjara Language Specialist", "Translation Verification Agent"),
+        ("Translation Verification Agent", "Knowledge Base Lookup"),
+        ("Knowledge Base Lookup", "Translation Verification Agent"),
+        ("Translation Verification Agent", "Language Identification"),
     ]
     
     node_types = {
@@ -179,12 +184,16 @@ def extended_uluru_exercise():
         "Arrernte Language Specialist": "agent",
         "Pitjantjatjara Language Specialist": "agent",
         "Knowledge Base Lookup": "tool",
-        # TODO: Add types for your new nodes here
+        "Translation Verification Agent": "agent",
     }
 
     edge_labels = {
         ("Language Identification", "Visitor Input"): "Formatted Response",
-        # TODO: Add new edge labels here
+        ("Arrernte Language Specialist", "Translation Verification Agent"): "Candidate Translation",
+        ("Pitjantjatjara Language Specialist", "Translation Verification Agent"): "Candidate Translation",
+        ("Translation Verification Agent", "Knowledge Base Lookup"): "Verification Query",
+        ("Knowledge Base Lookup", "Translation Verification Agent"): "Verification Data",
+        ("Translation Verification Agent", "Language Identification"): "Verified Translation",
     }
 
     create_diagram(
