@@ -51,11 +51,25 @@ def record_distribution(penguin_name: str, food: int, has_tool: bool) -> str:
     # print(f"TOOL EXEC [record_distribution]: For {penguin_name}, food {food}, tool {has_tool}.") # For debugging
     return f"Recorded: {penguin_name} got {food} food and {'a tool' if has_tool else 'no tool'}."
 
-# The tool is added by the student
-# --- EXAMPLE TOOL (Student can change) ---
+
 @tool
 def find_food(penguin_name: str, method: str) -> int:
-    pass
+    """
+    Simulate a penguin finding food using a specific method.
+    
+    Args:
+        penguin_name (str): The unique name or identifier of the penguin.
+        method (str): The method used to find food (e.g., "fishing", "foraging").
+    
+    Returns:
+        int: The amount of food found (0-7).
+    """
+    found_food = 0
+    if method.lower() == "fishing":
+        found_food = random.randint(2, 7)
+    elif method.lower() == "foraging":
+        found_food = random.randint(0, 3)
+    return found_food
 
 
 class ScientistAgent(ToolCallingAgent):
@@ -238,8 +252,22 @@ class PenguinAgent(ToolCallingAgent):
         #    (e.g., "I need food," or "I'd like a tool.").
         # 3. The LLM's final text after using a tool should be simple (e.g., "Okay, I tried fishing.")
         prompt = f"""
-        
-                """
+        You are Penguin {self.name}.
+        Your current state for this round is:
+        - Food: {self.food}
+        - Has Tool: {self.has_tool}
+
+        You have three possible actions:
+        1. Find food for yourself using the 'find_food' tool. If you choose this, 
+           you must specify the method ("fishing" or "foraging") and use the tool with your 
+           name as 'penguin_name'.
+           After using the tool, you should report your action in simple text 
+           (e.g., "I tried fishing to found some food.").
+        2. Request food from the scientist by writing a short text request.
+        3. Request a toy from the scientist by writing a short text request.
+
+        Make a smart decision based on your current state.
+        """
         # --- END STUDENT TASK ---
         
         final_llm_text_response = self.run(prompt) # LLM will populate self.memory.steps
