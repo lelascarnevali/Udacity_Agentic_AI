@@ -190,4 +190,4 @@ result = agent.run("Fetch data from 'sales_q4' and summarize it.")
 | **Adapter de LLM** | Chamadas diretas à API do provedor | `OpenAIServerModel` e outros adapters |
 
 ---
-&#91;← Tópico Anterior: Design de Arquitetura Multi-Agente&#93;&#40;02-designing-multi-agent-architecture.md&#41; | &#91;Próximo Tópico: Módulo 4 — Índice →&#93;&#40;README.md&#41;
+&#91;← Tópico Anterior: Design de Arquitetura Multi-Agente&#93;&#40;02-designing-multi-agent-architecture.md&#41; | &#91;Próximo Tópico: Orquestrando Atividades de Agentes →&#93;&#40;04-orchestrating-agent-activities.md&#41;

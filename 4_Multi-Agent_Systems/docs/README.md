@@ -18,6 +18,10 @@ Este módulo explora a arquitetura e implementação de sistemas onde múltiplos
     *   Tráfego em rede e fluxo estruturado em Orquestrador.
     *   Serialização e Deserialização.
     *   Framework Smolagents: `@tool`, `ToolCallingAgent` e ciclo de execução.
+4.  **[Orquestrando Atividades de Agentes](04-orchestrating-agent-activities.md)**
+    *   Papel do orquestrador como cérebro do workflow.
+    *   Execução sequencial, paralela e ramificação condicional.
+    *   Gerenciamento de estado, erros e composição de padrões.
 
 ---
 &#91;← Voltar para a Raiz&#93;&#40;../../README.md&#41;
