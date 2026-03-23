@@ -29,3 +29,6 @@ This repository standardizes Python environments via `uv` and a local `.venv` (P
 ## Next Actions
 - Consider adding a small note in skill usage to run `new_memory_entry` with an active `.venv`.
 - Periodically verify notebooks use the correct kernel (VS Code or Jupyter Lab).
+- If VS Code Debugger launches `/opt/homebrew/bin/python3` instead of `.venv/bin/python`, add or update `.vscode/launch.json` with an explicit `"python"` path to the workspace virtualenv.
+- If the editor's debug button still ignores `launch.json`, mark the configuration with `"purpose": ["debug-in-terminal"]` so the `Python Debugger: Debug Python File` command uses that launch config.
+- For `debugpy` crashes on Python 3.14 with `'_MainThread' object has no attribute '_handle'`, set `PYDEVD_USE_SYS_MONITORING=0` in the debug configuration as a workspace workaround until the debugger extension is updated.
