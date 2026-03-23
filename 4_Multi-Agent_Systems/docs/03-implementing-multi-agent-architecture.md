@@ -90,5 +90,104 @@ Não podemos passar um Objeto Python diretamente pela rede se os agentes habitam
 **A "Magia" do Framework vs. Necessidade de Debug:**
 A maioria dos frameworks modernos abstraem esse passo transacional: ferramentas que retornam *Pydantic models* são convertidas para JSON nos bastidores. No entanto, o engenheiro de IA deve compreender os conceitos intrínsecos de *descriptive object models* com *Type Hints* porque falhas subjacentes (ex: *Malformed JSON* ou *Deserialization Failed*) são bugs iminentes ao tentar integrar o retorno de ferramentas não tipadas, requerendo atenção especial à estrutura de dados base das mensagens inter-agentes.
 
+## 🤖 Smolagents: Um Framework Python para Sistemas Multi-Agente
+
+**Smolagents** é um framework Python projetado para construir sistemas multi-agente alimentados por LLMs. Ele combina raciocínio de linguagem com execução de ferramentas Python, permitindo criar agentes que usam ferramentas, mantêm estado e colaboram para resolver tarefas complexas.
+
+$$\text{Agente} = \text{LLM} + \text{Ferramentas Python} + \text{Estado}$$
+
+### Componentes Principais
+
+| Componente | Papel |
+| :--- | :--- |
+| `@tool` | Decorator que expõe funções Python como ferramentas acessíveis pelo agente |
+| `ToolCallingAgent` | Classe base para agentes com capacidade de identificar e invocar ferramentas |
+| `OpenAIServerModel` | Adapter que conecta o agente a um LLM via API compatível com OpenAI |
+
+### `ToolCallingAgent`: O Agente Principal
+
+`ToolCallingAgent` é a classe central do Smolagents. Ela representa um agente orientado a LLM capaz de:
+
+1. **Interpretar prompts** e entrada do usuário
+2. **Decidir quando chamar ferramentas** (funções Python decoradas com `@tool`)
+3. **Executar ferramentas** e integrar seus resultados ao raciocínio em curso
+
+O ciclo interno de um `ToolCallingAgent`:
+
+```mermaid
+flowchart TD
+    A[Prompt do Usuário] --> B[LLM: Interpretar]
+    B --> C{Ferramenta necessária?}
+    C -- Sim --> D[Identificar e Chamar a Tool]
+    D --> E[Executar Função Python]
+    E --> F[Resultado da Tool]
+    F --> B
+    C -- Não --> G[Resposta Final]
+```
+
+### Padrão de Implementação
+
+```python
+from smolagents import ToolCallingAgent, OpenAIServerModel, tool
+
+# 1. Inicializar o modelo de linguagem
+model = OpenAIServerModel(model_id="gpt-4o-mini", api_key="...")
+
+# 2. Definir ferramentas com @tool
+@tool
+def fetch_data(source: str) -> str:
+    """Retrieves data from the given source identifier.
+
+    Args:
+        source: The identifier of the data source to query.
+
+    Returns:
+        A string with the retrieved data or an error message.
+    """
+    try:
+        result = data_store.get(source)
+        return result if result else f"No data found for source: {source}"
+    except Exception as e:
+        return f"Error fetching data: {str(e)}"
+
+@tool
+def process_result(data: str, operation: str) -> str:
+    """Applies a named operation to the provided data.
+
+    Args:
+        data: The raw data string to process.
+        operation: The operation name (e.g., 'summarize', 'count').
+
+    Returns:
+        The processed result as a string.
+    """
+    return f"Processed [{operation}]: {data[:100]}..."
+
+# 3. Criar o agente especializado via herança
+class DataAgent(ToolCallingAgent):
+    def __init__(self):
+        super().__init__(
+            tools=[fetch_data, process_result],
+            model=model,
+            name="data_specialist"
+        )
+
+# 4. Usar o agente
+agent = DataAgent()
+result = agent.run("Fetch data from 'sales_q4' and summarize it.")
+```
+
+> **Regra de Ouro:** A docstring de cada `@tool` é o que o LLM lê para decidir *quando* e *como* invocar a ferramenta. Uma docstring pobre leva a chamadas erradas ou ausentes — trate-as como contratos de interface.
+
+### Smolagents vs. Implementação Manual
+
+| Aspecto | Implementação Manual | Smolagents |
+| :--- | :--- | :--- |
+| **Registro de Ferramentas** | Parsing manual do output do LLM | Decorator `@tool` + auto-discovery |
+| **Despacho de Ferramentas** | Lógica `if/elif` manual | Automático pelo framework |
+| **Multi-agente** | Orquestração manual de classes | Herança de `ToolCallingAgent` |
+| **Estado** | Variáveis globais ou contexto manual | Estado encapsulado no objeto agente |
+| **Adapter de LLM** | Chamadas diretas à API do provedor | `OpenAIServerModel` e outros adapters |
+
 ---
 &#91;← Tópico Anterior: Design de Arquitetura Multi-Agente&#93;&#40;02-designing-multi-agent-architecture.md&#41; | &#91;Próximo Tópico: Módulo 4 — Índice →&#93;&#40;README.md&#41;

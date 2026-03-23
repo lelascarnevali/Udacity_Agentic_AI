@@ -17,6 +17,7 @@ Este módulo explora a arquitetura e implementação de sistemas onde múltiplos
     *   Ferramentas, tipagem e tratamento de infraestrutura.
     *   Tráfego em rede e fluxo estruturado em Orquestrador.
     *   Serialização e Deserialização.
+    *   Framework Smolagents: `@tool`, `ToolCallingAgent` e ciclo de execução.
 
 ---
 &#91;← Voltar para a Raiz&#93;&#40;../../README.md&#41;
