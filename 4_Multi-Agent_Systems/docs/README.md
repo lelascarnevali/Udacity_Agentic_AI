@@ -22,6 +22,10 @@ Este módulo explora a arquitetura e implementação de sistemas onde múltiplos
     *   Papel do orquestrador como cérebro do workflow.
     *   Execução sequencial, paralela e ramificação condicional.
     *   Gerenciamento de estado, erros e composição de padrões.
+5.  **[Routing e Fluxo de Dados em Sistemas Agênticos](05-routing-and-data-flow-in-agentic-systems.md)**
+    *   Estratégias de roteamento por conteúdo, prioridade e balanceamento.
+    *   Diferença entre escolher o destino e transformar o payload.
+    *   Handoffs limpos entre agentes com contratos de dados explícitos.
 
 ---
 &#91;← Voltar para a Raiz&#93;&#40;../../README.md&#41;

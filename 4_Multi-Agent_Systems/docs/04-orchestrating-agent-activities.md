@@ -210,9 +210,9 @@ Depois, o orquestrador agregaria essas saídas antes da publicação.
 
 ## 🧪 Exercícios Práticos
 
-- 🐍 [Implementação de Arquitetura Multi-Agente](../exercises/2-multi-agent-architecture-implementation/exercises/2-multi-agent-architecture-implementation.py) — exercício principal de coordenação entre agentes, estado compartilhado e respostas do orquestrador.
-- 📓 [README do Exercício de Implementação](../exercises/2-multi-agent-architecture-implementation/exercises/README.md) — visão geral dos objetivos de implementação e conceitos praticados.
-- 🐍 [Demo de Implementação de Arquitetura Multi-Agente](../exercises/2-multi-agent-architecture-implementation/demo/2-multi-agent-architecture-implementation-demo.py) — exemplo guiado de interação entre pinguins e cientista com coordenação central.
+- 📓 [README do Exercício de Orquestração de Atividades](../exercises/03-orchestrating-agent-activities/exercises/README.md) — visão geral do cenário e dos objetivos de coordenação entre agentes especializados.
+- 🐍 [Demo do Exercício de Orquestração](../exercises/03-orchestrating-agent-activities/exercises/03-orchestrating-agent-activities-demo.py) — script da trilha de exercício com foco em dependências, sequenciamento e colaboração entre agentes.
+- 🐍 [Demo Guiada de Orquestração](../exercises/03-orchestrating-agent-activities/demo/03-orchestrating-agent-activities-demo.py) — exemplo complementar para observar o papel do coordenador em um fluxo multiagente.
 
 ---
-&#91;← Tópico Anterior: Implementação de Arquitetura Multi-Agente&#93;&#40;03-implementing-multi-agent-architecture.md&#41; | &#91;Próximo Tópico: Módulo 4 — Índice →&#93;&#40;README.md&#41;
+&#91;← Tópico Anterior: Implementação de Arquitetura Multi-Agente&#93;&#40;03-implementing-multi-agent-architecture.md&#41; | &#91;Próximo Tópico: Routing e Fluxo de Dados em Sistemas Agênticos →&#93;&#40;05-routing-and-data-flow-in-agentic-systems.md&#41;
