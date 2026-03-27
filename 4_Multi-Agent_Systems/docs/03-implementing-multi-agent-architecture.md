@@ -189,5 +189,57 @@ result = agent.run("Fetch data from 'sales_q4' and summarize it.")
 | **Estado** | Variáveis globais ou contexto manual | Estado encapsulado no objeto agente |
 | **Adapter de LLM** | Chamadas diretas à API do provedor | `OpenAIServerModel` e outros adapters |
 
+## 🧪 O que o Exercício de Implementação Ensina de Verdade
+
+O exercício dos pinguins e cientistas vai além de "criar duas classes". Ele mostra que implementar um sistema multiagente exige lidar com **três camadas ao mesmo tempo**:
+
+1.  **estado compartilhado do sistema**, como `DISTRIBUTION_HISTORY`;
+2.  **estado local do agente**, como `food_supply`, `tool_available`, `food` e `has_tool`;
+3.  **estado interno do framework**, especialmente `self.memory.steps`, onde ficam registrados tool calls, argumentos e observações.
+
+### Estado compartilhado vs. decisão do LLM
+
+No código do exercício, o cientista usa `check_history` e `record_distribution` para consultar e registrar histórico. Mas existe uma sutileza importante:
+
+*   o LLM registra sua **intenção** via tool call;
+*   a aplicação ainda precisa verificar restrições reais, como estoque de comida ou disponibilidade da ferramenta;
+*   só depois disso o efeito é aplicado ao estado do pinguim e do cientista.
+
+Essa distinção é central em sistemas multiagente reais:
+
+$$\text{Decisão do LLM} \neq \text{Efeito Final no Mundo}$$
+
+Você sempre precisa de uma camada que valide limites, normalize saídas e aplique a decisão com segurança.
+
+### Parsing de memória não é detalhe, é infraestrutura
+
+O exercício também mostra um padrão muito comum em frameworks agentic: depois de `run(prompt)`, o engenheiro percorre `self.memory.steps` para descobrir:
+
+*   se a tool correta foi chamada;
+*   quais argumentos o LLM realmente enviou;
+*   qual foi a observação retornada pela execução da tool;
+*   se a resposta final veio em texto puro ou encapsulada em `final_answer`.
+
+Isso aparece tanto no `ScientistAgent`, ao inspecionar `record_distribution`, quanto no `PenguinAgent`, ao interpretar `find_food` ou fazer fallback para pedidos em texto livre.
+
+### Padrão prático do exercício
+
+| Camada | Exemplo no exercício | Por que importa |
+| :--- | :--- | :--- |
+| **Tool estruturada** | `check_history`, `record_distribution`, `find_food` | Expõe ações e consultas que o LLM pode invocar com contrato claro |
+| **Memória do agente** | `self.memory.steps` | Permite auditar e interpretar o que o framework executou |
+| **Fallback textual** | pedido por comida/ferramenta sem tool call | Evita travar o sistema quando o LLM não segue o caminho ideal |
+| **Validação de restrição** | limitar comida a `0-5`, verificar estoque disponível | Protege o estado real contra decisões inválidas |
+
+### Regra prática
+
+> Em sistemas multiagente com tools, não basta confiar no texto final do LLM. Você precisa ler os eventos registrados pelo framework e separar intenção, observação e efeito aplicado.
+
+## 🧪 Exercícios Práticos
+
+- 🐍 [Exercício de Implementação de Arquitetura Multi-Agente](../exercises/02-multi-agent-architecture-implementation/exercises/2-multi-agent-architecture-implementation.py) — mostra agentes com estado local, tools tipadas, parsing de `memory.steps` e aplicação de restrições após a decisão do LLM.
+- 📓 [README do Exercício de Implementação](../exercises/02-multi-agent-architecture-implementation/exercises/README.md) — resume os objetivos de comunicação, coordenação e estado compartilhado entre agentes.
+- 🐍 [Demo de Implementação de Arquitetura Multi-Agente](../exercises/02-multi-agent-architecture-implementation/demo/2-multi-agent-architecture-implementation-demo.py) — versão guiada que ajuda a enxergar o fluxo entre intenção do modelo, tool call e atualização do estado do sistema.
+
 ---
 &#91;← Tópico Anterior: Design de Arquitetura Multi-Agente&#93;&#40;02-designing-multi-agent-architecture.md&#41; | &#91;Próximo Tópico: Orquestrando Atividades de Agentes →&#93;&#40;04-orchestrating-agent-activities.md&#41;

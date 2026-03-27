@@ -59,7 +59,9 @@ Ao final deste módulo, você será capaz de:
 
 ## 🧪 Exercícios Práticos
 
-- 📓 [Introdução ao Planejamento](../exercises/01-planning-intro.ipynb) — Primeiros passos na estruturação de tarefas multi-agente.
+- 🐍 [Exercício de Design de Arquitetura Multi-Agente](../exercises/01-multi-agent-architecture-design/exercises/1-multi-agent-architecture-design.py) — constrói um diagrama de arquitetura com nós, arestas, tipos de componente e fluxo de comunicação.
+- 📓 [README do Exercício de Design](../exercises/01-multi-agent-architecture-design/exercises/README.md) — visão geral dos objetivos de desenho arquitetural e dos padrões de comunicação praticados.
+- 🐍 [Demo de Design de Arquitetura Multi-Agente](../exercises/01-multi-agent-architecture-design/demo/1-multi-agent-architecture-design-demo.py) — exemplo guiado de modelagem de um sistema multiagente para o centro cultural de Uluru.
 
 ---
 &#91;← Tópico Anterior: Módulo 4 — Índice&#93;&#40;README.md&#41; | &#91;Próximo Tópico: Design de Arquitetura Multi-Agente →&#93;&#40;02-designing-multi-agent-architecture.md&#41;

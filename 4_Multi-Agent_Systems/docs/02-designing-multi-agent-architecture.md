@@ -47,9 +47,48 @@ Um agente pode receber informações ou terminar uma tarefa e, a partir daí, us
 
 Este modelo engendra uma grande **flexibilidade** e se demonstra excelente quando a exata cadeia de eventos para resolução do problema não é conhecida antecipadamente, mas sim construída sob demanda. Entretanto, é importante notar como os requisitos técnicos mudam de complexidade: gerir o fluxo solto de dados, se certificar que pequenos jobs não serão perdidos e assegurar a consistência de estado sem um mantenedor estrito de regras e sequência, torna-se uma barreira muito maior para o arquiteto do sistema (ainda mais quando o enxame de agentes comuta e cresce).
 
+## 💻 O que o Exercício de Design Mostra na Prática
+
+O exercício `1-multi-agent-architecture-design.py` transforma arquitetura em um **grafo explícito**. Em vez de deixar a planta só no discurso, ele força você a nomear:
+
+*   **nós** do sistema (`Visitor Input`, especialistas linguísticos, lookup de conhecimento);
+*   **tipos de nó** (`agent`, `tool`, `user`, `data`);
+*   **arestas** de comunicação;
+*   **rótulos das arestas**, que deixam claro o que está circulando entre componentes.
+
+Esse detalhe é importante porque arquitetura multiagente não é apenas "quem existe", mas também **quem fala com quem, em que direção e com qual payload**.
+
+### Tipos de componente que aparecem no exercício
+
+| Tipo | Papel no grafo | Exemplo no exercício |
+| :--- | :--- | :--- |
+| **`user`** | ponto de entrada/saída do sistema | `Visitor Input` |
+| **`agent`** | componente com decisão especializada | `Arrernte Language Specialist`, `Translation Verification Agent` |
+| **`tool`** | recurso ou serviço consultado por agentes | `Knowledge Base Lookup`, `Language Identification` |
+| **`data`** | componente focado em armazenamento ou transferência | categoria prevista pelo helper de diagrama |
+
+### O ganho arquitetural da extensão proposta
+
+No cenário do centro cultural de Uluru, a extensão adiciona um **Translation Verification Agent** entre o especialista linguístico e a resposta ao visitante. Isso ilustra um princípio central:
+
+> Uma boa arquitetura permite adicionar um novo agente ou ferramenta sem redesenhar todo o sistema.
+
+Na prática, o exercício mostra três perguntas que a documentação arquitetural deve responder antes da implementação:
+
+1.  Qual componente recebe a entrada?
+2.  Quais agentes ou tools são ativados depois?
+3.  Que tipo de informação trafega em cada aresta?
+
 ---
 
 > **Nota:** Independentemente da escolha ou variação inicial desse padrão global, você como arquiteto de agentes *sempre* precisará projetar formalmente os *Papéis*, *Protocolos de Comunicação* base, estratégias concisas de *Gerenciamento de Estado* final do sistema e a forma que o *Fluxo de Dados* vai transcorrer pelo seu sistema multi-agente, motivo claro no uso da ferramenta mental da lousa de "Diagramas de Caixas e Setas" antes de começar o desenvolvimento concreto.
+
+---
+## 🧪 Exercícios Práticos
+
+- 🐍 [Exercício de Design de Arquitetura Multi-Agente](../exercises/01-multi-agent-architecture-design/exercises/1-multi-agent-architecture-design.py) — gera um diagrama com `networkx` e `matplotlib`, tornando explícitos nós, arestas, tipos de componente e legendas.
+- 📓 [README do Exercício de Design](../exercises/01-multi-agent-architecture-design/exercises/README.md) — descreve os objetivos de especialização de papéis, padrões de comunicação e extensibilidade.
+- 🐍 [Demo de Design de Arquitetura Multi-Agente](../exercises/01-multi-agent-architecture-design/demo/1-multi-agent-architecture-design-demo.py) — exemplo guiado que mostra como transformar um caso de uso real em planta arquitetural.
 
 ---
 &#91;← Tópico Anterior: Introdução a Sistemas Multi-Agente&#93;&#40;01-introduction-to-multi-agent-systems.md&#41; | &#91;Próximo Tópico: Implementação de Arquitetura Multi-Agente →&#93;&#40;03-implementing-multi-agent-architecture.md&#41;

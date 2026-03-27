@@ -115,6 +115,50 @@ No **priority-based routing**, a mensagem carrega um nível de urgência e o sis
 
 > Um sistema real frequentemente combina os três. Por exemplo: primeiro checa prioridade, depois classifica por conteúdo, e por fim distribui a carga entre workers equivalentes.
 
+## 🛹 Routing no Exercício "Skate State"
+
+O exercício de orquestração do módulo mostra que routing nem sempre aparece com esse nome no código, mas ainda assim está lá.
+
+### Etapa 1: Diagnóstico da intenção
+
+O `CustomerSupportAgent` usa a tool `submit_request_diagnosis` para classificar o pedido em categorias como:
+
+*   compra de item;
+*   reserva de sessão;
+*   listagem de reservas;
+*   evento;
+*   manutenção;
+*   pedido genérico ou desconhecido.
+
+Isso é **content-based routing**, porque a rota nasce da interpretação do conteúdo da mensagem.
+
+### Etapa 2: Despacho da ação correta
+
+Depois do diagnóstico, o `Orchestrator` consulta a categoria e escolhe a tool apropriada:
+
+*   `get_item_inventory_level` ou `sell_item_from_inventory` para loja;
+*   `check_booking_availability` e depois `add_new_booking` para reservas;
+*   `list_upcoming_events` ou `create_new_event` para eventos;
+*   `log_maintenance_request` ou `view_maintenance_log` para manutenção.
+
+Aqui vemos duas ideias importantes:
+
+1.  **routing pode levar para uma única tool ou para uma pequena cadeia sequencial**;
+2.  **o diagnóstico vira dado de controle**, não apenas texto explicativo.
+
+### Etapa 3: Data flow entre diagnóstico, request e tool
+
+O exercício também mostra data flow management na prática:
+
+*   o pedido original do usuário é preservado como contexto;
+*   o diagnóstico é passado ao orquestrador como um rótulo estruturante;
+*   o orquestrador extrai argumentos úteis do texto original;
+*   se faltarem dados para a tool, ele não segue adiante e retorna `final_answer`.
+
+Em outras palavras:
+
+$$\text{Mensagem do Usuário} \rightarrow \text{Diagnóstico} \rightarrow \text{Tool Arguments} \rightarrow \text{Resposta Final}$$
+
 ## 📦 Data Flow Management: O Payload Também Precisa de Orquestração
 
 Routing resolve o **destino**. Data flow resolve o **handoff**.
@@ -269,6 +313,7 @@ prepared_payload = router.transform_for_agent(incoming, destination)
 ## 🧪 Exercícios Práticos
 
 - 📓 [README do Exercício de Orquestração de Atividades](../exercises/03-orchestrating-agent-activities/exercises/README.md) — cenário de coordenação entre agentes onde o roteamento de tarefas e a passagem de contexto já aparecem de forma implícita.
+- 🐍 [Exercício de Orquestração de Atividades](../exercises/03-orchestrating-agent-activities/exercises/03-orchestrating-agent-activities-demo.py) — exemplo em que um agente faz diagnóstico de intenção e o orquestrador despacha tools diferentes com fallback para pedidos incompletos.
 - 🐍 [Demo de Orquestração de Atividades](../exercises/03-orchestrating-agent-activities/demo/03-orchestrating-agent-activities-demo.py) — demonstração prática de delegação entre agentes, útil para observar como decisões de fluxo afetam a execução.
 - 📓 [README da Demo de Orquestração](../exercises/03-orchestrating-agent-activities/demo/README.md) — visão rápida do cenário “Skate State”, que ajuda a mapear eventos, destinos e responsabilidades.
 

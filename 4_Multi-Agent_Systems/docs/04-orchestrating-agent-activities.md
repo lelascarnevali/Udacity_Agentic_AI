@@ -146,6 +146,37 @@ Uma regra útil:
 
 > O orquestrador não deve assumir sucesso. Ele deve assumir que qualquer agente, tool ou chamada externa pode falhar e ainda assim preservar o estado do sistema.
 
+## 🛹 Caso Prático: O Fluxo do Exercício "Skate State"
+
+O exercício `03-orchestrating-agent-activities-demo.py` mostra uma forma mais concreta de orquestração do que o exemplo genérico de conteúdo. O fluxo real é este:
+
+1.  um **CustomerSupportAgent** lê o pedido do usuário e classifica sua intenção;
+2.  o **Orchestrator** recebe esse diagnóstico;
+3.  com base na categoria, ele escolhe a tool adequada;
+4.  em alguns casos, ele executa **mais de uma tool em sequência**;
+5.  no fim, ele extrai a resposta final da própria memória do framework.
+
+### O que isso revela sobre orquestração real
+
+| Componente | Papel no exercício | Padrão demonstrado |
+| :--- | :--- | :--- |
+| **`CustomerSupportAgent`** | categoriza a intenção do pedido | pré-triagem antes da execução |
+| **`Orchestrator`** | recebe a categoria e decide o próximo passo | coordenação central |
+| **Tools de booking, inventory, events e maintenance** | executam o trabalho operacional | delegação especializada |
+| **`final_answer` / observações** | consolidam a resposta ao usuário | síntese e encerramento do fluxo |
+
+### Sequência e ramificação no mesmo sistema
+
+O caso de booking mostra bem como padrões se combinam:
+
+*   para verificar agenda, o orquestrador usa `check_booking_availability`;
+*   se fizer sentido, ele chama `add_new_booking` em seguida;
+*   se faltar informação ou o pedido não se encaixar em uma tool, ele usa fallback com `final_answer`.
+
+Esse é um bom exemplo de sistema híbrido:
+
+$$\text{Orquestração Real} = \text{Diagnóstico} + \text{Despacho} + \text{Execução de Tool} + \text{Fallback}$$
+
 ## 💻 Exemplo de Orquestrador
 
 O exemplo abaixo combina sequência e um ponto de extensão para paralelismo:
