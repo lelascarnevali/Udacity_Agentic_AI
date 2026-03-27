@@ -13,6 +13,7 @@ When performing tasks, check this index to identify relevant memory files based 
 | Python / Jupyter | [`virtual-environment-agent-memory.md`](virtual-environment-agent-memory.md) | venv setup quirks, uv usage, kernel matching |
 | Terminal / Git | [`terminal-troubleshooting.md`](terminal-troubleshooting.md) | Heredoc trap, known terminal errors and fixes |
 | `agent-memory` skill | [`agent-memory-skill-usage-agent-memory.md`](agent-memory-skill-usage-agent-memory.md) | Naming conventions, template path, commit policy for memory files |
+| Multi-agent exercises | [`multi-agent-exercise-naming-agent-memory.md`](multi-agent-exercise-naming-agent-memory.md) | Exercise and demo files should match the parent folder name across the 05 state-management, 06 state-coordination, and 07 RAG modules |
 | Workflow patterns | [`workflow-memory-check-agent-memory.md`](workflow-memory-check-agent-memory.md) | *Why* Step 0 was created + skill-to-memory quick-reference table |
 | GPT-5 / Models | [`gpt5-model-usage-agent-memory.md`](gpt5-model-usage-agent-memory.md) | API differences (Responses vs Chat Completions), reasoning params, fallback strategy |
 
