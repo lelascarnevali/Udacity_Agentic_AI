@@ -105,7 +105,15 @@ def analyze_request_urgency(request: str) -> str:
     Returns:
         str: "urgent" if the request contains urgency indicators, "normal" otherwise.
     """
-    pass
+    urgency_keywords = [
+        "urgent", "emergency", "immediately", "asap", "right away", "right now",
+        "紧急", "急需", "立即", "马上", "立刻", "赶快", "尽快", "迫切", "急迫"
+    ]
+
+    if any(kw in request.lower() for kw in urgency_keywords):
+        return "urgent"
+    else:
+        return "normal"
 
 
 @tool
