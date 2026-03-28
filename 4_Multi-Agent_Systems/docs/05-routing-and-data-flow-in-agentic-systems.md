@@ -318,4 +318,4 @@ prepared_payload = router.transform_for_agent(incoming, destination)
 - 📓 [README da Demo de Orquestração](../exercises/03-orchestrating-agent-activities/demo/README.md) — visão rápida do cenário “Skate State”, que ajuda a mapear eventos, destinos e responsabilidades.
 
 ---
-&#91;← Tópico Anterior: Orquestrando Atividades de Agentes&#93;&#40;04-orchestrating-agent-activities.md&#41; | &#91;Próximo Tópico: Módulo 4 — Índice →&#93;&#40;README.md&#41;
+&#91;← Tópico Anterior: Orquestrando Atividades de Agentes&#93;&#40;04-orchestrating-agent-activities.md&#41; | &#91;Próximo Tópico: Gerenciamento de Estado em Sistemas Multi-Agente →&#93;&#40;06-state-management-in-multi-agent-systems.md&#41;

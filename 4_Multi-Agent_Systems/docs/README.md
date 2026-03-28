@@ -26,6 +26,10 @@ Este módulo explora a arquitetura e implementação de sistemas onde múltiplos
     *   Estratégias de roteamento por conteúdo, prioridade e balanceamento.
     *   Diferença entre escolher o destino e transformar o payload.
     *   Handoffs limpos entre agentes com contratos de dados explícitos.
+6.  **[Gerenciamento de Estado em Sistemas Multi-Agente](06-state-management-in-multi-agent-systems.md)**
+    *   Diferença entre estado efêmero e estado persistente.
+    *   Passagem seletiva de contexto entre agentes especializados.
+    *   Recovery points, compensação e tratamento de falhas em workflows stateful.
 
 ---
 &#91;← Voltar para a Raiz&#93;&#40;../../README.md&#41;
