@@ -27,6 +27,8 @@ Em termos práticos:
 | :--- | :--- | :--- |
 | **State** | Informação mantida sobre o status de uma interação ou workflow. | Dá continuidade ao processo. |
 | **State Management** | Técnicas para rastrear, atualizar e persistir estado. | Mantém consistência e memória. |
+| **Information about current interactions and context for agents** | Informações sobre as interações atuais e o contexto disponível para os agentes. | Alimenta decisões de curto prazo durante a execução. |
+| **Conversation-level State** | Estado ligado à conversa atual, à sessão em andamento e ao histórico imediato. | Mantém coerência dentro da interação presente. |
 | **Ephemeral State** | Estado temporário, válido só durante a sessão atual. | Sustenta contexto imediato. |
 | **Persistent State** | Estado salvo de forma durável em arquivo, banco ou storage. | Permite retomada entre sessões. |
 | **State Transition** | Mudança de um estado para outro após uma ação. | Representa progresso real do workflow. |
