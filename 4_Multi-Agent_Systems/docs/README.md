@@ -30,6 +30,10 @@ Este módulo explora a arquitetura e implementação de sistemas onde múltiplos
     *   Diferença entre estado efêmero e estado persistente.
     *   Passagem seletiva de contexto entre agentes especializados.
     *   Recovery points, compensação e tratamento de falhas em workflows stateful.
+7.  **[Orquestração Multi-Agente e Coordenação de Estado](07-multi-agent-orchestration-and-state-coordination.md)**
+    *   Sincronização de estado entre múltiplos agentes e recursos concorrentes.
+    *   Detecção de conflitos com base em versão, regra de negócio e revalidação.
+    *   Estratégias de resolução como retry, rollback, prioridade e escalada humana.
 
 ---
 &#91;← Voltar para a Raiz&#93;&#40;../../README.md&#41;

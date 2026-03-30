@@ -425,4 +425,4 @@ class StateCoordinator:
 *   🐍 [Exercício de State Coordination](../exercises/06-multi-agent-state-coordination-and-orchestration/exercise/06-multi-agent-state-coordination-and-orchestration.py) — prática para modelar transições mais ricas de estado, customização e priorização.
 
 ---
-&#91;← Tópico Anterior: Routing e Fluxo de Dados em Sistemas Agênticos&#93;&#40;05-routing-and-data-flow-in-agentic-systems.md&#41; | &#91;Próximo Tópico: Módulo 4 — Índice →&#93;&#40;README.md&#41;
+&#91;← Tópico Anterior: Routing e Fluxo de Dados em Sistemas Agênticos&#93;&#40;05-routing-and-data-flow-in-agentic-systems.md&#41; | &#91;Próximo Tópico: Orquestração Multi-Agente e Coordenação de Estado →&#93;&#40;07-multi-agent-orchestration-and-state-coordination.md&#41;
