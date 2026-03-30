@@ -125,8 +125,35 @@ def purchase_fruit(user_id: str, fruit_name: str, quantity: int) -> str:
     Returns:
         A confirmation message with purchase details.
     """
-    # TODO: Implement purchase recording with timestamps and pricing
-    pass
+    if fruit_name not in fruit_data:
+        return "Fruit not found in database. Cannot complete purchase."
+
+    if user_id not in user_states:
+        user_states[user_id] = {"preferences": [], "purchases": []}
+
+    if "preferences" not in user_states[user_id]:
+        user_states[user_id]["preferences"] = []
+
+    if "purchases" not in user_states[user_id]:
+        user_states[user_id]["purchases"] = []
+
+    price_per_unit = fruit_data[fruit_name]["price"]
+    total_cost = price_per_unit * quantity
+    purchase_record = {
+        "timestamp": datetime.now().isoformat(),
+        "fruit": fruit_name,
+        "quantity": quantity,
+        "price_per_unit": price_per_unit,
+        "total_cost": total_cost,
+    }
+
+    user_states[user_id]["purchases"].append(purchase_record)
+
+    return (
+        f"Purchased {quantity} {fruit_name}(s) at ${price_per_unit:.2f} each "
+        f"for a total of ${total_cost:.2f}."
+    )
+    
 
 @tool
 def get_purchase_history(user_id: str) -> List[Dict]:
@@ -157,8 +184,39 @@ def get_purchase_summary(user_id: str) -> Dict:
         A dictionary containing the total spent, number of transactions, 
         and most purchased fruit.
     """
-    # TODO: Implement purchase summary calculation
-    pass
+    if user_id not in user_states:
+        user_states[user_id] = {"preferences": [], "purchases": []}
+    elif "purchases" not in user_states[user_id]:
+        user_states[user_id]["purchases"] = []
+
+    purchases = user_states[user_id]["purchases"]
+
+    if not purchases:
+        return {
+            "total_spent": 0.0,
+            "transaction_count": 0,
+            "most_purchased_fruit": None,
+            "most_purchased_quantity": 0,
+            "total_fruits_purchased": 0,
+        }
+
+    total_spent = sum(purchase["total_cost"] for purchase in purchases)
+    transaction_count = len(purchases)
+    fruit_counter = Counter()
+
+    for purchase in purchases:
+        fruit_counter[purchase["fruit"]] += purchase["quantity"]
+
+    most_purchased_fruit, most_purchased_quantity = fruit_counter.most_common(1)[0]
+    total_fruits_purchased = sum(purchase["quantity"] for purchase in purchases)
+
+    return {
+        "total_spent": total_spent,
+        "transaction_count": transaction_count,
+        "most_purchased_fruit": most_purchased_fruit,
+        "most_purchased_quantity": most_purchased_quantity,
+        "total_fruits_purchased": total_fruits_purchased,
+    }
 
 # Specialized agents with real responsibilities
 
@@ -189,7 +247,7 @@ class PurchaseAgent(ToolCallingAgent):
     
     def __init__(self, model: OpenAIServerModel):
         super().__init__(
-            tools=[purchase_fruit, get_purchase_history],  # TODO: Add get_purchase_summary
+            tools=[purchase_fruit, get_purchase_history, get_purchase_summary],
             model=model,
             name="purchase_agent",
             description="Handles fruit purchases, purchase history, and purchase summaries.",
@@ -255,7 +313,8 @@ class Orchestrator(ToolCallingAgent):
                 return self.purchases.run(f"Record purchase for user {user_id}: {quantity} {fruit_name}")
             elif action == "history":
                 return self.purchases.run(f"Get purchase history for user {user_id}")
-            # TODO: Add support for action == "summary"
+            elif action == "summary":
+                return self.purchases.run(f"Get purchase summary for user {user_id}")
             return "Invalid purchase action"
 
         super().__init__(
@@ -352,16 +411,25 @@ def run_demo():
     
     # Final state check - display purchase history and summary
     purchase_history = get_purchase_history(user_id)
-    # TODO: Uncomment when get_purchase_summary is implemented
-    # purchase_summary = get_purchase_summary(user_id)
+    purchase_summary = get_purchase_summary(user_id)
     
     print("\n" + "="*70)
     print("Final Purchase History:")
     for i, purchase in enumerate(purchase_history):
-        print(f"  {i+1}. [Purchase details will show when purchase_fruit is implemented]")
-    
+        print(
+            "  "
+            f"{i+1}. {purchase['quantity']} {purchase['fruit']}(s) "
+            f"at ${purchase['price_per_unit']:.2f} each "
+            f"on {purchase['timestamp']} "
+            f"(total: ${purchase['total_cost']:.2f})"
+        )
+
     print("\nPurchase Summary:")
-    print("  [Summary will show when get_purchase_summary is implemented]")
+    print(f"  Total spent: ${purchase_summary['total_spent']:.2f}")
+    print(f"  Transactions: {purchase_summary['transaction_count']}")
+    print(f"  Most purchased fruit: {purchase_summary['most_purchased_fruit']}")
+    print(f"  Quantity of top fruit: {purchase_summary['most_purchased_quantity']}")
+    print(f"  Total fruits purchased: {purchase_summary['total_fruits_purchased']}")
     
     print("\n" + "="*70)
     print("Demo complete! This demonstrates state persistence and transaction tracking across sessions.")
