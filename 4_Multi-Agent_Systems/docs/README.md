@@ -34,6 +34,10 @@ Este módulo explora a arquitetura e implementação de sistemas onde múltiplos
     *   Sincronização de estado entre múltiplos agentes e recursos concorrentes.
     *   Detecção de conflitos com base em versão, regra de negócio e revalidação.
     *   Estratégias de resolução como retry, rollback, prioridade e escalada humana.
+8.  **[Multi-Agent Retrieval Augmented Generation](08-multi-agent-retrieval-augmented-generation.md)**
+    *   Evolução de RAG simples para recuperação distribuída entre agentes especialistas.
+    *   Papéis de retrieval coordinator, specialized retrieval agents, synthesis agent e gap analysis.
+    *   Relação direta com o demo e o exercício de claims processing com fraud detection.
 
 ---
 &#91;← Voltar para a Raiz&#93;&#40;../../README.md&#41;

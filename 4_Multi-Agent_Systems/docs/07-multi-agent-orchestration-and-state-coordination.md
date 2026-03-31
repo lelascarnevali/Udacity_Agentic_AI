@@ -361,4 +361,4 @@ def reserve_flour(broker: StateBroker, amount: float, max_retries: int = 2) -> d
 *   🐍 [Exercício de State Coordination](../exercises/06-multi-agent-state-coordination-and-orchestration/exercise/06-multi-agent-state-coordination-and-orchestration.py) — prática ideal para explorar conflitos de inventário, priorização, catálogo dinâmico e consistência de fila.
 
 ---
-&#91;← Tópico Anterior: Gerenciamento de Estado em Sistemas Multi-Agente&#93;&#40;06-state-management-in-multi-agent-systems.md&#41; | &#91;Próximo Tópico: Módulo 4 — Índice →&#93;&#40;README.md&#41;
+&#91;← Tópico Anterior: Gerenciamento de Estado em Sistemas Multi-Agente&#93;&#40;06-state-management-in-multi-agent-systems.md&#41; | &#91;Próximo Tópico: Multi-Agent Retrieval Augmented Generation →&#93;&#40;08-multi-agent-retrieval-augmented-generation.md&#41;
