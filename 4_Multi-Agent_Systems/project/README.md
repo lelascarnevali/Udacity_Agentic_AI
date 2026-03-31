@@ -66,7 +66,7 @@ After a successful run you should have:
 
 The final system uses four agents in the module 4 `smolagents` style.
 
-| Agent | Responsibility | Main Tools |
+| Agent | Responsibility | Registered / Available Tools |
 | --- | --- | --- |
 | `PaperCompanyOrchestrator` | Parses the request, routes work, and returns the customer-facing response | coordination tools that call `self.<agent>.run(...)` |
 | `InventoryAgent` | Checks stock, calculates shortfalls, validates supplier timing, and decides if each item is feasible | `get_all_inventory`, `get_stock_level`, `get_supplier_delivery_date`, `generate_financial_report` |
@@ -83,7 +83,7 @@ The final system uses four agents in the module 4 `smolagents` style.
 | `get_all_inventory()` | Exposed through the inventory snapshot tool |
 | `get_stock_level()` | Used for per-item feasibility checks |
 | `get_supplier_delivery_date()` | Used to decide whether replenishment can satisfy the deadline |
-| `get_cash_balance()` | Used before replenishment and for reporting |
+| `get_cash_balance()` | Used for cash-feasibility checks before replenishment decisions and exposed as a fulfillment helper |
 | `generate_financial_report()` | Used for operational reporting and the starter harness snapshots |
 | `search_quote_history()` | Used by the quote agent to add a contextual discount signal |
 

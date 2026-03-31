@@ -1,43 +1,33 @@
-flowchart LR
-    %% Beaver's Choice Paper Company multi-agent architecture
-    Customer[Customer Request]
+flowchart TB
+    Customer["Customer request"] --> O["PaperCompanyOrchestrator<br/>Parses the request and returns the customer-safe response"]
 
-    subgraph Agents["Beaver's Choice Paper Company"]
+    subgraph Agents["Worker agents"]
         direction LR
-        O[Orchestrator Agent]
-        I[Inventory Agent]
-        Q[Quoting Agent]
-        R[Fulfillment Agent]
+        I["InventoryAgent<br/>Checks stock, shortfalls, deadlines, and replenishment feasibility"]
+        Q["QuoteAgent<br/>Builds discounted quotes from accepted items"]
+        F["FulfillmentAgent<br/>Writes transactions and summarizes the final outcome"]
     end
 
-    subgraph Tools["Tools"]
-        IT[Inventory tools\nget_all_inventory()\nget_stock_level()]
-        QT[Quote tools\nsearch_quote_history()]
-        OT[Order tools\ncreate_transaction()\nget_supplier_delivery_date()]
-        RT[Reporting tools\ngenerate_financial_report()\nget_cash_balance()]
-    end
+    O -->|"1. assess_inventory(parsed_request_json)"| I
+    O -->|"2. build_quote(request_bundle_json)"| Q
+    O -->|"3. finalize_order(order_bundle_json)"| F
 
-    subgraph DB["SQLite: munder_difflin.db"]
-        T1[(transactions)]
-        T2[(inventory)]
-        T3[(quotes)]
-        T4[(quote_requests)]
-    end
-
-    Customer --> O
-    O --> I
-    O --> Q
-    O --> R
+    IT["InventoryAgent tools<br/>inventory_snapshot_tool(): get_all_inventory() for current stock snapshot<br/>stock_level_tool(): get_stock_level() for per-item stock lookup<br/>supplier_delivery_tool(): get_supplier_delivery_date() for replenishment ETA<br/>financial_report_tool(): generate_financial_report() for operational snapshot"]
+    QT["QuoteAgent tools<br/>quote_history_tool(): search_quote_history() for historical pricing context"]
+    FT["FulfillmentAgent tools<br/>cash_balance_tool(): get_cash_balance() for available cash lookup<br/>record_stock_order_tool(): create_transaction() for stock_orders logging<br/>record_sale_tool(): create_transaction() for sales logging<br/>financial_report_tool(): generate_financial_report() for post-order reporting"]
 
     I --> IT
     Q --> QT
-    R --> OT
-    O --> RT
+    F --> FT
 
-    IT --> T1
-    IT --> T2
-    QT --> T3
-    QT --> T4
-    OT --> T1
-    RT --> T1
-    RT --> T2
+    O -. "inventory_query shortcut" .-> IT
+    I -. "direct cash feasibility lookup" .-> FT
+
+    Supplier["Supplier lead-time logic<br/>Used by supplier_delivery_tool()"]
+    IT --> Supplier
+
+    DB["SQLite: munder_difflin.db<br/>transactions | inventory | quotes | quote_requests"]
+
+    IT -->|"reads transactions + inventory"| DB
+    QT -->|"reads quotes + quote_requests"| DB
+    FT -->|"reads and writes transactions + inventory"| DB
