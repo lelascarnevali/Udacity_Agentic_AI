@@ -16,6 +16,7 @@ When performing tasks, check this index to identify relevant memory files based 
 | Multi-agent exercises | [`multi-agent-exercise-naming-agent-memory.md`](multi-agent-exercise-naming-agent-memory.md) | Exercise and demo files should match the parent folder name across the 05 state-management, 06 state-coordination, and 07 RAG modules |
 | Workflow patterns | [`workflow-memory-check-agent-memory.md`](workflow-memory-check-agent-memory.md) | *Why* Step 0 was created + skill-to-memory quick-reference table |
 | GPT-5 / Models | [`gpt5-model-usage-agent-memory.md`](gpt5-model-usage-agent-memory.md) | API differences (Responses vs Chat Completions), reasoning params, fallback strategy |
+| Architecture code alignment | [`architecture-code-alignment-agent-memory.md`](architecture-code-alignment-agent-memory.md) | Mermaid diagrams should mirror the actual tool registration in `project_starter.py` |
 
 ## Where procedures live (not here)
 

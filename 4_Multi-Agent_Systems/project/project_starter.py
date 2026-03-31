@@ -1177,7 +1177,13 @@ class InventoryAgent(BeaverChoiceAgent):
 
     def __init__(self, model_to_use) -> None:
         super().__init__(
-            tools=[inventory_snapshot_tool, stock_level_tool, supplier_delivery_tool, financial_report_tool],
+            tools=[
+                inventory_snapshot_tool,
+                stock_level_tool,
+                supplier_delivery_tool,
+                cash_balance_tool,
+                financial_report_tool,
+            ],
             model_to_use=model_to_use,
             name="inventory_agent",
             description="Checks current stock, evaluates replenishment feasibility, and explains delivery timing.",
@@ -1197,7 +1203,7 @@ class InventoryAgent(BeaverChoiceAgent):
         accepted_items = []
         rejected_items = []
         unknown_items = []
-        cash_available = float(cash_balance_tool(parsed_request.request_date))
+        cash_available = float(self.tools["cash_balance_tool"](parsed_request.request_date))
         reserved_cash = 0.0
         delivery_dates = []
 

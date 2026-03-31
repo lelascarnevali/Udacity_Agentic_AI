@@ -69,7 +69,7 @@ The final system uses four agents in the module 4 `smolagents` style.
 | Agent | Responsibility | Registered / Available Tools |
 | --- | --- | --- |
 | `PaperCompanyOrchestrator` | Parses the request, routes work, and returns the customer-facing response | coordination tools that call `self.<agent>.run(...)` |
-| `InventoryAgent` | Checks stock, calculates shortfalls, validates supplier timing, and decides if each item is feasible | `get_all_inventory`, `get_stock_level`, `get_supplier_delivery_date`, `generate_financial_report` |
+| `InventoryAgent` | Checks stock, calculates shortfalls, validates supplier timing, and decides if each item is feasible | `get_all_inventory`, `get_stock_level`, `get_supplier_delivery_date`, `get_cash_balance`, `generate_financial_report` |
 | `QuoteAgent` | Prices accepted items, applies bulk discount tiers, and uses quote history to add contextual pricing | `search_quote_history` |
 | `FulfillmentAgent` | Records `stock_orders` and `sales` and summarizes the final outcome | `create_transaction`, `get_cash_balance`, `generate_financial_report` |
 
@@ -83,8 +83,8 @@ The final system uses four agents in the module 4 `smolagents` style.
 | `get_all_inventory()` | Exposed through the inventory snapshot tool |
 | `get_stock_level()` | Used for per-item feasibility checks |
 | `get_supplier_delivery_date()` | Used to decide whether replenishment can satisfy the deadline |
-| `get_cash_balance()` | Used for cash-feasibility checks before replenishment decisions and exposed as a fulfillment helper |
-| `generate_financial_report()` | Used for operational reporting and the starter harness snapshots |
+| `get_cash_balance()` | Used as a shared financial helper for inventory feasibility checks and fulfillment confirmation |
+| `generate_financial_report()` | Used as a shared reporting helper plus the starter harness snapshots |
 | `search_quote_history()` | Used by the quote agent to add a contextual discount signal |
 
 ## Request Handling Workflow

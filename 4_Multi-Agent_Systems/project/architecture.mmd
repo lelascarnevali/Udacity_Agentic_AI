@@ -12,7 +12,7 @@ flowchart TB
     O -->|"2. build_quote(request_bundle_json)"| Q
     O -->|"3. finalize_order(order_bundle_json)"| F
 
-    IT["InventoryAgent tools<br/>inventory_snapshot_tool(): get_all_inventory() for current stock snapshot<br/>stock_level_tool(): get_stock_level() for per-item stock lookup<br/>supplier_delivery_tool(): get_supplier_delivery_date() for replenishment ETA<br/>financial_report_tool(): generate_financial_report() for operational snapshot"]
+    IT["InventoryAgent tools<br/>inventory_snapshot_tool(): get_all_inventory() for current stock snapshot<br/>stock_level_tool(): get_stock_level() for per-item stock lookup<br/>supplier_delivery_tool(): get_supplier_delivery_date() for replenishment ETA<br/>cash_balance_tool(): get_cash_balance() for replenishment cash feasibility<br/>financial_report_tool(): generate_financial_report() for operational snapshot"]
     QT["QuoteAgent tools<br/>quote_history_tool(): search_quote_history() for historical pricing context"]
     FT["FulfillmentAgent tools<br/>cash_balance_tool(): get_cash_balance() for available cash lookup<br/>record_stock_order_tool(): create_transaction() for stock_orders logging<br/>record_sale_tool(): create_transaction() for sales logging<br/>financial_report_tool(): generate_financial_report() for post-order reporting"]
 
@@ -21,8 +21,6 @@ flowchart TB
     F --> FT
 
     O -. "inventory_query shortcut" .-> IT
-    I -. "direct cash feasibility lookup" .-> FT
-
     Supplier["Supplier lead-time logic<br/>Used by supplier_delivery_tool()"]
     IT --> Supplier
 
