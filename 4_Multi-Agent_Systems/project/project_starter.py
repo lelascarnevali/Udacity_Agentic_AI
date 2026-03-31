@@ -664,7 +664,9 @@ class DeterministicModel:
         )
 
 
+PROJECT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
+db_engine = create_engine(f"sqlite:///{PROJECT_DIR / 'munder_difflin.db'}")
 dotenv.load_dotenv(dotenv_path=PROJECT_ROOT / ".env")
 openai_api_key = os.getenv("UDACITY_OPENAI_API_KEY")
 
@@ -682,7 +684,12 @@ _starter_init_database = init_database
 
 
 def init_database(db_engine_override: Engine = db_engine, seed: int = 137) -> Engine:
-    return _starter_init_database(db_engine_override, seed=seed)
+    original_cwd = Path.cwd()
+    try:
+        os.chdir(PROJECT_DIR)
+        return _starter_init_database(db_engine_override, seed=seed)
+    finally:
+        os.chdir(original_cwd)
 
 CATALOG_BY_NAME = {item["item_name"]: item for item in paper_supplies}
 MONTH_NAME_DATE_PATTERN = re.compile(
@@ -1597,7 +1604,7 @@ def run_test_scenarios():
     print("Initializing Database...")
     init_database()
     try:
-        quote_requests_sample = pd.read_csv("quote_requests_sample.csv")
+        quote_requests_sample = pd.read_csv(PROJECT_DIR / "quote_requests_sample.csv")
         quote_requests_sample["request_date"] = pd.to_datetime(
             quote_requests_sample["request_date"], format="%m/%d/%y", errors="coerce"
         )
@@ -1674,7 +1681,7 @@ def run_test_scenarios():
     print(f"Final Inventory: ${final_report['inventory_value']:.2f}")
 
     # Save results
-    pd.DataFrame(results).to_csv("test_results.csv", index=False)
+    pd.DataFrame(results).to_csv(PROJECT_DIR / "test_results.csv", index=False)
     return results
 
 
