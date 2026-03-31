@@ -1,0 +1,235 @@
+Initializing Database...
+
+=== Request 1 ===
+Context: office manager organizing ceremony
+Request Date: 2025-04-01
+Cash Balance: $45059.70
+Inventory Value: $4940.30
+Response: Beaver's Choice Paper Company confirmed your request. Quoted total: $61. We built the quote from the live catalog subtotal of $65.00. A 5% bulk discount was applied for the requested volume, and a 1% contextual adjustment was added from similar quote history. Confirmed items: 200 units of Glossy paper available on 2025-04-01; 100 units of Cardstock available on 2025-04-01; 100 units of Colored paper available on 2025-04-01. The latest committed delivery date is 2025-04-01, which stays within your requested deadline of 2025-04-15.
+Updated Cash: $45120.70
+Updated Inventory: $4875.30
+
+=== Request 2 ===
+Context: hotel manager organizing parade
+Request Date: 2025-04-03
+Cash Balance: $45120.70
+Inventory Value: $4875.30
+FUNC (get_supplier_delivery_date): Calculating for qty 500 from date string '2025-04-03'
+FUNC (get_supplier_delivery_date): Calculating for qty 300 from date string '2025-04-03'
+Response: Beaver's Choice Paper Company confirmed your request. Quoted total: $130. We built the quote from the live catalog subtotal of $140.00. A 5% bulk discount was applied for the requested volume, and a 2% contextual adjustment was added from similar quote history. Confirmed items: 500 units of Poster paper available on 2025-04-07; 300 units of Party streamers available on 2025-04-07. The latest committed delivery date is 2025-04-07, which stays within your requested deadline of 2025-04-15. Mapped the poster request to poster paper stock. We could not include balloons because No reliable catalog match was found for this request.
+Updated Cash: $45110.70
+Updated Inventory: $4875.30
+
+=== Request 3 ===
+Context: school board resouorce manager organizing conference
+Request Date: 2025-04-04
+Cash Balance: $45110.70
+Inventory Value: $4875.30
+FUNC (get_supplier_delivery_date): Calculating for qty 9728 from date string '2025-04-04'
+FUNC (get_supplier_delivery_date): Calculating for qty 250000 from date string '2025-04-04'
+Response: Beaver's Choice Paper Company confirmed your request. Quoted total: $9030. We built the quote from the live catalog subtotal of $10500.00. A 12% bulk discount was applied for the requested volume, and a 2% contextual adjustment was added from similar quote history. Confirmed items: 10000 units of A4 paper available on 2025-04-11; 250000 units of Standard copy paper available on 2025-04-11. The latest committed delivery date is 2025-04-11, which stays within your requested deadline of 2025-04-15. Mapped the printer paper request to standard copy paper. We could not include A3 paper because No reliable catalog match was found for this request.
+Updated Cash: $43654.30
+Updated Inventory: $4861.70
+
+=== Request 4 ===
+Context: non-profit director organizing reception
+Request Date: 2025-04-05
+Cash Balance: $43654.30
+Inventory Value: $4861.70
+FUNC (get_supplier_delivery_date): Calculating for qty 5 from date string '2025-04-05'
+FUNC (get_supplier_delivery_date): Calculating for qty 250 from date string '2025-04-05'
+Response: Beaver's Choice Paper Company confirmed your request. Quoted total: $79. We built the quote from the live catalog subtotal of $85.00. A 5% bulk discount was applied for the requested volume, and a 2% contextual adjustment was added from similar quote history. Confirmed items: 500 units of Cardstock available on 2025-04-05; 250 units of Standard copy paper available on 2025-04-09. The latest committed delivery date is 2025-04-09, which stays within your requested deadline of 2025-04-15. This order may arrive in staged deliveries because some items require supplier replenishment. Mapped the printer paper request to standard copy paper.
+Updated Cash: $43722.55
+Updated Inventory: $4787.45
+
+=== Request 5 ===
+Context: school teacher organizing party
+Request Date: 2025-04-05
+Cash Balance: $43722.55
+Inventory Value: $4787.45
+FUNC (get_supplier_delivery_date): Calculating for qty 300 from date string '2025-04-05'
+FUNC (get_supplier_delivery_date): Calculating for qty 200 from date string '2025-04-05'
+Response: Beaver's Choice Paper Company confirmed your request. Quoted total: $126. We built the quote from the live catalog subtotal of $135.00. A 5% bulk discount was applied for the requested volume, and a 2% contextual adjustment was added from similar quote history. Confirmed items: 500 units of Colored paper available on 2025-04-05; 300 units of Cardstock available on 2025-04-09; 200 units of Decorative adhesive tape (washi tape) available on 2025-04-09. The latest committed delivery date is 2025-04-09, which stays within your requested deadline of 2025-04-15. This order may arrive in staged deliveries because some items require supplier replenishment. Mapped the decorative tape request to the stocked washi tape item.
+Updated Cash: $43763.55
+Updated Inventory: $4737.45
+
+=== Request 6 ===
+Context: school teacher organizing assembly
+Request Date: 2025-04-06
+Cash Balance: $43763.55
+Inventory Value: $4737.45
+FUNC (get_supplier_delivery_date): Calculating for qty 500 from date string '2025-04-06'
+FUNC (get_supplier_delivery_date): Calculating for qty 300 from date string '2025-04-06'
+FUNC (get_supplier_delivery_date): Calculating for qty 200 from date string '2025-04-06'
+Response: Beaver's Choice Paper Company confirmed your request. Quoted total: $72. We built the quote from the live catalog subtotal of $77.00. A 5% bulk discount was applied for the requested volume, and a 2% contextual adjustment was added from similar quote history. Confirmed items: 500 units of Construction paper available on 2025-04-10; 300 units of Standard copy paper available on 2025-04-10; 200 units of Cardstock available on 2025-04-10. The latest committed delivery date is 2025-04-10, which stays within your requested deadline of 2025-04-15. Mapped the printer paper request to standard copy paper.
+Updated Cash: $43758.55
+Updated Inventory: $4737.45
+
+=== Request 7 ===
+Context: business owner organizing exhibition
+Request Date: 2025-04-07
+Cash Balance: $43758.55
+Inventory Value: $4737.45
+FUNC (get_supplier_delivery_date): Calculating for qty 113 from date string '2025-04-07'
+FUNC (get_supplier_delivery_date): Calculating for qty 1000 from date string '2025-04-07'
+FUNC (get_supplier_delivery_date): Calculating for qty 200 from date string '2025-04-07'
+Response: Beaver's Choice Paper Company confirmed your request. Quoted total: $549. We built the quote from the live catalog subtotal of $610.00. A 8% bulk discount was applied for the requested volume, and a 2% contextual adjustment was added from similar quote history. Confirmed items: 500 units of Glossy paper available on 2025-04-11; 1000 units of Matte paper available on 2025-04-11; 300 units of Large poster paper (24x36 inches) available on 2025-04-07; 200 units of Cardstock available on 2025-04-11. The latest committed delivery date is 2025-04-11, which stays within your requested deadline of 2025-04-15. This order may arrive in staged deliveries because some items require supplier replenishment. Used the closest stocked matte paper option because the exact size variant is not in the catalog. Mapped the poster board request to the stocked 24x36 poster stock.
+Updated Cash: $44074.95
+Updated Inventory: $4360.05
+
+=== Request 8 ===
+Context: school board resouorce manager organizing ceremony
+Request Date: 2025-04-07
+Cash Balance: $44074.95
+Inventory Value: $4360.05
+FUNC (get_supplier_delivery_date): Calculating for qty 500 from date string '2025-04-07'
+FUNC (get_supplier_delivery_date): Calculating for qty 1000 from date string '2025-04-07'
+FUNC (get_supplier_delivery_date): Calculating for qty 1812 from date string '2025-04-07'
+FUNC (get_supplier_delivery_date): Calculating for qty 3000 from date string '2025-04-07'
+Response: Beaver's Choice Paper Company confirmed your request. Quoted total: $626. We built the quote from the live catalog subtotal of $720.00. A 12% bulk discount was applied for the requested volume, and a 1% contextual adjustment was added from similar quote history. Confirmed items: 500 units of Glossy paper available on 2025-04-11; 1000 units of Matte paper available on 2025-04-11; 2000 units of Colored paper available on 2025-04-14; 3000 units of Recycled paper available on 2025-04-14. The latest committed delivery date is 2025-04-14, which stays within your requested deadline of 2025-04-15. This order may arrive in staged deliveries because some items require supplier replenishment. Used the closest stocked colored paper option because the exact size variant is not in the catalog.
+Updated Cash: $43999.75
+Updated Inventory: $4341.25
+
+=== Request 9 ===
+Context: city hall clerk organizing reception
+Request Date: 2025-04-07
+Cash Balance: $43999.75
+Inventory Value: $4341.25
+FUNC (get_supplier_delivery_date): Calculating for qty 200 from date string '2025-04-07'
+FUNC (get_supplier_delivery_date): Calculating for qty 100 from date string '2025-04-07'
+FUNC (get_supplier_delivery_date): Calculating for qty 50 from date string '2025-04-07'
+Response: Beaver's Choice Paper Company confirmed your request. Quoted total: $21. We built the quote from the live catalog subtotal of $22.50. A 5% bulk discount was applied for the requested volume, and a 1% contextual adjustment was added from similar quote history. Confirmed items: 100 units of Glossy paper available on 2025-04-08; 50 units of Envelopes available on 2025-04-08. The latest committed delivery date is 2025-04-08, which stays within your requested deadline of 2025-04-10. Used the closest stocked glossy paper option because the exact size variant is not in the catalog. We could not include A4 white printer paper because Supplier timing reaches 2025-04-11, after the requested deadline of 2025-04-10.
+Updated Cash: $43998.25
+Updated Inventory: $4341.25
+
+=== Request 13 ===
+Context: school principal organizing gathering
+Request Date: 2025-04-08
+Cash Balance: $43998.25
+Inventory Value: $4341.25
+FUNC (get_supplier_delivery_date): Calculating for qty 500 from date string '2025-04-08'
+FUNC (get_supplier_delivery_date): Calculating for qty 200 from date string '2025-04-08'
+Response: Beaver's Choice Paper Company could not confirm this order. Supplier timing reaches 2025-04-12, after the requested deadline of 2025-04-10. Supplier timing reaches 2025-04-12, after the requested deadline of 2025-04-10.
+Updated Cash: $43998.25
+Updated Inventory: $4341.25
+
+=== Request 12 ===
+Context: city hall clerk organizing party
+Request Date: 2025-04-08
+Cash Balance: $43998.25
+Inventory Value: $4341.25
+FUNC (get_supplier_delivery_date): Calculating for qty 200 from date string '2025-04-08'
+FUNC (get_supplier_delivery_date): Calculating for qty 500 from date string '2025-04-08'
+FUNC (get_supplier_delivery_date): Calculating for qty 100 from date string '2025-04-08'
+Response: Beaver's Choice Paper Company confirmed your request. Quoted total: $48. We built the quote from the live catalog subtotal of $52.00. A 5% bulk discount was applied for the requested volume, and a 2% contextual adjustment was added from similar quote history. Confirmed items: 200 units of Cardstock available on 2025-04-12; 500 units of Standard copy paper available on 2025-04-12; 100 units of Paper napkins available on 2025-04-09. The latest committed delivery date is 2025-04-12, which stays within your requested deadline of 2025-04-15. This order may arrive in staged deliveries because some items require supplier replenishment. Mapped the printer paper request to standard copy paper.
+Updated Cash: $43994.25
+Updated Inventory: $4341.25
+
+=== Request 10 ===
+Context: business owner organizing show
+Request Date: 2025-04-08
+Cash Balance: $43994.25
+Inventory Value: $4341.25
+FUNC (get_supplier_delivery_date): Calculating for qty 500 from date string '2025-04-08'
+FUNC (get_supplier_delivery_date): Calculating for qty 300 from date string '2025-04-08'
+Response: Beaver's Choice Paper Company confirmed your request. Quoted total: $135. We built the quote from the live catalog subtotal of $145.00. A 5% bulk discount was applied for the requested volume, and a 2% contextual adjustment was added from similar quote history. Confirmed items: 500 units of Glossy paper available on 2025-04-12; 300 units of Cardstock available on 2025-04-12. The latest committed delivery date is 2025-04-12, which stays within your requested deadline of 2025-04-15.
+Updated Cash: $43984.25
+Updated Inventory: $4341.25
+
+=== Request 11 ===
+Context: event manager organizing exhibition
+Request Date: 2025-04-08
+Cash Balance: $43984.25
+Inventory Value: $4341.25
+FUNC (get_supplier_delivery_date): Calculating for qty 500 from date string '2025-04-08'
+FUNC (get_supplier_delivery_date): Calculating for qty 300 from date string '2025-04-08'
+Response: Beaver's Choice Paper Company confirmed your request. Quoted total: $143. We built the quote from the live catalog subtotal of $154.00. A 5% bulk discount was applied for the requested volume, and a 2% contextual adjustment was added from similar quote history. Confirmed items: 500 units of Glossy paper available on 2025-04-12; 300 units of Matte paper available on 2025-04-12. The latest committed delivery date is 2025-04-12, which stays within your requested deadline of 2025-04-15. Used the closest stocked glossy paper option because the exact size variant is not in the catalog.
+Updated Cash: $43973.25
+Updated Inventory: $4341.25
+
+=== Request 14 ===
+Context: city hall clerk organizing performance
+Request Date: 2025-04-09
+Cash Balance: $43973.25
+Inventory Value: $4341.25
+FUNC (get_supplier_delivery_date): Calculating for qty 5000 from date string '2025-04-09'
+FUNC (get_supplier_delivery_date): Calculating for qty 2000 from date string '2025-04-09'
+FUNC (get_supplier_delivery_date): Calculating for qty 500 from date string '2025-04-09'
+Response: Beaver's Choice Paper Company confirmed your request. Quoted total: $70. We built the quote from the live catalog subtotal of $75.00. A 5% bulk discount was applied for the requested volume, and a 2% contextual adjustment was added from similar quote history. Confirmed items: 500 units of Cardstock available on 2025-04-13. The latest committed delivery date is 2025-04-13, which stays within your requested deadline of 2025-04-15. We could not include A4 paper because Supplier timing reaches 2025-04-16, after the requested deadline of 2025-04-15. We could not include poster paper in various colors because Supplier timing reaches 2025-04-16, after the requested deadline of 2025-04-15.
+Updated Cash: $43968.25
+Updated Inventory: $4341.25
+
+=== Request 15 ===
+Context: event manager organizing demonstration
+Request Date: 2025-04-12
+Cash Balance: $43968.25
+Inventory Value: $4341.25
+FUNC (get_supplier_delivery_date): Calculating for qty 10000 from date string '2025-04-12'
+FUNC (get_supplier_delivery_date): Calculating for qty 5000 from date string '2025-04-12'
+Response: Beaver's Choice Paper Company could not confirm this order. Supplier timing reaches 2025-04-19, after the requested deadline of 2025-04-15. Supplier timing reaches 2025-04-19, after the requested deadline of 2025-04-15. No reliable catalog match was found for this request.
+Updated Cash: $43968.25
+Updated Inventory: $4341.25
+
+=== Request 16 ===
+Context: school teacher organizing assembly
+Request Date: 2025-04-13
+Cash Balance: $43968.25
+Inventory Value: $4341.25
+FUNC (get_supplier_delivery_date): Calculating for qty 500 from date string '2025-04-13'
+FUNC (get_supplier_delivery_date): Calculating for qty 200 from date string '2025-04-13'
+Response: Beaver's Choice Paper Company confirmed your request. Quoted total: $93. We built the quote from the live catalog subtotal of $100.00. A 5% bulk discount was applied for the requested volume, and a 2% contextual adjustment was added from similar quote history. Confirmed items: 100 units of Large poster paper (24x36 inches) available on 2025-04-13. The latest committed delivery date is 2025-04-13, which stays within your requested deadline of 2025-04-15. Mapped the poster board request to the stocked 24x36 poster stock. We could not include A4 printer paper because Supplier timing reaches 2025-04-17, after the requested deadline of 2025-04-15. We could not include colorful construction paper because Supplier timing reaches 2025-04-17, after the requested deadline of 2025-04-15.
+Updated Cash: $44061.25
+Updated Inventory: $4241.25
+
+=== Request 17 ===
+Context: restaurant manager organizing reception
+Request Date: 2025-04-14
+Cash Balance: $44061.25
+Inventory Value: $4241.25
+FUNC (get_supplier_delivery_date): Calculating for qty 1000 from date string '2025-04-14'
+FUNC (get_supplier_delivery_date): Calculating for qty 500 from date string '2025-04-14'
+FUNC (get_supplier_delivery_date): Calculating for qty 2000 from date string '2025-04-14'
+FUNC (get_supplier_delivery_date): Calculating for qty 1000 from date string '2025-04-14'
+Response: Beaver's Choice Paper Company confirmed your request. Quoted total: $47. We built the quote from the live catalog subtotal of $50.00. A 5% bulk discount was applied for the requested volume, and a 1% contextual adjustment was added from similar quote history. Confirmed items: 500 units of Paper plates available on 2025-04-14. The latest committed delivery date is 2025-04-14, which stays within your requested deadline of 2025-04-15. We could not include A4 white printer paper because Supplier timing reaches 2025-04-18, after the requested deadline of 2025-04-15. We could not include A3 colored paper (assorted colors) because Supplier timing reaches 2025-04-18, after the requested deadline of 2025-04-15. We could not include table napkins (white) because Supplier timing reaches 2025-04-21, after the requested deadline of 2025-04-15. We could not include paper cups (biodegradable) because Supplier timing reaches 2025-04-18, after the requested deadline of 2025-04-15.
+Updated Cash: $44108.25
+Updated Inventory: $4191.25
+
+=== Request 18 ===
+Context: office manager organizing ceremony
+Request Date: 2025-04-14
+Cash Balance: $44108.25
+Inventory Value: $4191.25
+FUNC (get_supplier_delivery_date): Calculating for qty 500 from date string '2025-04-14'
+FUNC (get_supplier_delivery_date): Calculating for qty 1000 from date string '2025-04-14'
+FUNC (get_supplier_delivery_date): Calculating for qty 200 from date string '2025-04-14'
+Response: Beaver's Choice Paper Company could not confirm this order. Supplier timing reaches 2025-04-18, after the requested deadline of 2025-04-15. Supplier timing reaches 2025-04-18, after the requested deadline of 2025-04-15. Supplier timing reaches 2025-04-18, after the requested deadline of 2025-04-15.
+Updated Cash: $44108.25
+Updated Inventory: $4191.25
+
+=== Request 19 ===
+Context: city hall clerk organizing exhibition
+Request Date: 2025-04-15
+Cash Balance: $44108.25
+Inventory Value: $4191.25
+FUNC (get_supplier_delivery_date): Calculating for qty 2000 from date string '2025-04-15'
+FUNC (get_supplier_delivery_date): Calculating for qty 1500 from date string '2025-04-15'
+FUNC (get_supplier_delivery_date): Calculating for qty 1000 from date string '2025-04-15'
+Response: Beaver's Choice Paper Company confirmed your request. Quoted total: $140. We built the quote from the live catalog subtotal of $150.00. A 5% bulk discount was applied for the requested volume, and a 2% contextual adjustment was added from similar quote history. Confirmed items: 1000 units of Cardstock available on 2025-04-19. The latest committed delivery date is 2025-04-19, which stays within your requested deadline of 2025-04-20. We could not include A4 glossy paper because Supplier timing reaches 2025-04-22, after the requested deadline of 2025-04-20. We could not include A3 matte paper because Supplier timing reaches 2025-04-22, after the requested deadline of 2025-04-20.
+Updated Cash: $44098.25
+Updated Inventory: $4191.25
+
+=== Request 20 ===
+Context: restaurant manager organizing concert
+Request Date: 2025-04-17
+Cash Balance: $44098.25
+Inventory Value: $4191.25
+FUNC (get_supplier_delivery_date): Calculating for qty 5000 from date string '2025-04-17'
+FUNC (get_supplier_delivery_date): Calculating for qty 2000 from date string '2025-04-17'
+Response: Beaver's Choice Paper Company confirmed your request. Quoted total: $1075. We built the quote from the live catalog subtotal of $1250.00. A 12% bulk discount was applied for the requested volume, and a 2% contextual adjustment was added from similar quote history. Confirmed items: 5000 units of Flyers available on 2025-04-24; 2000 units of Poster paper available on 2025-04-24. The latest committed delivery date is 2025-04-24, which stays within your requested deadline of 2025-05-15. Mapped the poster request to poster paper stock. We could not include tickets because No reliable catalog match was found for this request.
+Updated Cash: $43923.25
+Updated Inventory: $4191.25
+
+===== FINAL FINANCIAL REPORT =====
+Final Cash: $43923.25
+Final Inventory: $4191.25
+TOTAL_RESULTS=20

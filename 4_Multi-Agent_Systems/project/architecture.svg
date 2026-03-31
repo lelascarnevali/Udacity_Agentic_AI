@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="980" viewBox="0 0 1600 980" role="img" aria-labelledby="title desc">
+  <title id="title">Beaver's Choice Paper Company Multi-Agent Architecture</title>
+  <desc id="desc">An orchestrator agent routes requests to inventory, quoting, and ordering agents. Each agent uses tools backed by a shared SQLite database.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f7f5ef; }
+      .title { font: 700 30px Arial, Helvetica, sans-serif; fill: #1f2933; }
+      .subtitle { font: 400 15px Arial, Helvetica, sans-serif; fill: #52616b; }
+      .group { fill: #ffffff; stroke: #9aa5b1; stroke-width: 2; rx: 18; ry: 18; }
+      .agent { fill: #eef6ff; stroke: #2f5bea; stroke-width: 2.5; rx: 16; ry: 16; }
+      .tool { fill: #fff7e8; stroke: #d97706; stroke-width: 2; rx: 14; ry: 14; }
+      .db { fill: #e9f7ef; stroke: #15803d; stroke-width: 2.5; rx: 18; ry: 18; }
+      .label { font: 700 18px Arial, Helvetica, sans-serif; fill: #102a43; }
+      .small { font: 400 14px Arial, Helvetica, sans-serif; fill: #243b53; }
+      .tiny { font: 400 12px Arial, Helvetica, sans-serif; fill: #334e68; }
+      .line { stroke: #475569; stroke-width: 2.5; fill: none; }
+      .dashed { stroke-dasharray: 8 6; }
+    </style>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1600" height="980"/>
+  <text class="title" x="800" y="52" text-anchor="middle">Beaver's Choice Paper Company Multi-Agent Architecture</text>
+  <text class="subtitle" x="800" y="80" text-anchor="middle">One orchestrator, three specialist agents, shared tools, and a single SQLite source of truth</text>
+
+  <rect class="group" x="50" y="120" width="1500" height="380"/>
+  <text class="label" x="90" y="150">Agent Layer</text>
+
+  <rect class="tool" x="625" y="110" width="350" height="44"/>
+  <text class="small" x="800" y="138" text-anchor="middle">Customer Request</text>
+
+  <rect class="agent" x="600" y="165" width="400" height="80"/>
+  <text class="label" x="800" y="196" text-anchor="middle">Orchestrator Agent</text>
+  <text class="small" x="800" y="220" text-anchor="middle">Routes requests and composes the final response</text>
+
+  <rect class="agent" x="160" y="305" width="300" height="90"/>
+  <text class="label" x="310" y="338" text-anchor="middle">Inventory Agent</text>
+  <text class="small" x="310" y="362" text-anchor="middle">Checks stock and replenishment needs</text>
+
+  <rect class="agent" x="650" y="305" width="300" height="90"/>
+  <text class="label" x="800" y="338" text-anchor="middle">Quoting Agent</text>
+  <text class="small" x="800" y="362" text-anchor="middle">Builds quote using history and request context</text>
+
+  <rect class="agent" x="1140" y="305" width="300" height="90"/>
+  <text class="label" x="1290" y="338" text-anchor="middle">Fulfillment Agent</text>
+  <text class="small" x="1290" y="362" text-anchor="middle">Writes transactions and delivery dates</text>
+
+  <path class="line" marker-end="url(#arrow)" d="M800 154 L800 165"/>
+  <path class="line" marker-end="url(#arrow)" d="M800 245 L800 300"/>
+  <path class="line" marker-end="url(#arrow)" d="M760 245 C650 270, 470 280, 310 305"/>
+  <path class="line" marker-end="url(#arrow)" d="M800 245 C800 270, 800 280, 800 305"/>
+  <path class="line" marker-end="url(#arrow)" d="M840 245 C950 270, 1130 280, 1290 305"/>
+
+  <rect class="group" x="50" y="540" width="1500" height="250"/>
+  <text class="label" x="90" y="570">Tools Layer</text>
+
+  <rect class="tool" x="125" y="610" width="300" height="130"/>
+  <text class="label" x="275" y="645" text-anchor="middle">Inventory Tools</text>
+  <text class="small" x="275" y="672" text-anchor="middle">get_all_inventory()</text>
+  <text class="small" x="275" y="695" text-anchor="middle">get_stock_level()</text>
+
+  <rect class="tool" x="465" y="610" width="300" height="130"/>
+  <text class="label" x="615" y="645" text-anchor="middle">Quote Tools</text>
+  <text class="small" x="615" y="672" text-anchor="middle">search_quote_history()</text>
+
+  <rect class="tool" x="805" y="610" width="300" height="130"/>
+  <text class="label" x="955" y="645" text-anchor="middle">Order Tools</text>
+  <text class="small" x="955" y="672" text-anchor="middle">create_transaction()</text>
+  <text class="small" x="955" y="695" text-anchor="middle">get_supplier_delivery_date()</text>
+
+  <rect class="tool" x="1145" y="610" width="300" height="130"/>
+  <text class="label" x="1295" y="645" text-anchor="middle">Reporting Tools</text>
+  <text class="small" x="1295" y="672" text-anchor="middle">generate_financial_report()</text>
+  <text class="small" x="1295" y="695" text-anchor="middle">get_cash_balance()</text>
+
+  <path class="line" marker-end="url(#arrow)" d="M310 395 L310 610"/>
+  <path class="line" marker-end="url(#arrow)" d="M800 395 L615 610"/>
+  <path class="line" marker-end="url(#arrow)" d="M1290 395 L955 610"/>
+  <path class="line" marker-end="url(#arrow)" d="M800 245 L1295 610"/>
+
+  <rect class="db" x="450" y="830" width="700" height="95"/>
+  <text class="label" x="800" y="865" text-anchor="middle">SQLite Database: munder_difflin.db</text>
+  <text class="small" x="800" y="890" text-anchor="middle">transactions | inventory | quotes | quote_requests</text>
+
+  <path class="line dashed" marker-end="url(#arrow)" d="M275 740 L275 825"/>
+  <path class="line dashed" marker-end="url(#arrow)" d="M615 740 L615 825"/>
+  <path class="line dashed" marker-end="url(#arrow)" d="M955 740 L955 825"/>
+  <path class="line dashed" marker-end="url(#arrow)" d="M1295 740 L1295 825"/>
+
+  <text class="tiny" x="800" y="950" text-anchor="middle">The orchestrator routes work, the specialists call tools, and SQLite persists the shared state.</text>
+</svg>

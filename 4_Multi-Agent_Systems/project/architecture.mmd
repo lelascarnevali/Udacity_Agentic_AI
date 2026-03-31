@@ -1,0 +1,43 @@
+flowchart LR
+    %% Beaver's Choice Paper Company multi-agent architecture
+    Customer[Customer Request]
+
+    subgraph Agents["Beaver's Choice Paper Company"]
+        direction LR
+        O[Orchestrator Agent]
+        I[Inventory Agent]
+        Q[Quoting Agent]
+        R[Fulfillment Agent]
+    end
+
+    subgraph Tools["Tools"]
+        IT[Inventory tools\nget_all_inventory()\nget_stock_level()]
+        QT[Quote tools\nsearch_quote_history()]
+        OT[Order tools\ncreate_transaction()\nget_supplier_delivery_date()]
+        RT[Reporting tools\ngenerate_financial_report()\nget_cash_balance()]
+    end
+
+    subgraph DB["SQLite: munder_difflin.db"]
+        T1[(transactions)]
+        T2[(inventory)]
+        T3[(quotes)]
+        T4[(quote_requests)]
+    end
+
+    Customer --> O
+    O --> I
+    O --> Q
+    O --> R
+
+    I --> IT
+    Q --> QT
+    R --> OT
+    O --> RT
+
+    IT --> T1
+    IT --> T2
+    QT --> T3
+    QT --> T4
+    OT --> T1
+    RT --> T1
+    RT --> T2
