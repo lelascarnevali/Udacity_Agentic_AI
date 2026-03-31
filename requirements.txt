@@ -100,6 +100,7 @@ requests==2.32.4
 rfc3339-validator==0.1.4
 rfc3986-validator==0.1.1
 rpds-py==0.26.0
+scikit-learn==1.6.0
 Send2Trash==1.8.3
 setuptools==80.9.0
 six==1.17.0
