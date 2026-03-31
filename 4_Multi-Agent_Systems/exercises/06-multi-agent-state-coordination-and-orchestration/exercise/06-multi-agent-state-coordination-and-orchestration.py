@@ -96,7 +96,12 @@ factory_state = FactoryState()
 def check_pasta_recipe(pasta_shape: str) -> Dict[str, float]:
     """
     Check what ingredients are needed for a specific pasta shape.
-    Returns a dictionary of ingredients and amounts needed per kg of pasta.
+    
+    Args:
+        pasta_shape: The pasta shape to look up in the standard or custom recipe catalog.
+        
+    Returns:
+        A dictionary of ingredients and amounts needed per kg of pasta.
     """
     if pasta_shape in factory_state.pasta_recipes:
         return factory_state.pasta_recipes[pasta_shape]
@@ -153,7 +158,12 @@ def update_inventory(ingredient: str, amount: float) -> Dict[str, Any]:
 def check_production_capacity(days_ahead: int = 7) -> Dict[str, Any]:
     """
     Check the current production capacity and queue for the next X days.
-    Returns information about queue size and estimated completion times.
+    
+    Args:
+        days_ahead: Number of days ahead to inspect when estimating production capacity.
+        
+    Returns:
+        Information about queue size and estimated completion times.
     """
     queue_size = len(factory_state.production_queue)
     
@@ -200,14 +210,72 @@ def add_to_production_queue(
     Returns:
         Status of the queuing operation with estimated delivery date
     """
-    # TODO: Implement this function
-    # 1. Verify that pasta_shape is valid using check_pasta_recipe
-    # 2. Calculate required ingredients and check inventory availability
-    # 3. Create PastaOrder object and add to factory_state.production_queue
-    # 4. Calculate estimated delivery date based on priority and production capacity
-    # 5. Update inventory by subtracting required ingredients
-    # 6. Return success status with delivery date
-    pass
+    recipe = check_pasta_recipe(pasta_shape)
+    if not recipe:
+        return {
+            "success": False,
+            "message": f"Unknown pasta shape: {pasta_shape}.",
+        }
+
+    required_ingredients = {
+        ingredient: amount * quantity for ingredient, amount in recipe.items()
+    }
+
+    insufficient_ingredients = {
+        ingredient: {
+            "required": required_amount,
+            "available": factory_state.inventory.get(ingredient, 0),
+        }
+        for ingredient, required_amount in required_ingredients.items()
+        if factory_state.inventory.get(ingredient, 0) < required_amount
+    }
+
+    if insufficient_ingredients:
+        return {
+            "success": False,
+            "message": "Insufficient ingredients for production.",
+            "insufficient_ingredients": insufficient_ingredients,
+        }
+
+    capacity_info = check_production_capacity()
+    base_days = max(1, int(capacity_info["days_to_complete_current_queue"]))
+    if priority == 3:
+        lead_days = 1
+    elif priority == 2:
+        lead_days = max(1, base_days // 2)
+    else:
+        lead_days = base_days
+
+    estimated_delivery_date = (
+        datetime.now() + timedelta(days=lead_days)
+    ).strftime("%Y-%m-%d")
+
+    order = PastaOrder(
+        order_id=order_id,
+        pasta_shape=pasta_shape,
+        quantity=quantity,
+        status="queued",
+        priority=priority,
+        customer_notes=customer_notes,
+        estimated_delivery_date=estimated_delivery_date,
+    )
+    factory_state.production_queue.append(order)
+    factory_state.production_queue.sort(key=lambda item: (-item.priority, item.timestamp))
+
+    for ingredient, required_amount in required_ingredients.items():
+        factory_state.inventory[ingredient] -= required_amount
+
+    return {
+        "success": True,
+        "message": f"Order {order_id} added to production queue.",
+        "order_id": order_id,
+        "estimated_delivery_date": estimated_delivery_date,
+        "queue_position": next(
+            index + 1
+            for index, queued_order in enumerate(factory_state.production_queue)
+            if queued_order.order_id == order_id
+        ),
+    }
 
 @tool
 def create_custom_pasta_recipe(
@@ -224,13 +292,32 @@ def create_custom_pasta_recipe(
     Returns:
         Status of the recipe creation
     """
-    # TODO: Implement this function
-    # 1. Validate ingredients exist in factory_state.inventory
-    # 2. Check if recipe name already exists
-    # 3. Add the custom recipe to factory_state.custom_recipes
-    # 4. Update factory_state.known_pasta_shapes using update_known_pasta_shapes()
-    # 5. Return success status with recipe details
-    pass
+    unknown_ingredients = [
+        ingredient for ingredient in ingredients if ingredient not in factory_state.inventory
+    ]
+    if unknown_ingredients:
+        return {
+            "success": False,
+            "message": f"Unknown ingredients: {', '.join(unknown_ingredients)}.",
+        }
+
+    if (
+        pasta_name in factory_state.pasta_recipes
+        or pasta_name in factory_state.custom_recipes
+    ):
+        return {
+            "success": False,
+            "message": f"Recipe {pasta_name} already exists.",
+        }
+
+    factory_state.custom_recipes[pasta_name] = ingredients
+    factory_state.update_known_pasta_shapes()
+
+    return {
+        "success": True,
+        "message": f"Custom recipe {pasta_name} created successfully.",
+        "recipe": {pasta_name: ingredients},
+    }
 
 @tool
 def prioritize_order(order_id: str, new_priority: int) -> Dict[str, Any]:
@@ -244,13 +331,37 @@ def prioritize_order(order_id: str, new_priority: int) -> Dict[str, Any]:
     Returns:
         Status of the priority change
     """
-    # TODO: Implement this function
-    # 1. Validate priority level (1, 2, or 3)
-    # 2. Find the order in factory_state.production_queue
-    # 3. Update the order's priority
-    # 4. Recalculate estimated delivery date based on new priority
-    # 5. Return success status with new delivery date
-    pass
+    if new_priority not in {1, 2, 3}:
+        return {
+            "success": False,
+            "message": "Priority must be 1, 2, or 3.",
+        }
+
+    for order in factory_state.production_queue:
+        if order.order_id == order_id:
+            order.priority = new_priority
+            if new_priority == 3:
+                lead_days = 1
+            elif new_priority == 2:
+                lead_days = 2
+            else:
+                lead_days = 3
+            order.estimated_delivery_date = (
+                datetime.now() + timedelta(days=lead_days)
+            ).strftime("%Y-%m-%d")
+            factory_state.production_queue.sort(
+                key=lambda item: (-item.priority, item.timestamp)
+            )
+            return {
+                "success": True,
+                "message": f"Priority updated for order {order_id}.",
+                "estimated_delivery_date": order.estimated_delivery_date,
+            }
+
+    return {
+        "success": False,
+        "message": f"Order {order_id} not found.",
+    }
 
 # ======= Agents =======
 
@@ -281,7 +392,7 @@ class ProductionManagerAgent(ToolCallingAgent):
     
     def __init__(self, model):
         super().__init__(
-            tools=[check_production_capacity],  # TODO: Add add_to_production_queue, prioritize_order
+            tools=[check_production_capacity, add_to_production_queue, prioritize_order],
             model=model,
             name="production_manager",
             description="Agent responsible for managing production scheduling and prioritization."
@@ -289,31 +400,29 @@ class ProductionManagerAgent(ToolCallingAgent):
 
 # TODO: Implement the CustomPastaDesignerAgent class
 class CustomPastaDesignerAgent(ToolCallingAgent):
-    """TODO: Agent responsible for designing custom pasta recipes."""
+    """Agent responsible for designing custom pasta recipes."""
     
     def __init__(self, model):
-        # TODO: Initialize with appropriate tools for custom pasta design
         super().__init__(
-            tools=[],  # TODO: Add check_inventory, create_custom_pasta_recipe
+            tools=[check_inventory, create_custom_pasta_recipe],
             model=model,
             name="pasta_designer",
-            description="TODO: Add description for custom pasta design specialist.",
+            description="Agent specialized in validating ingredient availability and creating custom pasta recipes.",
         )
 
 # ======= Orchestrator =======
 
 # TODO: Create proper Orchestrator using ToolCallingAgent pattern
 class Orchestrator(ToolCallingAgent):
-    """TODO: Orchestrator that coordinates workflow between specialized agents."""
+    """Orchestrator that coordinates workflow between specialized pasta factory agents."""
     
     def __init__(self, model):
         self.model = model
         
-        # TODO: Initialize specialized agents
-        # self.order_processor = OrderProcessorAgent(model)
-        # self.inventory_manager = InventoryManagerAgent(model)
-        # self.production_manager = ProductionManagerAgent(model)
-        # self.pasta_designer = CustomPastaDesignerAgent(model)
+        self.order_processor = OrderProcessorAgent(model)
+        self.inventory_manager = InventoryManagerAgent(model)
+        self.production_manager = ProductionManagerAgent(model)
+        self.pasta_designer = CustomPastaDesignerAgent(model)
 
         # TODO: Create coordination tools that route requests to different agents
         @tool
@@ -326,8 +435,17 @@ class Orchestrator(ToolCallingAgent):
             Returns:
                 Processed order information with pasta shape and quantity
             """
-            # TODO: Route this request to the OrderProcessorAgent
-            pass
+            return self.order_processor.run(f"""
+            The customer says: "{customer_request}"
+
+            Identify:
+            1. The pasta shape requested
+            2. The quantity in kg
+            3. Whether the pasta shape exists
+
+            Use check_pasta_recipe to validate the pasta shape and generate_order_id to create an order ID.
+            Return a concise summary with the order ID, pasta shape, quantity, and whether the order is valid.
+            """)
 
         @tool
         def manage_inventory(order_details: str) -> str:
@@ -339,8 +457,14 @@ class Orchestrator(ToolCallingAgent):
             Returns:
                 Inventory management result
             """
-            # TODO: Route this request to the InventoryManagerAgent
-            pass
+            return self.inventory_manager.run(f"""
+            Order details: {order_details}
+
+            Check if we have enough ingredients for this order:
+            1. Use check_pasta_recipe to get ingredient requirements
+            2. Use check_inventory to compare current stock against the order need
+            3. Explain clearly whether inventory is sufficient
+            """)
 
         @tool
         def schedule_production(order_info: str, priority: int = 1) -> str:
@@ -353,8 +477,15 @@ class Orchestrator(ToolCallingAgent):
             Returns:
                 Production scheduling result with delivery date
             """
-            # TODO: Route this request to the ProductionManagerAgent
-            pass
+            return self.production_manager.run(f"""
+            Order information: {order_info}
+            Priority: {priority}
+
+            Schedule this order for production:
+            1. Use add_to_production_queue to queue the order
+            2. Use check_production_capacity if needed
+            3. Return the queue status and estimated delivery date
+            """)
 
         @tool
         def design_custom_pasta(customer_request: str) -> str:
@@ -366,17 +497,23 @@ class Orchestrator(ToolCallingAgent):
             Returns:
                 Custom pasta design result
             """
-            # TODO: Route this request to the CustomPastaDesignerAgent
-            pass
+            return self.pasta_designer.run(f"""
+            Customer custom pasta request: "{customer_request}"
+
+            Design a simple custom recipe using available ingredients only.
+            Use check_inventory to inspect available ingredients and create_custom_pasta_recipe to save the recipe.
+            Return the recipe name and ingredient composition.
+            """)
 
         super().__init__(
-            tools=[],  # TODO: Add the coordination tools
+            tools=[process_order_info, manage_inventory, schedule_production, design_custom_pasta],
             model=model,
             name="orchestrator",
             description="""
-            TODO: Add description for orchestrating the pasta factory system
-            by coordinating between specialized agents for order processing,
-            inventory management, production scheduling, and custom pasta design.
+            Orchestrate the pasta factory system by coordinating between specialized
+            agents for order processing, inventory management, production scheduling,
+            and custom pasta design. Route each customer request through the right
+            sequence of tools and provide a clear customer-facing response.
             """,
         )
         
@@ -384,19 +521,30 @@ class Orchestrator(ToolCallingAgent):
         """
         Process a customer order through coordinated agent workflow.
         """
-        # TODO: Implement coordinated workflow
-        # 1. Check if it's a custom pasta request
-        # 2. Determine priority from customer language
-        # 3. Use coordination tools to process through appropriate agents
-        # 4. Return comprehensive response to customer
-        pass
+        return self.run(f"""
+        Customer request: "{customer_request}"
+
+        Process this request using the available coordination tools.
+
+        Workflow:
+        1. If the request is for a custom pasta, first use design_custom_pasta.
+        2. Determine priority from the language:
+           - "emergency" -> 3
+           - "rush", "urgent", "tomorrow" -> 2
+           - otherwise -> 1
+        3. Use process_order_info to extract the order details.
+        4. Use manage_inventory to confirm whether ingredients are sufficient.
+        5. If inventory is sufficient, use schedule_production with the detected priority.
+        6. If inventory is insufficient or the pasta shape is invalid, explain why the order cannot proceed.
+
+        Return a concise but complete response to the customer.
+        """)
 
 # ======= Main Demo =======
 
 def run_demo():
     """Run a demonstration of the pasta factory system."""
-    # TODO: Create orchestrator and test the multi-agent coordination
-    # orchestrator = Orchestrator(model)
+    orchestrator = Orchestrator(model)
     
     print("Welcome to the Pasta Factory Multi-Agent System!")
     print("Initial Factory State:", json.dumps(factory_state.to_dict(), indent=2))
@@ -411,9 +559,8 @@ def run_demo():
         print(f"\n--- Processing Order {i+1} ---")
         print(f"Customer: {order}")
         
-        # response = orchestrator.process_order(order)
-        # print(f"Factory: {response}")
-        print("Factory: [TODO: Implement orchestrator.process_order]")
+        response = orchestrator.process_order(order)
+        print(f"Factory: {response}")
         
     print("\n--- Final Factory State ---")
     print(json.dumps(factory_state.to_dict(), indent=2))
